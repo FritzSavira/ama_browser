@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antwort</title>
+    
+</head>
+<body>
+    <!-- Hauptüberschrift -->
+    <h1>Auf welche Frage rund um Leben, Glauben und Gemeinde willst du antworten?</h1>
+    <!-- Formular zur Eingabe der Frage -->
+    <form method="post">
+        <label for="frage">Zu beantwortende Frage:</label>
+        <input type="text" id="frage" name="frage" required style="width: 50%">
+        <button type="submit">Senden</button>
+    </form>
+    <div>
+        <h2>Ausgaben:</h2>
+        <p>{{ output_log }}</p>
+    </div>
+    <div>
+        <h2>Wäre dies eine mögliche Antwort?:</h2>
+        <textarea readonly style="width: 80%;" rows="10">{{ antwort }}</textarea>
+    </div>
+</body>
+</html>
