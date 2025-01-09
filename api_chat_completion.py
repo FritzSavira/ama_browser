@@ -20,14 +20,14 @@ def log_to_json(file_path, frage, prompt, reply):
         "reply": reply
     }
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
     except FileNotFoundError:
         data = []
 
     data.append(log_entry)
 
-    with open(file_path, 'w') as file:
+    with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
 
