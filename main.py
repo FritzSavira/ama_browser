@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from hello import hello
 from api_chat_completion import generate_reply, log_to_json
 from prompt import prompt
 from aio_straico import straico_client
@@ -27,4 +28,5 @@ def index():
 
 
 if __name__ == '__main__':
+    hello()
     app.run(host="0.0.0.0", port=5000)
