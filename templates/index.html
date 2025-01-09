@@ -5,9 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Antwort</title>
     
-</head>
+    <style>
+        /* CSS für den Ladeindikator */
+        #loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            display: none; /* Standardmäßig ausgeblendet */
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        // JavaScript zum Anzeigen des Ladeindikators
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+            const loader = document.getElementById("loader");
+
+            form.addEventListener("submit", function() {
+                loader.style.display = "block"; // Ladeindikator anzeigen
+            });
+        });
+    </script>
 <body>
-    <!-- Hauptüberschrift -->
+    <!-- Ladeindikator -->
+    <div id="loader"></div>
     <h1>Auf welche Frage rund um Leben, Glauben und Gemeinde willst du antworten?</h1>
     <h2>Bitte hab ein wenig Geduld. Die Beantwortung deiner wichtigen Frage kann bis zu 30 Sekunden dauern.</h2>
     <!-- Formular zur Eingabe der Frage -->
