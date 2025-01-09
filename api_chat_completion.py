@@ -3,7 +3,7 @@ from prompt import prompt
 from aio_straico import straico_client
 import os
 
-STRAICO_API_KEY = os.environ['STRAICO_API_KEY']
+#STRAICO_API_KEY = os.environ['STRAICO_API_KEY']
 
 def log_to_json(file_path, frage, prompt, reply):
     """
