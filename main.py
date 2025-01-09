@@ -6,7 +6,7 @@ import os
 
 
 app = Flask(__name__)
-STRAICO_API_KEY = os.environ['STRAICO_API_KEY']
+straico_api_key = os.getenv('STRAICO_API_KEY')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

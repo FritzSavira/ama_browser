@@ -3,6 +3,8 @@ from prompt import prompt
 from aio_straico import straico_client
 import os
 
+straico_api_key = os.getenv('STRAICO_API_KEY')
+
 def log_to_json(file_path, frage, prompt, reply):
     """
     Speichert die Frage, den Prompt und die Antwort in einer JSON-Datei.
@@ -37,7 +39,7 @@ def generate_reply(frage):
     :return: Die generierte Antwort als JSON-Objekt
     """
     llm = 'openai/gpt-4o-2024-08-06'
-    with straico_client(API_KEY=STRAICO_API_KEY) as client:
+    with straico_client(API_KEY=straico_api_key) as client:
         reply = client.prompt_completion(llm, prompt + frage)
         return reply
 
