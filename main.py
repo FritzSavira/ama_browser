@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-from hello import hello
 from api_chat_completion import generate_reply, log_to_json
 from prompt import prompt
 from aio_straico import straico_client
