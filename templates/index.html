@@ -20,6 +20,16 @@
         <p>{{ output_log }}</p>
     </div>
     <div>
+        {% if antwort %}
+            <form action="/download" method="get">
+                <input type="hidden" name="frage" value="{{ frage }}">
+                <input type="hidden" name="antwort" value="{{ antwort }}">
+                <input type="hidden" name="dateiname" value="{{ dateiname }}">
+                <button type="submit">Frage und Antwort herunterladen</button>
+            </form>
+        {% endif %}
+    </div>
+    <div>
         <h2>Wäre dies eine mögliche Antwort?:</h2>
         <textarea readonly style="width: 80%;" rows="10">{{ antwort }}</textarea>
     </div>
