@@ -22,7 +22,7 @@ def index():
             output_log = f"Die zu beantwortende Frage lautet: {frage}"
             reply = generate_reply(frage)
             antwort = reply['completion']['choices'][0]['message']['content']
-            log_to_json('ama_log.json', frage, prompt, reply)
+            log_to_json('/data/ama_log.json', frage, prompt, reply)
     return render_template('index.html', output_log=output_log, antwort=antwort)
 
 
