@@ -7,6 +7,7 @@ import json
 app = Flask(__name__)
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
+
 def generate_reply(frage):
     """
     Generiert eine Antwort auf die gegebene Frage unter Verwendung des Sprachmodells.
