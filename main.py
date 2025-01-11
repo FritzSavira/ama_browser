@@ -4,7 +4,6 @@ from aio_straico import straico_client
 import os
 import json
 
-
 app = Flask(__name__)
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
