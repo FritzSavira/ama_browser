@@ -115,7 +115,7 @@
                 // Ersetze Leerzeichen und nicht erlaubte Zeichen im Dateinamen
                 const safeFrage = aktuelleFrage.replace(/[^a-z0-9]/gi, '_').toLowerCase();
                 // Begrenze die Länge des Dateinamens
-                const safeFrage = safeFrage.substring(0, 30)
+                const safeFrage = safeFrage.substring(0, 30);
                 a.download = `frage_antwort_${safeFrage}.md`;
                 document.body.appendChild(a);
                 a.click();
