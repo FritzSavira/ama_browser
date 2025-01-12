@@ -16,6 +16,13 @@
             overflow: auto;
             background-color: #f9f9f9;
         }
+        /* Stil für den Download-Button */
+        #download_md {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            display: none; /* Anfangs versteckt */
+        }
     </style>
 </head>
 <body>
@@ -36,12 +43,19 @@
         <!-- Verwende ein div statt eines textarea -->
         <div id="antwort">.</div>
     </div>
+    <!-- Download-Button hinzufügen -->
+    <button id="download_md">Als .md speichern</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const frageForm = document.getElementById('frageForm');
             const outputLog = document.getElementById('output_log');
             const antwortDiv = document.getElementById('antwort');
+            const downloadButton = document.getElementById('download_md');
+
+            // Variablen zum Speichern der Frage und Antwort-Markdown
+            let aktuelleFrage = '';
+            let aktuelleAntwortMarkdown = '';
 
             frageForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -53,6 +67,7 @@
 
                 outputLog.textContent = `Die zu beantwortende Frage lautet: ${frageInput}`;
                 antwortDiv.innerHTML = 'Antwort wird generiert...';
+                downloadButton.style.display = 'none'; // Verstecke den Download-Button während der Anfrage
 
                 try {
                     const response = await fetch('/ask', {
@@ -67,6 +82,11 @@
                         const data = await response.json();
                         // Setze die HTML-Antwort sicher
                         antwortDiv.innerHTML = data.antwort;
+                        // Speichere die Frage und Antwort-Markdown für den Download
+                        aktuelleFrage = data.frage;
+                        aktuelleAntwortMarkdown = data.antwort_markdown;
+                        // Zeige den Download-Button an
+                        downloadButton.style.display = 'inline-block';
                     } else {
                         antwortDiv.textContent = 'Fehler bei der Verarbeitung der Anfrage.';
                     }
@@ -74,6 +94,31 @@
                     console.error('Error:', error);
                     antwortDiv.textContent = 'Ein Fehler ist aufgetreten.';
                 }
+            });
+
+            downloadButton.addEventListener('click', () => {
+                if (!aktuelleFrage || !aktuelleAntwortMarkdown) {
+                    alert('Keine Daten zum Herunterladen verfügbar.');
+                    return;
+                }
+
+                // Formatieren des Inhalts für die .md-Datei
+                const mdContent = `# Frage\n\n${aktuelleFrage}\n\n# Antwort\n\n${aktuelleAntwortMarkdown}`;
+
+                // Erstellen eines Blob-Objekts mit dem Markdown-Inhalt
+                const blob = new Blob([mdContent], { type: 'text/markdown' });
+
+                // Erstellen eines temporären Links zum Herunterladen
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                // Ersetze Leerzeichen und nicht erlaubte Zeichen im Dateinamen
+                const safeFrage = aktuelleFrage.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                a.download = `frage_antwort_${safeFrage}.md`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
             });
         });
     </script>

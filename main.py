@@ -19,7 +19,8 @@ ALLOWED_ATTRIBUTES = {
     'img': ['src', 'alt', 'title'],
 }
 
-ANTWORT_FOOTER = "\n *Dies ist eine mögliche Antwort. Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*"
+ANTWORT_FOOTER = ("\n *Dies ist eine mögliche Antwort."
+                  " Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*")
 
 def generate_reply(frage):
     """
@@ -46,18 +47,18 @@ def convert_markdown_to_html(markdown_text):
     clean_html = bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
     return clean_html
 
-def log_to_json(file_path, frage, prompt, reply):
+def log_to_json(file_path, frage, prompt_text, reply):
     """
     Speichert die Frage, den Prompt und die Antwort in einer JSON-Datei.
 
     :param file_path: Pfad zur JSON-Datei
     :param frage: Die gestellte Frage
-    :param prompt: Der verwendete Prompt
+    :param prompt_text: Der verwendete Prompt
     :param reply: Die generierte Antwort
     """
     log_entry = {
         "frage": frage,
-        "prompt": prompt,
+        "prompt": prompt_text,
         "reply": reply
     }
     try:
@@ -93,7 +94,7 @@ def ask():
         antwort_html = convert_markdown_to_html(antwort_markdown)
         # Logge die Daten (optional kannst du hier die Markdown- oder HTML-Antwort loggen)
         log_to_json('/data/ama_log.json', frage, prompt, antwort_markdown)
-        return jsonify({'antwort': antwort_html})
+        return jsonify({'antwort': antwort_html, 'antwort_markdown': antwort_markdown, 'frage': frage})
     return jsonify({'antwort': 'Keine Frage gestellt.'}), 400
 
 if __name__ == '__main__':
