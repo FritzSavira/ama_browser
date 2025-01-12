@@ -3,9 +3,21 @@ from prompt import prompt
 from aio_straico import straico_client
 import os
 import json
+import markdown
+import bleach
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
+
+# Definiere erlaubte HTML-Tags und Attribute für die Sanitierung
+ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS + [
+    'p', 'pre', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br'
+]
+ALLOWED_ATTRIBUTES = {
+    '*': ['class', 'id', 'style'],
+    'a': ['href', 'title'],
+    'img': ['src', 'alt', 'title'],
+}
 
 def generate_reply(frage):
     """
@@ -18,6 +30,19 @@ def generate_reply(frage):
     with straico_client(API_KEY=straico_api_key) as client:
         reply = client.prompt_completion(llm, prompt + frage)
         return reply
+
+def convert_markdown_to_html(markdown_text):
+    """
+    Konvertiert Markdown in HTML und sanitisiert das Ergebnis.
+
+    :param markdown_text: Markdown-Text
+    :return: Sicheres HTML
+    """
+    # Konvertiere Markdown zu HTML
+    html = markdown.markdown(markdown_text, extensions=['fenced_code', 'codehilite'])
+    # Sanitisiere das HTML
+    clean_html = bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+    return clean_html
 
 def log_to_json(file_path, frage, prompt, reply):
     """
@@ -60,9 +85,13 @@ def ask():
     frage = data.get('frage', '')
     if frage:
         reply = generate_reply(frage)
-        antwort = reply['completion']['choices'][0]['message']['content']
-        log_to_json('/data/ama_log.json', frage, prompt, reply)
-        return jsonify({'antwort': antwort})
+        # Extrahiere die Markdown-Antwort
+        antwort_markdown = reply['completion']['choices'][0]['message']['content']
+        # Konvertiere zu HTML
+        antwort_html = convert_markdown_to_html(antwort_markdown)
+        # Logge die Daten (optional kannst du hier die Markdown- oder HTML-Antwort loggen)
+        log_to_json('/data/ama_log.json', frage, prompt, antwort_markdown)
+        return jsonify({'antwort': antwort_html})
     return jsonify({'antwort': 'Keine Frage gestellt.'}), 400
 
 if __name__ == '__main__':

@@ -6,6 +6,17 @@
     <title>Antwort</title>
     <!-- Einbindung des gebündelten JavaScript -->
     <script src="{{ url_for('static', filename='dist/bundle.js') }}"></script>
+    <style>
+        /* Optional: Einige grundlegende Stile für die Ausgabe */
+        #antwort {
+            width: 80%;
+            min-height: 200px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow: auto;
+            background-color: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
     <h1>Auf welche Frage rund um Leben, Glauben und Gemeinde willst du antworten?</h1>
@@ -23,14 +34,15 @@
     </div>
     <div>
         <h2>Wäre dies eine mögliche Antwort?:</h2>
-        <textarea id="antwort" readonly style="width: 80%;" rows="10"></textarea>
+        <!-- Verwende ein div statt eines textarea -->
+        <div id="antwort">Antwort wird generiert...</div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const frageForm = document.getElementById('frageForm');
             const outputLog = document.getElementById('output_log');
-            const antwortText = document.getElementById('antwort');
+            const antwortDiv = document.getElementById('antwort');
 
             frageForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -41,7 +53,7 @@
                 }
 
                 outputLog.textContent = `Die zu beantwortende Frage lautet: ${frageInput}`;
-                antwortText.value = 'Antwort wird generiert...';
+                antwortDiv.innerHTML = 'Antwort wird generiert...';
 
                 try {
                     const response = await fetch('/ask', {
@@ -54,13 +66,14 @@
 
                     if (response.ok) {
                         const data = await response.json();
-                        antwortText.value = data.antwort;
+                        // Setze die HTML-Antwort sicher
+                        antwortDiv.innerHTML = data.antwort;
                     } else {
-                        antwortText.value = 'Fehler bei der Verarbeitung der Anfrage.';
+                        antwortDiv.textContent = 'Fehler bei der Verarbeitung der Anfrage.';
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    antwortText.value = 'Ein Fehler ist aufgetreten.';
+                    antwortDiv.textContent = 'Ein Fehler ist aufgetreten.';
                 }
             });
         });
