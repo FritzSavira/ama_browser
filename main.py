@@ -10,9 +10,9 @@ app = Flask(__name__, static_folder='static', template_folder='templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
 # Definiere erlaubte HTML-Tags und Attribute für die Sanitierung
-ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS + [
+ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS.union({
     'p', 'pre', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br'
-]
+})
 ALLOWED_ATTRIBUTES = {
     '*': ['class', 'id', 'style'],
     'a': ['href', 'title'],
