@@ -19,7 +19,7 @@ ALLOWED_ATTRIBUTES = {
     'img': ['src', 'alt', 'title'],
 }
 
-ANTWORT_FOOTER = ("\n *Dies ist eine mögliche Antwort."
+ANTWORT_FOOTER = ("\n\n *Dies ist eine mögliche Antwort."
                   " Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*")
 
 def generate_reply(frage):
