@@ -8,10 +8,9 @@ ENV PYTHONUNBUFFERED=1
 # Installiere Abhängigkeiten für Python-Pakete und Systempakete
 RUN apt-get update && apt-get install -y build-essential curl
 
-# Installiere Node.js (Version 18.x LTS)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install -g npm@latest
+# Installiere Node.js (Version 20.x LTS)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
 # Erstelle ein Verzeichnis für die Anwendung
 WORKDIR /app
