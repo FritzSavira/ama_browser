@@ -19,6 +19,8 @@ ALLOWED_ATTRIBUTES = {
     'img': ['src', 'alt', 'title'],
 }
 
+ANTWORT_FOOTER = "\n *Dies ist eine mögliche Antwort. Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*"
+
 def generate_reply(frage):
     """
     Generiert eine Antwort auf die gegebene Frage unter Verwendung des Sprachmodells.
@@ -86,7 +88,7 @@ def ask():
     if frage:
         reply = generate_reply(frage)
         # Extrahiere die Markdown-Antwort
-        antwort_markdown = reply['completion']['choices'][0]['message']['content']
+        antwort_markdown = reply['completion']['choices'][0]['message']['content'] + ANTWORT_FOOTER
         # Konvertiere zu HTML
         antwort_html = convert_markdown_to_html(antwort_markdown)
         # Logge die Daten (optional kannst du hier die Markdown- oder HTML-Antwort loggen)
