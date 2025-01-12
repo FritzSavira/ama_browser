@@ -4,24 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Antwort</title>
+    <!-- Einbindung des gebündelten JavaScript -->
+    <script src="{{ url_for('static', filename='dist/bundle.js') }}"></script>
 </head>
 <body>
     <h1>Auf welche Frage rund um Leben, Glauben und Gemeinde willst du antworten?</h1>
     <h2>Bitte hab ein wenig Geduld. Die Beantwortung deiner wichtigen Frage kann bis zu 30 Sekunden dauern.</h2>
 
     <!-- Formular zur Eingabe der Frage -->
-    <form method="post">
+    <form id="frageForm">
         <label for="frage">Zu beantwortende Frage:</label>
         <input type="text" id="frage" name="frage" required style="width: 50%">
         <button type="submit">Senden</button>
     </form>
     <div>
         <h2>Ausgaben:</h2>
-        <p>{{ output_log }}</p>
+        <p id="output_log"></p>
     </div>
     <div>
         <h2>Wäre dies eine mögliche Antwort?:</h2>
-        <textarea readonly style="width: 80%;" rows="10">{{ antwort }}</textarea>
+        <textarea id="antwort" readonly style="width: 80%;" rows="10"></textarea>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const frageForm = document.getElementById('frageForm');
+            const outputLog = document.getElementById('output_log');
+            const antwortText = document.getElementById('antwort');
+
+            frageForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const frageInput = document.getElementById('frage').value;
+                if (frageInput.trim() === '') {
+                    alert('Bitte gib eine Frage ein.');
+                    return;
+                }
+
+                outputLog.textContent = `Die zu beantwortende Frage lautet: ${frageInput}`;
+                antwortText.value = 'Antwort wird generiert...';
+
+                try {
+                    const response = await fetch('/ask', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ frage: frageInput })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        antwortText.value = data.antwort;
+                    } else {
+                        antwortText.value = 'Fehler bei der Verarbeitung der Anfrage.';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    antwortText.value = 'Ein Fehler ist aufgetreten.';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
