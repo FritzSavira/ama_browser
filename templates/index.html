@@ -4,123 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Antwort</title>
+    <!-- Google Fonts für eine angenehmere Typografie -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Einbindung des gebündelten JavaScript -->
     <script src="{{ url_for('static', filename='dist/bundle.js') }}"></script>
     <style>
-        /* Optional: Einige grundlegende Stile für die Ausgabe */
-        #antwort {
-            width: 80%;
-            min-height: 200px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            overflow: auto;
-            background-color: #f9f9f9;
+        /* Grundlegende Reset-Stile */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        /* Stil für den Download-Button */
+
+        /* Allgemeine Stile */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Main Container für den Inhal */
+        .main-container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 16px 24px;
+        }
+
+        h1, h2 {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        label {
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            padding: 10px 12px;
+            font-size: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        input[type="text"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 4px 0 rgba(59, 130, 246, 0.2);
+        }
+
+        button[type="submit"], #download_md {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background-color: #3b82f6;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            display: block;
+        }
+
+        button[type="submit"]:hover, #download_md:hover {
+            background-color: #2563eb;
+        }
+
+        #antwort {
+            margin-top: 16px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background-color: #f9fafb;
+            min-height: 150px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
         #download_md {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
+            margin-top: 16px;
             display: none; /* Anfangs versteckt */
+        }
+
+        .footer-note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 16px;
         }
     </style>
 </head>
 <body>
-    <h1>Auf welche Frage rund um Leben, Glauben und Gemeinde benötigst du eine Antwort?</h1>
-    <h2>Bitte hab ein wenig Geduld. Die Beantwortung deiner wichtigen Frage kann bis zu 30 Sekunden dauern.</h2>
+    <div class="main-container">
+        <h1>Auf welche Frage rund um Leben, Glauben und Gemeinde benötigst du eine Antwort?</h1>
+        <h2>Bitte hab ein wenig Geduld. Die Beantwortung deiner wichtigen Frage kann bis zu 30 Sekunden dauern.</h2>
 
-    <!-- Formular zur Eingabe der Frage -->
-    <form id="frageForm">
-        <label for="frage">Zu beantwortende Frage:</label>
-        <input type="text" id="frage" name="frage" required style="width: 50%">
-        <button type="submit">Senden</button>
-    </form>
-    <div>
-        <p id="output_log"></p>
+        <!-- Formular zur Eingabe der Frage -->
+        <form id="frageForm">
+            <label for="frage">Zu beantwortende Frage:</label>
+            <input type="text" id="frage" name="frage" placeholder="Stelle hier deine Frage..." required>
+            <button type="submit">Antwort generieren</button>
+        </form>
+
+        <div>
+            <p id="output_log" class="footer-note"></p>
+        </div>
+
+        <div>
+            <h2>Wäre dies eine mögliche Antwort?</h2>
+            <div id="antwort">.</div>
+        </div>
+
+        <button id="download_md">Frage und Antwort herunterladen</button>
     </div>
-    <div>
-        <h2>Wäre dies eine mögliche Antwort?</h2>
-        <!-- Verwende ein div statt eines textarea -->
-        <div id="antwort">.</div>
-    </div>
-    <!-- Download-Button hinzufügen -->
-    <button id="download_md">Frage und Antwort herunterladen</button>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const frageForm = document.getElementById('frageForm');
-            const outputLog = document.getElementById('output_log');
-            const antwortDiv = document.getElementById('antwort');
-            const downloadButton = document.getElementById('download_md');
-
-            // Variablen zum Speichern der Frage und Antwort-Markdown
-            let aktuelleFrage = '';
-            let aktuelleAntwortMarkdown = '';
-
-            frageForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const frageInput = document.getElementById('frage').value;
-                if (frageInput.trim() === '') {
-                    alert('Bitte gib eine Frage ein.');
-                    return;
-                }
-
-                outputLog.textContent = `Die zu beantwortende Frage lautet: ${frageInput}`;
-                antwortDiv.innerHTML = 'Antwort wird generiert...';
-                downloadButton.style.display = 'none'; // Verstecke den Download-Button während der Anfrage
-
-                try {
-                    const response = await fetch('/ask', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ frage: frageInput })
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        // Setze die HTML-Antwort sicher
-                        antwortDiv.innerHTML = data.antwort;
-                        // Speichere die Frage und Antwort-Markdown für den Download
-                        aktuelleFrage = data.frage;
-                        aktuelleAntwortMarkdown = data.antwort_markdown;
-                        // Zeige den Download-Button an
-                        downloadButton.style.display = 'inline-block';
-                    } else {
-                        antwortDiv.textContent = 'Fehler bei der Verarbeitung der Anfrage.';
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    antwortDiv.textContent = 'Ein Fehler ist aufgetreten.';
-                }
-            });
-
-            downloadButton.addEventListener('click', () => {
-                if (!aktuelleFrage || !aktuelleAntwortMarkdown) {
-                    alert('Keine Daten zum Herunterladen verfügbar.');
-                    return;
-                }
-
-                // Formatieren des Inhalts für die .md-Datei
-                const mdContent = `# Frage\n\n${aktuelleFrage}\n\n# Antwort\n\n${aktuelleAntwortMarkdown}`;
-
-                // Erstellen eines Blob-Objekts mit dem Markdown-Inhalt
-                const blob = new Blob([mdContent], { type: 'text/markdown' });
-
-                // Erstellen eines temporären Links zum Herunterladen
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                // Ersetze Leerzeichen und nicht erlaubte Zeichen im Dateinamen und begrenze auf 30 Zeichen
-                const safeFrage = aktuelleFrage.replace(/[^a-z0-9]/gi, '_').toLowerCase().substring(0, 30);
-                a.download = `frage_antwort_${safeFrage}.md`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            });
-        });
-    </script>
 </body>
 </html>
