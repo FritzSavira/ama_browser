@@ -93,7 +93,7 @@ def ask():
         # Konvertiere zu HTML
         antwort_html = convert_markdown_to_html(antwort_markdown)
         # Logge die Daten (optional kannst du hier die Markdown- oder HTML-Antwort loggen)
-        log_to_json('/data/ama_log.json', frage, prompt, antwort_markdown)
+        log_to_json('/data/ama_log.json', frage, prompt, reply)
         return jsonify({'antwort': antwort_html, 'antwort_markdown': antwort_markdown, 'frage': frage})
     return jsonify({'antwort': 'Keine Frage gestellt.'}), 400
 
