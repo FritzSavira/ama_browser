@@ -6,6 +6,7 @@ import json
 import markdown
 import bleach
 
+
 app = Flask(__name__, static_folder='static', template_folder='templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
@@ -29,7 +30,10 @@ def generate_reply(frage):
     :param frage: Die gestellte Frage
     :return: Die generierte Antwort als JSON-Objekt
     """
-    llm = 'openai/gpt-4o-2024-08-06'
+    # llm = 'openai/gpt-4o-2024-08-06'
+    llm = 'openai/o3-mini'
+    # llm = 'openai/gpt-4o-2024-11-20'
+    # llm = 'openai/o1-preview'
     with straico_client(API_KEY=straico_api_key) as client:
         reply = client.prompt_completion(llm, prompt + frage)
         return reply
