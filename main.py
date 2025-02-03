@@ -34,7 +34,7 @@ def generate_reply(frage):
     # llm = 'openai/gpt-4o-2024-11-20' Robust, sehr gut geeignet. 3,3 Coins
     # llm = 'openai/o3-mini' Ausreichende Präzision für einfache bis mittlere Komplexität. 1,5 Coins
     # llm = 'openai/o1-preview'
-    # llm = 'amazon/nova-pro-v1' Einfaches, preiswertes Model mit einfacher Ausdrucksweise für einfache Fragen. 1 Coin
+    llm = 'amazon/nova-pro-v1' Einfaches, preiswertes Model mit einfacher Ausdrucksweise für einfache Fragen. 1 Coin
     # llm = 'anthropic/claude-3-opus' Exzellente Antworten, extrem teuer. 24 Coins
     # llm = 'anthropic/claude-3.5-sonnet' Gut, klare Antworten. Störend: Regieanweisungen wie 'Pastor lächelt'. 4,8 Coins
     with straico_client(API_KEY=straico_api_key) as client:
@@ -99,7 +99,7 @@ def ask():
         antwort_markdown = reply['completion']['choices'][0]['message']['content'] + ANTWORT_FOOTER
         # Konvertiere zu HTML
         antwort_html = convert_markdown_to_html(antwort_markdown)
-        # Logge die Daten (optional kannst du hier die Markdown- oder HTML-Antwort loggen)
+        # Logge die Daten
         log_to_json('/data/ama_log.json', frage, prompt, reply)
         return jsonify({'antwort': antwort_html, 'antwort_markdown': antwort_markdown, 'frage': frage})
     return jsonify({'antwort': 'Keine Frage gestellt.'}), 400
