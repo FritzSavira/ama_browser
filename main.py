@@ -34,7 +34,7 @@ def generate_reply(frage):
     # llm = 'openai/gpt-4o-2024-11-20'
     # llm = 'openai/o3-mini'
     # llm = 'openai/o1-preview'
-    llm = 'gryphe/mythomax-l2-13b'
+    llm = 'amazon/nova-micro-v1'
     with straico_client(API_KEY=straico_api_key) as client:
         reply = client.prompt_completion(llm, prompt + frage)
         return reply
