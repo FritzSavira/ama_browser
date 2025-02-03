@@ -36,7 +36,7 @@ def generate_reply(frage):
     # llm = 'openai/o1-preview'
     # llm = 'amazon/nova-pro-v1' Einfaches, preiswertes Model mit einfacher Ausdrucksweise für einfache Fragen. 1 Coin
     # llm = 'anthropic/claude-3-opus' Exzellente Antworten, extrem teuer. 24 Coins
-    llm = 'anthropic/claude-3.5-sonnet'
+    # llm = 'anthropic/claude-3.5-sonnet' Gut, klare Antworten. Störend: Regieanweisungen wie 'Pastor lächelt'. 4,8 Coins
     with straico_client(API_KEY=straico_api_key) as client:
         reply = client.prompt_completion(llm, prompt + frage)
         return reply
