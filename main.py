@@ -31,9 +31,10 @@ def generate_reply(frage):
     :return: Die generierte Antwort als JSON-Objekt
     """
     # llm = 'openai/gpt-4o-2024-08-06'
+    # llm = 'openai/gpt-4o-2024-11-20'
     # llm = 'openai/o3-mini'
-    llm = 'openai/gpt-4o-2024-11-20'
     # llm = 'openai/o1-preview'
+    llm = 'gryphe/mythomax-l2-13b'
     with straico_client(API_KEY=straico_api_key) as client:
         reply = client.prompt_completion(llm, prompt + frage)
         return reply
