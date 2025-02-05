@@ -37,8 +37,7 @@ def generate_reply(frage):
     # llm = 'openai/o1-preview'
     # llm = 'amazon/nova-pro-v1' #Einfaches, preiswertes Model mit einfacher Ausdrucksweise für einfache Fragen. 1 Coin
     # llm = 'anthropic/claude-3-opus' Exzellente Antworten, extrem teuer. 24 Coins
-    # llm = 'anthropic/claude-3.5-sonnet' Gut, klare Antworten. Störend: Regieanweisungen wie 'Pastor lächelt'. 4,8 Coins
-    llm = 'cohere/command-r-08-2024'
+    llm = 'anthropic/claude-3.5-sonnet' #Gut, klare Antworten. Störend: Regieanweisungen wie 'Pastor lächelt'. 4,8 Coins
     with straico_client(API_KEY=straico_api_key) as client:
         reply = client.prompt_completion(llm, prompt + frage)
         return reply
@@ -102,9 +101,45 @@ def ask():
         # Konvertiere zu HTML
         antwort_html = convert_markdown_to_html(antwort_markdown)
         # Logge die Daten
-        log_to_json('/data/ama_log.json', frage, prompt, reply)
+        # vor 'ama_log.json' muss vor dem Deployen noch '/data/' geschrieben werden.
+        log_to_json('ama_log.json', frage, prompt, reply)
         return jsonify({'antwort': antwort_html, 'antwort_markdown': antwort_markdown, 'frage': frage})
     return jsonify({'antwort': 'Keine Frage gestellt.'}), 400
+
+
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    """
+    Verarbeitung des Feedbacks vom Benutzer.
+    """
+    data = request.get_json()
+    frage = data.pop('frage', None)
+    if frage:
+        feedback = data  # Das Feedback ist der Rest der Daten
+
+        try:
+            # vor 'ama_log.json' muss vor dem Deployen noch '/data/' geschrieben werden.
+            with open('ama_log.json', 'r', encoding='utf-8') as file:
+                log_data = json.load(file)
+        except FileNotFoundError:
+            log_data = []
+        # Suche nach der entsprechenden Frage
+        for entry in reversed(log_data):
+            if entry['frage'] == frage and 'feedback' not in entry:
+                entry['feedback'] = feedback
+                break
+        else:
+            # Falls kein Eintrag gefunden wurde, neuen erstellen
+            log_data.append({
+                "frage": frage,
+                "feedback": feedback
+            })
+        # vor 'ama_log.json' muss vor dem Deployen noch '/data/' geschrieben werden.
+        with open('ama_log.json', 'w', encoding='utf-8') as file:
+            json.dump(log_data, file, ensure_ascii=False, indent=4)
+        return jsonify({'status': 'success'}), 200
+    return jsonify({'status': 'error', 'message': 'Keine gültige Frage gefunden.'}), 400
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)

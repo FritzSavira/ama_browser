@@ -97,6 +97,93 @@
     <script src="{{ url_for('static', filename='dist/bundle.js') }}"></script>
 
     <script>
+        function createFeedbackForm() {
+            const form = document.createElement('form');
+            form.id = 'feedbackForm';
+            form.classList.add('mt-3');
+
+            const merkmale = [
+                {
+                    name: 'Inhalt',
+                    beschreibungen: [
+                        '0 - Der Inhalt fehlt oder ist verwirrend, es gibt keine klare Idee oder Botschaft.',
+                        '1 - Schlecht entworfener Inhalt, relevante Details fehlen, der Kernpunkt ist nur ungenau vermittelt.',
+                        '2 - Akzeptabler Inhalt, vermittelt die Hauptbotschaft, aber könnte mehr Tiefe und Kontext haben.',
+                        '3 - Informative und gut durchdachte Inhalte, gibt Einblicke und lässt den Leser mit einem tieferen Verständnis zurück.',
+                        '4 - Sehr ausführlicher und gut recherchierter Inhalt, bietet eine umfassende Analyse und berücksichtigt unterschiedliche Perspektiven.',
+                        '5 - Transformative Inhalte, die neue Perspektiven bieten, inspirieren und den Leser zum Nachdenken und zu weiterführender Forschung anregen.'
+                    ]
+                },
+                {
+                    name: 'Theologie',
+                    beschreibungen: [
+                        '0 - Kein theologischer Bezug oder falsche theologische Aussagen, die gegen grundsätzliche Lehren verstoßen.',
+                        '1 - Schwache theologische Grundlagen, säkularisierte Ansätze, die theologische Tiefe fehlt.',
+                        '2 - Basisanwendung theologischer Konzepte, einige fehlerhafte Verwendungen oder Fehlschlüsse.',
+                        '3 - Solide theologische Ansätze, berücksichtigt wichtige theologische Lehrmeinungen, aber lässt Raum für Interpretation.',
+                        '4 - Gut informierte und präzise Verwendung theologischer Lehre, bietet tiefe Einblicke und ein differenziertes Verständnis.',
+                        '5 - Innovative theologische Gedanken, die neue Zugänge und Interpretationen anbieten und das theologische Verständnis erweitern.'
+                    ]
+                },
+                {
+                    name: 'Seelsorge',
+                    beschreibungen: [
+                        '0 - Keine seelsorglichen Aspekte oder unangemessene Empfehlungen, die Schaden anrichten könnten.',
+                        '1 - Ungefährliche, aber wenig nützliche seelsorgliche Inputs, bietet wenig Trost oder Unterstützung.',
+                        '2 - Grundlegende seelsorgerische Begleitung, bietet Gewohnheitslösungen, aber keine tiefgreifende Veränderung.',
+                        '3 - Hilfreiche und ermutigende Seelsorge, bietet praktische Schritte und eine positive Perspektive.',
+                        '4 - Tiefgreifende und empathische Seelsorge, versteht die individuellen Herausforderungen und bietet maßgeschneiderte Lösungen.',
+                        '5 - Transformative Seelsorge, die Heilung und Wachstum fördert und die spirituellen und emotionalen Bedürfnisse des Einzelnen anspricht.'
+                    ]
+                },
+            ];
+
+            const heading = document.createElement('h4');
+            heading.textContent = 'Bitte bewerte die Antwort anhand der folgenden Merkmale:';
+            form.appendChild(heading);
+
+            merkmale.forEach((merkmalObj) => {
+                const merkmal = merkmalObj.name;
+                const beschreibungen = merkmalObj.beschreibungen;
+
+                const fieldset = document.createElement('fieldset');
+                fieldset.style.marginTop = '20px';
+                const legend = document.createElement('legend');
+                legend.style.fontWeight = 'bold';
+                legend.textContent = merkmal;
+                fieldset.appendChild(legend);
+
+                beschreibungen.forEach((beschreibung, index) => {
+                    const label = document.createElement('label');
+                    label.style.display = 'block';
+                    label.style.marginBottom = '5px';
+
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = merkmal;
+                    input.value = index;
+                    input.required = true;
+                    label.appendChild(input);
+
+                    // Füge die Beschreibung hinzu
+                    const beschreibungText = document.createTextNode(' ' + beschreibung);
+                    label.appendChild(beschreibungText);
+
+                    fieldset.appendChild(label);
+                });
+                form.appendChild(fieldset);
+            });
+
+            const submitButton = document.createElement('button');
+            submitButton.type = 'submit';
+            submitButton.textContent = 'Feedback senden';
+            submitButton.classList.add('btn', 'btn-success', 'mt-3');
+            form.appendChild(submitButton);
+
+            return form;
+        }
+
+
         document.addEventListener('DOMContentLoaded', () => {
             const frageForm = document.getElementById('frageForm');
             const chatMessages = document.getElementById('chatMessages');
@@ -141,6 +228,36 @@
                         aktuelleAntwortMarkdown = data.antwort_markdown;
                         // Download-Button anzeigen
                         downloadButton.style.display = 'inline-block';
+
+                        // Feedback-Formular erstellen und hinzufügen
+                        const feedbackForm = createFeedbackForm();
+                        chatMessages.appendChild(feedbackForm);
+
+                        // Event Listener für das Feedback-Formular
+                        feedbackForm.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const formData = new FormData(feedbackForm);
+                            const feedbackData = {};
+                            formData.forEach((value, key) => {
+                                feedbackData[key] = value;
+                            });
+                            feedbackData['frage'] = data.frage; // Frage hinzufügen
+                            // Sende Feedback an das Backend
+                            const feedbackResponse = await fetch('/feedback', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(feedbackData)
+                            });
+                            if (feedbackResponse.ok) {
+                                alert('Danke für dein Feedback!');
+                                feedbackForm.remove(); // Formular entfernen nach dem Absenden
+                            } else {
+                                alert('Fehler beim Senden des Feedbacks.');
+                            }
+                        });
+
                     } else {
                         loadingMessage.textContent = 'Fehler bei der Verarbeitung der Anfrage.';
                     }
