@@ -106,40 +106,40 @@
                 {
                     name: 'Inhalt',
                     beschreibungen: [
-                        '0 - Der Inhalt fehlt oder ist verwirrend, es gibt keine klare Idee oder Botschaft.',
-                        '1 - Schlecht entworfener Inhalt, relevante Details fehlen, der Kernpunkt ist nur ungenau vermittelt.',
-                        '2 - Akzeptabler Inhalt, vermittelt die Hauptbotschaft, aber könnte mehr Tiefe und Kontext haben.',
-                        '3 - Informative und gut durchdachte Inhalte, gibt Einblicke und lässt den Leser mit einem tieferen Verständnis zurück.',
-                        '4 - Sehr ausführlicher und gut recherchierter Inhalt, bietet eine umfassende Analyse und berücksichtigt unterschiedliche Perspektiven.',
-                        '5 - Transformative Inhalte, die neue Perspektiven bieten, inspirieren und den Leser zum Nachdenken und zu weiterführender Forschung anregen.'
+                        '0 - Der Inhalt fehlt oder ist verwirrend.',
+                        '1 - Schlecht entworfener Inhalt, relevante Details fehlen.',
+                        '2 - Akzeptabler Inhalt, vermittelt die Hauptbotschaft.',
+                        '3 - Informative und gut durchdachte Inhalte, gibt Einblicke tieferes Verständnis.',
+                        '4 - Sehr ausführlicher und gut recherchierter Inhalt, bietet eine umfassende Analyse.',
+                        '5 - Transformative Inhalte, die neue Perspektiven bieten.'
                     ]
                 },
                 {
                     name: 'Theologie',
                     beschreibungen: [
-                        '0 - Kein theologischer Bezug oder falsche theologische Aussagen, die gegen grundsätzliche Lehren verstoßen.',
-                        '1 - Schwache theologische Grundlagen, säkularisierte Ansätze, die theologische Tiefe fehlt.',
-                        '2 - Basisanwendung theologischer Konzepte, einige fehlerhafte Verwendungen oder Fehlschlüsse.',
-                        '3 - Solide theologische Ansätze, berücksichtigt wichtige theologische Lehrmeinungen, aber lässt Raum für Interpretation.',
-                        '4 - Gut informierte und präzise Verwendung theologischer Lehre, bietet tiefe Einblicke und ein differenziertes Verständnis.',
-                        '5 - Innovative theologische Gedanken, die neue Zugänge und Interpretationen anbieten und das theologische Verständnis erweitern.'
+                        '0 - Kein theologischer Bezug oder falsche theologische Aussagen.',
+                        '1 - Schwache theologische Grundlagen, die theologische Tiefe fehlt.',
+                        '2 - Basisanwendung theologischer Konzepte.',
+                        '3 - Solide theologische Ansätze, berücksichtigt wichtige theologische Lehrmeinungen.',
+                        '4 - Gut informierte und präzise Verwendung theologischer Lehre.',
+                        '5 - Innovative theologische Gedanken, die das theologische Verständnis erweitern.'
                     ]
                 },
                 {
                     name: 'Seelsorge',
                     beschreibungen: [
-                        '0 - Keine seelsorglichen Aspekte oder unangemessene Empfehlungen, die Schaden anrichten könnten.',
-                        '1 - Ungefährliche, aber wenig nützliche seelsorgliche Inputs, bietet wenig Trost oder Unterstützung.',
-                        '2 - Grundlegende seelsorgerische Begleitung, bietet Gewohnheitslösungen, aber keine tiefgreifende Veränderung.',
-                        '3 - Hilfreiche und ermutigende Seelsorge, bietet praktische Schritte und eine positive Perspektive.',
-                        '4 - Tiefgreifende und empathische Seelsorge, versteht die individuellen Herausforderungen und bietet maßgeschneiderte Lösungen.',
-                        '5 - Transformative Seelsorge, die Heilung und Wachstum fördert und die spirituellen und emotionalen Bedürfnisse des Einzelnen anspricht.'
+                        '0 - Keine seelsorglichen Aspekte oder unangemessene Empfehlungen.',
+                        '1 - Ungefährliche, aber wenig nützliche seelsorgliche Inputs.',
+                        '2 - Grundlegende seelsorgerische Begleitung, bietet Gewohnheitslösungen.',
+                        '3 - Hilfreiche und ermutigende Seelsorge, bietet praktische Schritte.',
+                        '4 - Tiefgreifende und empathische Seelsorge, versteht die individuellen Herausforderungen.',
+                        '5 - Transformative Seelsorge, die Heilung und Wachstum fördert.'
                     ]
                 },
             ];
 
-            const heading = document.createElement('h4');
-            heading.textContent = 'Bitte bewerte die Antwort anhand der folgenden Merkmale:';
+            const heading = document.createElement('h5');
+            heading.textContent = 'Bitte bewerte die Antwort, vielen Dank!:';
             form.appendChild(heading);
 
             merkmale.forEach((merkmalObj) => {
@@ -231,7 +231,7 @@
 
                         // Feedback-Formular erstellen und hinzufügen
                         const feedbackForm = createFeedbackForm();
-                        chatMessages.appendChild(feedbackForm);
+                        loadingMessage.appendChild(feedbackForm);
 
                         // Event Listener für das Feedback-Formular
                         feedbackForm.addEventListener('submit', async (e) => {
