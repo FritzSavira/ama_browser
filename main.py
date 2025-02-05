@@ -102,7 +102,7 @@ def ask():
         antwort_html = convert_markdown_to_html(antwort_markdown)
         # Logge die Daten
         # vor 'ama_log.json' muss vor dem Deployen noch '/data/' geschrieben werden.
-        log_to_json('ama_log.json', frage, prompt, reply)
+        log_to_json('/data/ama_log.json', frage, prompt, reply)
         return jsonify({'antwort': antwort_html, 'antwort_markdown': antwort_markdown, 'frage': frage})
     return jsonify({'antwort': 'Keine Frage gestellt.'}), 400
 
@@ -119,7 +119,7 @@ def feedback():
 
         try:
             # vor 'ama_log.json' muss vor dem Deployen noch '/data/' geschrieben werden.
-            with open('ama_log.json', 'r', encoding='utf-8') as file:
+            with open('/data/ama_log.json', 'r', encoding='utf-8') as file:
                 log_data = json.load(file)
         except FileNotFoundError:
             log_data = []
@@ -135,7 +135,7 @@ def feedback():
                 "feedback": feedback
             })
         # vor 'ama_log.json' muss vor dem Deployen noch '/data/' geschrieben werden.
-        with open('ama_log.json', 'w', encoding='utf-8') as file:
+        with open('/data/ama_log.json', 'w', encoding='utf-8') as file:
             json.dump(log_data, file, ensure_ascii=False, indent=4)
         return jsonify({'status': 'success'}), 200
     return jsonify({'status': 'error', 'message': 'Keine gültige Frage gefunden.'}), 400
