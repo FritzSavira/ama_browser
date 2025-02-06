@@ -193,40 +193,57 @@
             let aktuelleFrage = '';
             let aktuelleAntwortMarkdown = '';
 
-            frageForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const frageInput = document.getElementById('frage').value;
-                if (frageInput.trim() === '') {
-                    alert('Bitte gib eine Frage ein.');
-                    return;
-                }
+        frageForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const frageInput = document.getElementById('frage').value;
+            if (frageInput.trim() === '') {
+                alert('Bitte gib eine Frage ein.');
+                return;
+            }
 
-                // Benutzernachricht anzeigen
-                displayMessage(frageInput, 'user-message');
-                document.getElementById('frage').value = ''; // Eingabefeld leeren
+            // Benutzernachricht anzeigen
+            displayMessage(frageInput, 'user-message');
+            document.getElementById('frage').value = ''; // Eingabefeld leeren
 
-                // Ladeindikator anzeigen
-                const loadingMessage = displayMessage('Antwort wird generiert...', 'bot-message');
+            // Ladeindikator erstellen
+            const loadingMessage = displayMessage('Antwort wird generiert...', 'bot-message');
 
-                downloadButton.style.display = 'none'; // Download-Button während der Anfrage verstecken
+            // Array mit Ladetexten
+            const loadingTexts = [
+                'Antwort wird generiert...',
+                'Ich schlage etwas nach ...',
+                'Formulierung vorbereiten ...',
+                'Antwort zusammenfassen ...',
+                'Nochmal prüfen ...'
+            ];
 
-                try {
-                    const response = await fetch('/ask', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ frage: frageInput })
-                    });
+            let currentIndex = 0;
+            // Interval für den Textwechsel
+            const loadingInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % loadingTexts.length;
+                loadingMessage.innerHTML = loadingTexts[currentIndex];
+            }, 3000);
+
+            downloadButton.style.display = 'none'; // Download-Button während der Anfrage verstecken
+
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ frage: frageInput })
+                });
+
+                // Interval stoppen, sobald die Antwort da ist
+                clearInterval(loadingInterval);
 
                 if (response.ok) {
                     const data = await response.json();
-                    // Bot-Nachricht aktualisieren
+                    // Rest des Codes bleibt gleich...
                     loadingMessage.innerHTML = data.antwort;
-                    // Frage und Antwort-Markdown für den Download speichern
                     aktuelleFrage = data.frage;
                     aktuelleAntwortMarkdown = data.antwort_markdown;
-                    // Download-Button anzeigen
                     downloadButton.style.display = 'inline-block';
 
                     // Feedback-Aufforderung als separate Bot-Nachricht
