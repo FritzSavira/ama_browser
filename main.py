@@ -53,6 +53,7 @@ def convert_markdown_to_html(markdown_text):
     html = markdown.markdown(markdown_text, extensions=['fenced_code', 'codehilite'])
     # Sanitisiere das HTML
     clean_html = bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+    clean_html = clean_html.replace('<hr />', '')
     return clean_html
 
 def log_to_json(file_path, frage, prompt_text, reply):
