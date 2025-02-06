@@ -219,44 +219,51 @@
                         body: JSON.stringify({ frage: frageInput })
                     });
 
-                    if (response.ok) {
-                        const data = await response.json();
-                        // Bot-Nachricht aktualisieren
-                        loadingMessage.innerHTML = data.antwort;
-                        // Frage und Antwort-Markdown für den Download speichern
-                        aktuelleFrage = data.frage;
-                        aktuelleAntwortMarkdown = data.antwort_markdown;
-                        // Download-Button anzeigen
-                        downloadButton.style.display = 'inline-block';
+                if (response.ok) {
+                    const data = await response.json();
+                    // Bot-Nachricht aktualisieren
+                    loadingMessage.innerHTML = data.antwort;
+                    // Frage und Antwort-Markdown für den Download speichern
+                    aktuelleFrage = data.frage;
+                    aktuelleAntwortMarkdown = data.antwort_markdown;
+                    // Download-Button anzeigen
+                    downloadButton.style.display = 'inline-block';
 
-                        // Feedback-Formular erstellen und hinzufügen
-                        const feedbackForm = createFeedbackForm();
-                        loadingMessage.appendChild(feedbackForm);
+                    // Feedback-Aufforderung als separate Bot-Nachricht
+                    const feedbackPrompt = displayMessage('Bitte bewerte die Antwort, vielen Dank!:', 'bot-message');
 
-                        // Event Listener für das Feedback-Formular
-                        feedbackForm.addEventListener('submit', async (e) => {
-                            e.preventDefault();
-                            const formData = new FormData(feedbackForm);
-                            const feedbackData = {};
-                            formData.forEach((value, key) => {
-                                feedbackData[key] = value;
-                            });
-                            feedbackData['frage'] = data.frage; // Frage hinzufügen
-                            // Sende Feedback an das Backend
-                            const feedbackResponse = await fetch('/feedback', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(feedbackData)
-                            });
-                            if (feedbackResponse.ok) {
-                                alert('Danke für dein Feedback!');
-                                feedbackForm.remove(); // Formular entfernen nach dem Absenden
-                            } else {
-                                alert('Fehler beim Senden des Feedbacks.');
-                            }
+                    // Feedback-Formular als Benutzernachricht
+                    const feedbackContainer = displayMessage('', 'user-message');
+                    const feedbackForm = createFeedbackForm();
+                    // Entferne die Überschrift aus dem Formular, da wir sie bereits als Bot-Nachricht haben
+                    feedbackForm.querySelector('h5').remove();
+                    feedbackContainer.appendChild(feedbackForm);
+
+                    // Event Listener für das Feedback-Formular
+                    feedbackForm.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        const formData = new FormData(feedbackForm);
+                        const feedbackData = {};
+                        formData.forEach((value, key) => {
+                            feedbackData[key] = value;
                         });
+                        feedbackData['frage'] = data.frage; // Frage hinzufügen
+                        // Sende Feedback an das Backend
+                        const feedbackResponse = await fetch('/feedback', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(feedbackData)
+                        });
+                        if (feedbackResponse.ok) {
+                            alert('Danke für dein Feedback!');
+                            feedbackContainer.remove(); // Formular-Container entfernen nach dem Absenden
+                            feedbackPrompt.remove(); // Feedback-Aufforderung entfernen
+                        } else {
+                            alert('Fehler beim Senden des Feedbacks.');
+                        }
+                    });
 
                     } else {
                         loadingMessage.textContent = 'Fehler bei der Verarbeitung der Anfrage.';
