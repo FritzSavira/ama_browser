@@ -259,6 +259,9 @@
                     feedbackForm.querySelector('h5').remove();
                     feedbackContainer.appendChild(feedbackForm);
 
+                    // Scrolle zur Antwort
+                    loadingMessage.scrollIntoView({ behavior: 'smooth' });
+
                     // Event Listener für das Feedback-Formular
                     feedbackForm.addEventListener('submit', async (e) => {
                         e.preventDefault();
