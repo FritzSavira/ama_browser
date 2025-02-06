@@ -286,6 +286,8 @@
                         loadingMessage.textContent = 'Fehler bei der Verarbeitung der Anfrage.';
                     }
                 } catch (error) {
+                    // Interval auch bei Fehler stoppen
+                    clearInterval(loadingInterval);
                     console.error('Error:', error);
                     loadingMessage.textContent = 'Ein Fehler ist aufgetreten.';
                 }
