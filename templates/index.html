@@ -201,6 +201,9 @@
                 return;
             }
 
+            // Lösche den bisherigen Chat-Verlauf
+            chatMessages.innerHTML = '';
+
             // Benutzernachricht anzeigen
             displayMessage(frageInput, 'user-message');
             document.getElementById('frage').value = ''; // Eingabefeld leeren
