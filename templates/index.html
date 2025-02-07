@@ -187,8 +187,25 @@
 
                     fieldset.appendChild(label);
                 });
+
                 form.appendChild(fieldset);
             });
+
+            // Freitext-Eingabefeld hinzufügen
+            const freitextLabel = document.createElement('label');
+            freitextLabel.style.display = 'block';
+            freitextLabel.style.marginTop = '20px';
+            freitextLabel.style.fontWeight = 'bold';
+            freitextLabel.textContent = 'Weitere Anmerkungen:';
+
+            const freitextTextarea = document.createElement('textarea');
+            freitextTextarea.name = 'freitext';
+            freitextTextarea.rows = 4;
+            freitextTextarea.style.width = '100%';
+            freitextTextarea.placeholder = 'Optional: Deine Anmerkungen oder Verbesserungsvorschläge';
+
+            freitextLabel.appendChild(freitextTextarea);
+            form.appendChild(freitextLabel);
 
             // Senden-Button für das Feedback-Formular
             const submitButton = document.createElement('button');
@@ -245,7 +262,7 @@
                 const loadingInterval = setInterval(() => {
                     currentIndex = (currentIndex + 1) % loadingTexts.length;
                     loadingMessage.innerHTML = loadingTexts[currentIndex];
-                }, 3000);
+                }, 4000);
 
                 downloadButton.style.display = 'none'; // Download-Button während der Anfrage verstecken
 
