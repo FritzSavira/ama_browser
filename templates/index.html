@@ -8,11 +8,13 @@
     <!-- Einbinden von Bootstrap CSS über CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
-    <!-- Optional: Custom CSS für weitere Stilanpassungen -->
+    <!-- Custom CSS für weitere Stilanpassungen -->
     <style>
+        /* Allgemeine Stile */
         body {
             background-color: #f7f7f7;
         }
+        /* Chat-Container-Stile */
         .chat-container {
             max-width: 800px;
             margin: 50px auto;
@@ -23,6 +25,7 @@
             height: 80vh;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        /* Chat-Kopfzeile-Stile */
         .chat-header {
             padding: 10px;
             background-color: #0d6efd;
@@ -30,16 +33,19 @@
             text-align: center;
             font-size: 1.2rem;
         }
+        /* Chat-Nachrichten-Stile */
         .chat-messages {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
         }
+        /* Eingabefeld-Stile */
         .chat-input {
             padding: 10px;
             border-top: 1px solid #ddd;
             background-color: #f9f9f9;
         }
+        /* Chat-Blase-Stile */
         .chat-bubble {
             max-width: 75%;
             padding: 15px;
@@ -48,6 +54,7 @@
             line-height: 1.5;
             word-wrap: break-word;
         }
+        /* Benutzer- und Bot-Nachrichten-Stile */
         .user-message {
             background-color: #d1e7dd;
             align-self: flex-end;
@@ -56,6 +63,7 @@
             background-color: #e2e3e5;
             align-self: flex-start;
         }
+        /* Codeblock-Stil in Chat-Blasen */
         .chat-bubble pre {
             background: transparent;
             padding: 0;
@@ -71,15 +79,19 @@
     </style>
 </head>
 <body>
+    <!-- Hauptcontainer für den Chat -->
     <div class="chat-container d-flex flex-column">
+        <!-- Kopfzeile des Chats -->
         <div class="chat-header">
             <h3>Stelle deine Frage rund um Leben, Glauben und Gemeinde</h3>
         </div>
+        <!-- Bereich für die Chat-Nachrichten -->
         <div id="chatMessages" class="chat-messages d-flex flex-column">
             <!-- Nachrichten werden hier hinzugefügt -->
         </div>
-        <!-- Download-Button innerhalb des Containers -->
+        <!-- Download-Button zum Herunterladen der Frage und Antwort -->
         <button id="download_md" class="btn btn-secondary">Frage und Antwort herunterladen</button>
+        <!-- Eingabebereich für neue Fragen -->
         <div class="chat-input">
             <form id="frageForm" class="d-flex">
                 <input type="text" id="frage" name="frage" required class="form-control" placeholder="Schreibe deine Frage hier...">
@@ -93,10 +105,12 @@
     <!-- Popper.js und Bootstrap JS (falls Bootstrap JS-Komponenten verwendet werden) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
 
-    <!-- Einbindung des gebündelten JavaScript -->
-    <script src="{{ url_for('static', filename='dist/bundle.js') }}"></script>
-
+    <!-- Haupt-JavaScript-Code -->
     <script>
+        /**
+         * Erstellt das Feedback-Formular.
+         * @returns {HTMLFormElement} Das erstellte Feedback-Formular.
+         */
         function createFeedbackForm() {
             const form = document.createElement('form');
             form.id = 'feedbackForm';
@@ -138,10 +152,12 @@
                 },
             ];
 
+            // Überschrift des Formulars
             const heading = document.createElement('h5');
             heading.textContent = 'Bitte bewerte die Antwort, vielen Dank!:';
             form.appendChild(heading);
 
+            // Generierung der Bewertungsfelder für jedes Merkmal
             merkmale.forEach((merkmalObj) => {
                 const merkmal = merkmalObj.name;
                 const beschreibungen = merkmalObj.beschreibungen;
@@ -174,6 +190,7 @@
                 form.appendChild(fieldset);
             });
 
+            // Senden-Button für das Feedback-Formular
             const submitButton = document.createElement('button');
             submitButton.type = 'submit';
             submitButton.textContent = 'Feedback senden';
@@ -183,122 +200,133 @@
             return form;
         }
 
-
+        /**
+         * Hauptfunktion, die nach dem Laden des Dokuments ausgeführt wird.
+         */
         document.addEventListener('DOMContentLoaded', () => {
             const frageForm = document.getElementById('frageForm');
             const chatMessages = document.getElementById('chatMessages');
             const downloadButton = document.getElementById('download_md');
 
-            // Variablen zum Speichern der Frage und Antwort-Markdown
+            // Variablen zum Speichern der aktuellen Frage und Antwort in Markdown
             let aktuelleFrage = '';
             let aktuelleAntwortMarkdown = '';
 
-        frageForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const frageInput = document.getElementById('frage').value;
-            if (frageInput.trim() === '') {
-                alert('Bitte gib eine Frage ein.');
-                return;
-            }
+            // Event Listener für das Absenden der Frage
+            frageForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const frageInput = document.getElementById('frage').value;
+                if (frageInput.trim() === '') {
+                    alert('Bitte gib eine Frage ein.');
+                    return;
+                }
 
-            // Lösche den bisherigen Chat-Verlauf
-            chatMessages.innerHTML = '';
+                // Lösche den bisherigen Chat-Verlauf
+                chatMessages.innerHTML = '';
 
-            // Benutzernachricht anzeigen
-            displayMessage(frageInput, 'user-message');
-            document.getElementById('frage').value = ''; // Eingabefeld leeren
+                // Zeige die Benutzernachricht an
+                displayMessage(frageInput, 'user-message');
+                document.getElementById('frage').value = ''; // Eingabefeld leeren
 
-            // Ladeindikator erstellen
-            const loadingMessage = displayMessage('Antwort wird generiert...', 'bot-message');
+                // Ladeindikator erstellen
+                const loadingMessage = displayMessage('Antwort wird generiert...', 'bot-message');
 
-            // Array mit Ladetexten
-            const loadingTexts = [
-                'Antwort wird generiert...',
-                'Ich schlage etwas nach ...',
-                'Formulierung vorbereiten ...',
-                'Antwort zusammenfassen ...',
-                'Nochmal prüfen ...'
-            ];
+                // Array mit verschiedenen Ladetexten
+                const loadingTexts = [
+                    'Antwort wird generiert...',
+                    'Ich schlage etwas nach ...',
+                    'Formulierung vorbereiten ...',
+                    'Antwort zusammenfassen ...',
+                    'Nochmal prüfen ...'
+                ];
 
-            let currentIndex = 0;
-            // Interval für den Textwechsel
-            const loadingInterval = setInterval(() => {
-                currentIndex = (currentIndex + 1) % loadingTexts.length;
-                loadingMessage.innerHTML = loadingTexts[currentIndex];
-            }, 3000);
+                let currentIndex = 0;
+                // Intervall für den Wechsel der Ladetexte
+                const loadingInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % loadingTexts.length;
+                    loadingMessage.innerHTML = loadingTexts[currentIndex];
+                }, 3000);
 
-            downloadButton.style.display = 'none'; // Download-Button während der Anfrage verstecken
+                downloadButton.style.display = 'none'; // Download-Button während der Anfrage verstecken
 
-            try {
-                const response = await fetch('/ask', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ frage: frageInput })
-                });
-
-                // Interval stoppen, sobald die Antwort da ist
-                clearInterval(loadingInterval);
-
-                if (response.ok) {
-                    const data = await response.json();
-                    // Rest des Codes bleibt gleich...
-                    loadingMessage.innerHTML = data.antwort;
-                    aktuelleFrage = data.frage;
-                    aktuelleAntwortMarkdown = data.antwort_markdown;
-                    downloadButton.style.display = 'inline-block';
-
-                    // Feedback-Aufforderung als separate Bot-Nachricht
-                    const feedbackPrompt = displayMessage('Bitte bewerte die Antwort, vielen Dank!:', 'bot-message');
-
-                    // Feedback-Formular als Benutzernachricht
-                    const feedbackContainer = displayMessage('', 'user-message');
-                    const feedbackForm = createFeedbackForm();
-                    // Entferne die Überschrift aus dem Formular, da wir sie bereits als Bot-Nachricht haben
-                    feedbackForm.querySelector('h5').remove();
-                    feedbackContainer.appendChild(feedbackForm);
-
-                    // Scrolle zur Antwort
-                    loadingMessage.scrollIntoView({ behavior: 'smooth' });
-
-                    // Event Listener für das Feedback-Formular
-                    feedbackForm.addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        const formData = new FormData(feedbackForm);
-                        const feedbackData = {};
-                        formData.forEach((value, key) => {
-                            feedbackData[key] = value;
-                        });
-                        feedbackData['frage'] = data.frage; // Frage hinzufügen
-                        // Sende Feedback an das Backend
-                        const feedbackResponse = await fetch('/feedback', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(feedbackData)
-                        });
-                        if (feedbackResponse.ok) {
-                            alert('Danke für dein Feedback!');
-                            feedbackContainer.remove(); // Formular-Container entfernen nach dem Absenden
-                            feedbackPrompt.remove(); // Feedback-Aufforderung entfernen
-                        } else {
-                            alert('Fehler beim Senden des Feedbacks.');
-                        }
+                try {
+                    const response = await fetch('/ask', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ frage: frageInput })
                     });
+
+                    // Intervall stoppen, sobald die Antwort da ist
+                    clearInterval(loadingInterval);
+
+                    if (response.ok) {
+                        const data = await response.json();
+
+                        // Zeige die Antwort an
+                        loadingMessage.innerHTML = data.antwort;
+                        aktuelleFrage = data.frage;
+                        aktuelleAntwortMarkdown = data.antwort_markdown;
+                        downloadButton.style.display = 'inline-block';
+
+                        // Feedback-Aufforderung als separate Bot-Nachricht
+                        const feedbackPrompt = displayMessage('Bitte bewerte die Antwort, vielen Dank!:', 'bot-message');
+
+                        // Feedback-Formular als Benutzernachricht
+                        const feedbackContainer = displayMessage('', 'user-message');
+                        const feedbackForm = createFeedbackForm();
+                        // Entferne die Überschrift aus dem Formular, da sie bereits angezeigt wurde
+                        feedbackForm.querySelector('h5').remove();
+                        feedbackContainer.appendChild(feedbackForm);
+
+                        // Scrolle zur Antwort
+                        loadingMessage.scrollIntoView({ behavior: 'smooth' });
+
+                        // Event Listener für das Absenden des Feedback-Formulars
+                        feedbackForm.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const formData = new FormData(feedbackForm);
+                            const feedbackData = {};
+                            formData.forEach((value, key) => {
+                                feedbackData[key] = value;
+                            });
+                            feedbackData['frage'] = data.frage; // Frage hinzufügen
+
+                            // Sende das Feedback an das Backend
+                            const feedbackResponse = await fetch('/feedback', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(feedbackData)
+                            });
+                            if (feedbackResponse.ok) {
+                                alert('Danke für dein Feedback!');
+                                feedbackContainer.remove(); // Formular entfernen
+                                feedbackPrompt.remove(); // Aufforderung entfernen
+                            } else {
+                                alert('Fehler beim Senden des Feedbacks.');
+                            }
+                        });
 
                     } else {
                         loadingMessage.textContent = 'Fehler bei der Verarbeitung der Anfrage.';
                     }
                 } catch (error) {
-                    // Interval auch bei Fehler stoppen
+                    // Intervall auch bei Fehler stoppen
                     clearInterval(loadingInterval);
                     console.error('Error:', error);
                     loadingMessage.textContent = 'Ein Fehler ist aufgetreten.';
                 }
             });
 
+            /**
+             * Zeigt eine Nachricht im Chat-Verlauf an.
+             * @param {string} messageContent - Der Inhalt der Nachricht.
+             * @param {string} messageClass - Die CSS-Klasse für die Nachricht (z.B. 'user-message' oder 'bot-message').
+             * @returns {HTMLElement} Das erstellte Nachrichten-Element.
+             */
             function displayMessage(messageContent, messageClass) {
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-bubble', messageClass);
@@ -309,6 +337,7 @@
                 return messageElement;
             }
 
+            // Event Listener für den Download-Button
             downloadButton.addEventListener('click', () => {
                 if (!aktuelleFrage || !aktuelleAntwortMarkdown) {
                     alert('Keine Daten zum Herunterladen verfügbar.');
