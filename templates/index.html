@@ -463,7 +463,48 @@
                 if (frageInput.trim() === '') {
                     alert('Bitte gib eine Frage ein.');
                     return;
-                }
+            }
+
+        // Nach der DOMContentLoaded-Event-Definition einfügen
+        function addSuccessAnimation(element) {
+            element.classList.add('success-animation');
+            element.addEventListener('animationend', () => {
+                element.classList.remove('success-animation');
+            });
+        }
+
+        // Feedback für erfolgreiche Aktionen
+        function showSuccessFeedback(message) {
+            const feedback = document.createElement('div');
+            feedback.classList.add('alert', 'alert-success', 'fade');
+            feedback.style.position = 'fixed';
+            feedback.style.top = '20px';
+            feedback.style.right = '20px';
+            feedback.style.zIndex = '1000';
+            feedback.textContent = message;
+            document.body.appendChild(feedback);
+
+            setTimeout(() => {
+                feedback.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                feedback.classList.remove('show');
+                setTimeout(() => {
+                    feedback.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Event-Listener für Feedback-Animation
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                addSuccessAnimation(btn);
+            });
+        });
+
+
+
 
                 // Lösche den bisherigen Chat-Verlauf
                 chatMessages.innerHTML = '';
