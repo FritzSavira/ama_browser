@@ -250,7 +250,72 @@
             animation: success 0.3s ease;
         }
 
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            .chat-container {
+                margin: 0;
+                height: 100vh;
+                border-radius: 0;
+            }
 
+            .chat-header {
+                border-radius: 0;
+                padding: 10px;
+            }
+
+            .chat-header h3 {
+                font-size: 1.2rem;
+            }
+
+            .chat-bubble {
+                max-width: 85%;
+                padding: 12px;
+            }
+
+            .chat-input {
+                padding: 10px;
+            }
+
+            #download_md {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .chat-messages {
+                padding: 15px;
+            }
+
+            .chat-bubble {
+                max-width: 90%;
+                font-size: 0.95rem;
+            }
+
+            .btn {
+                padding: 8px 12px;
+            }
+
+            #feedbackForm fieldset {
+                margin-top: 10px;
+            }
+
+            #feedbackForm legend {
+                font-size: 1rem;
+            }
+        }
+
+        /* Landscape-Orientierung auf Mobilgeräten */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .chat-container {
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .chat-messages {
+                max-height: 50vh;
+            }
+        }
 
     </style>
 </head>
