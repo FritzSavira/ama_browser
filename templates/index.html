@@ -630,19 +630,19 @@
              * @param {string} messageClass - Die CSS-Klasse für die Nachricht (z.B. 'user-message' oder 'bot-message').
              * @returns {HTMLElement} Das erstellte Nachrichten-Element.
              */
-                function displayMessage(messageContent, messageClass, isLoading = false) {
-                    const messageElement = document.createElement('div');
-                    messageElement.classList.add('chat-bubble', messageClass);
+            function displayMessage(messageContent, messageClass, isLoading = false) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-bubble', messageClass);
 
-                    if (isLoading) {
-                        messageElement.classList.add('loading-indicator');
-                    }
-
-                    messageElement.innerHTML = messageContent;
-                    chatMessages.appendChild(messageElement);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                    return messageElement;
+                if (isLoading) {
+                    messageElement.classList.add('loading-indicator');
                 }
+
+                messageElement.innerHTML = messageContent;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                return messageElement;
+            }
 
                 // Beim Laden der Antwort verwenden
                 const loadingMessage = displayMessage('Antwort wird generiert', 'bot-message', true);
