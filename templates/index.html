@@ -12,57 +12,70 @@
     <style>
         /* Allgemeine Stile */
         body {
-            background-color: #f7f7f7;
+            background-color: #F5F5F0;  /* Sanftes Graubeige */
         }
+
         /* Chat-Container-Stile */
         .chat-container {
             max-width: 800px;
             margin: 50px auto;
-            background-color: #ffffff;
+            background-color: #F9F7F3;  /* Cremeweiß */
             border-radius: 8px;
             display: flex;
             flex-direction: column;
             height: 80vh;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(70,60,50,0.1);  /* Weicherer, warmtoniger Schatten */
         }
+
         /* Chat-Kopfzeile-Stile */
         .chat-header {
-            padding: 10px;
-            background-color: #0d6efd;
-            color: #ffffff;
+            padding: 15px;
+            background-color: #567E6B;  /* Gedecktes Salbeigrün */
+            color: #F4ECD8;  /* Elfenbein */
             text-align: center;
             font-size: 1.2rem;
+            border-radius: 8px 8px 0 0;  /* Abgerundete obere Ecken */
         }
+
         /* Chat-Nachrichten-Stile */
         .chat-messages {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
+            background-color: #F9F7F3;  /* Cremeweiß */
         }
+
         /* Eingabefeld-Stile */
         .chat-input {
-            padding: 10px;
-            border-top: 1px solid #ddd;
-            background-color: #f9f9f9;
+            padding: 15px;
+            border-top: 1px solid #E6E2D7;  /* Warmes Grau */
+            background-color: #F9F7F3;  /* Cremeweiß */
+            border-radius: 0 0 8px 8px;  /* Abgerundete untere Ecken */
         }
+
         /* Chat-Blase-Stile */
         .chat-bubble {
             max-width: 75%;
             padding: 15px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border-radius: 15px;
             line-height: 1.5;
             word-wrap: break-word;
         }
+
         /* Benutzer- und Bot-Nachrichten-Stile */
         .user-message {
-            background-color: #d1e7dd;
+            background-color: #D4E4BC;  /* Pastellsalbei */
             align-self: flex-end;
+            border-bottom-right-radius: 5px;  /* Angepasste Ecken für bessere Optik */
         }
+
         .bot-message {
-            background-color: #e2e3e5;
+            background-color: #E6E2D7;  /* Warmes Grau */
             align-self: flex-start;
+            border-bottom-left-radius: 5px;  /* Angepasste Ecken für bessere Optik */
         }
+
         /* Codeblock-Stil in Chat-Blasen */
         .chat-bubble pre {
             background: transparent;
@@ -70,11 +83,25 @@
             margin: 0;
             border: none;
             white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            color: #2C3E2E;  /* Dunkleres Grün für bessere Lesbarkeit */
         }
+
         /* Download-Button anpassen */
         #download_md {
             margin: 10px;
-            display: none; /* Anfangs versteckt */
+            display: none;
+            background-color: #567E6B;  /* Gedecktes Salbeigrün */
+            color: #F4ECD8;  /* Elfenbein */
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #download_md:hover {
+            background-color: #456859;  /* Dunklere Variation des Salbeigrüns */
         }
     </style>
 </head>
