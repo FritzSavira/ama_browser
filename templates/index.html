@@ -11,6 +11,9 @@
     <!-- Font-Import -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Serif+Pro:wght@400;600&display=swap" rel="stylesheet">
 
+    <!-- Nach den Google Fonts und vor dem Style-Block einfügen -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <!-- Custom CSS für weitere Stilanpassungen -->
     <style>
         :root {
@@ -168,8 +171,152 @@
             transform: translateY(-1px);
         }
 
+        /* Animation für den Ladeindikator */
+        @keyframes typingDots {
+            0% { content: '.'; }
+            33% { content: '..'; }
+            66% { content: '...'; }
+            100% { content: '.'; }
+        }
 
+        .loading-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
 
+        .loading-indicator::after {
+            content: '.';
+            animation: typingDots 1.5s infinite;
+            width: 20px;
+            display: inline-block;
+        }
+
+        /* Einblend-Animation für neue Nachrichten */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-bubble {
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        /* Hover-Effekte für interaktive Elemente */
+        .btn {
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: all 0.2s ease;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .btn:active::after {
+            width: 200px;
+            height: 200px;
+        }
+
+        /* Fokus-Styles für das Eingabefeld */
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(58,99,81,0.2);
+            border-color: var(--primary);
+        }
+
+        /* Feedback-Animation für erfolgreiche Aktionen */
+        @keyframes success {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .success-animation {
+            animation: success 0.3s ease;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            .chat-container {
+                margin: 0;
+                height: 100vh;
+                border-radius: 0;
+            }
+
+            .chat-header {
+                border-radius: 0;
+                padding: 10px;
+            }
+
+            .chat-header h3 {
+                font-size: 1.2rem;
+            }
+
+            .chat-bubble {
+                max-width: 85%;
+                padding: 12px;
+            }
+
+            .chat-input {
+                padding: 10px;
+            }
+
+            #download_md {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .chat-messages {
+                padding: 15px;
+            }
+
+            .chat-bubble {
+                max-width: 90%;
+                font-size: 0.95rem;
+            }
+
+            .btn {
+                padding: 8px 12px;
+            }
+
+            #feedbackForm fieldset {
+                margin-top: 10px;
+            }
+
+            #feedbackForm legend {
+                font-size: 1rem;
+            }
+        }
+
+        /* Landscape-Orientierung auf Mobilgeräten */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .chat-container {
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .chat-messages {
+                max-height: 50vh;
+            }
+        }
 
 
     </style>
@@ -186,12 +333,18 @@
             <!-- Nachrichten werden hier hinzugefügt -->
         </div>
         <!-- Download-Button zum Herunterladen der Frage und Antwort -->
-        <button id="download_md" class="btn btn-secondary">Frage und Antwort herunterladen</button>
+        <button id="download_md" class="btn btn-secondary">
+            <i class="fas fa-download"></i>
+            <span class="ml-2">Frage und Antwort herunterladen</span>
+        </button>
         <!-- Eingabebereich für neue Fragen -->
         <div class="chat-input">
             <form id="frageForm" class="d-flex">
                 <input type="text" id="frage" name="frage" required class="form-control" placeholder="Schreibe deine Frage hier...">
-                <button type="submit" class="btn btn-primary ml-2">Senden</button>
+                <button type="submit" class="btn btn-primary ml-2">
+                    <i class="fas fa-paper-plane"></i>
+                    <span class="d-none d-sm-inline ml-2"></span>
+                </button>
             </form>
         </div>
     </div>
@@ -321,6 +474,43 @@
             const chatMessages = document.getElementById('chatMessages');
             const downloadButton = document.getElementById('download_md');
 
+        function addSuccessAnimation(element) {
+            element.classList.add('success-animation');
+            element.addEventListener('animationend', () => {
+                element.classList.remove('success-animation');
+            });
+        }
+
+        // Feedback für erfolgreiche Aktionen
+        function showSuccessFeedback(message) {
+            const feedback = document.createElement('div');
+            feedback.classList.add('alert', 'alert-success', 'fade');
+            feedback.style.position = 'fixed';
+            feedback.style.top = '20px';
+            feedback.style.right = '20px';
+            feedback.style.zIndex = '1000';
+            feedback.textContent = message;
+            document.body.appendChild(feedback);
+
+            setTimeout(() => {
+                feedback.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                feedback.classList.remove('show');
+                setTimeout(() => {
+                    feedback.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Event-Listener für Feedback-Animation
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                addSuccessAnimation(btn);
+            });
+        });
+
             // Variablen zum Speichern der aktuellen Frage und Antwort in Markdown
             let aktuelleFrage = '';
             let aktuelleAntwortMarkdown = '';
@@ -440,22 +630,22 @@
              * @param {string} messageClass - Die CSS-Klasse für die Nachricht (z.B. 'user-message' oder 'bot-message').
              * @returns {HTMLElement} Das erstellte Nachrichten-Element.
              */
-            function displayMessage(messageContent, messageClass) {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('chat-bubble', messageClass);
-                messageElement.innerHTML = messageContent;
-                chatMessages.appendChild(messageElement);
-                // Zum Ende scrollen
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                return messageElement;
-            }
+                function displayMessage(messageContent, messageClass, isLoading = false) {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('chat-bubble', messageClass);
 
-            // Event Listener für den Download-Button
-            downloadButton.addEventListener('click', () => {
-                if (!aktuelleFrage || !aktuelleAntwortMarkdown) {
-                    alert('Keine Daten zum Herunterladen verfügbar.');
-                    return;
+                    if (isLoading) {
+                        messageElement.classList.add('loading-indicator');
+                    }
+
+                    messageElement.innerHTML = messageContent;
+                    chatMessages.appendChild(messageElement);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    return messageElement;
                 }
+
+                // Beim Laden der Antwort verwenden
+                const loadingMessage = displayMessage('Antwort wird generiert', 'bot-message', true);
 
                 // Inhalt für die .md-Datei formatieren
                 const mdContent = `# Frage\n\n${aktuelleFrage}\n\n# Antwort\n\n${aktuelleAntwortMarkdown}`;
