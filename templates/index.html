@@ -8,72 +8,111 @@
     <!-- Einbinden von Bootstrap CSS über CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
+    <!-- Font-Import -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Serif+Pro:wght@400;600&display=swap" rel="stylesheet">
+
     <!-- Custom CSS für weitere Stilanpassungen -->
     <style>
+        :root {
+            --primary-dark: #2C4A3B;
+            --primary: #3A6351;
+            --primary-light: #88A793;
+            --accent: #C17817;
+            --background: #F5F3EE;
+            --text-dark: #2A2826;
+            --text-light: #F9F6F0;
+        }
+
+
         /* Allgemeine Stile */
         body {
-            background-color: #F5F5F0;  /* Sanftes Graubeige */
+            background-color: var(--background);
+            color: var(--text-dark);
+            font-family: 'Source Serif Pro', Georgia, serif;
         }
 
         /* Chat-Container-Stile */
         .chat-container {
             max-width: 800px;
             margin: 50px auto;
-            background-color: #F9F7F3;  /* Cremeweiß */
+            background-color: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(44,74,59,0.08);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
             height: 80vh;
-            box-shadow: 0 2px 8px rgba(70,60,50,0.1);  /* Weicherer, warmtoniger Schatten */
         }
 
         /* Chat-Kopfzeile-Stile */
         .chat-header {
             padding: 15px;
-            background-color: #567E6B;  /* Gedecktes Salbeigrün */
-            color: #F4ECD8;  /* Elfenbein */
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--text-light);
             text-align: center;
-            font-size: 1.2rem;
-            border-radius: 8px 8px 0 0;  /* Abgerundete obere Ecken */
+            border-radius: 8px 8px 0 0;
+        }
+
+        .chat-header h3 {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
+            margin: 0;
         }
 
         /* Chat-Nachrichten-Stile */
         .chat-messages {
             flex: 1;
-            padding: 20px;
+            padding: 30px;
             overflow-y: auto;
-            background-color: #F9F7F3;  /* Cremeweiß */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         /* Eingabefeld-Stile */
         .chat-input {
-            padding: 15px;
-            border-top: 1px solid #E6E2D7;  /* Warmes Grau */
-            background-color: #F9F7F3;  /* Cremeweiß */
-            border-radius: 0 0 8px 8px;  /* Abgerundete untere Ecken */
+            padding: 20px;
+            background: linear-gradient(180deg, rgba(245,243,238,0) 0%, rgba(245,243,238,1) 100%);
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .chat-input input[type="text"] {
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input input[type="text"]:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(136,167,147,0.2);
+            outline: none;
         }
 
         /* Chat-Blase-Stile */
         .chat-bubble {
             max-width: 75%;
             padding: 15px;
-            margin-bottom: 12px;
-            border-radius: 15px;
             line-height: 1.5;
             word-wrap: break-word;
+            transition: transform 0.2s ease;
+        }
+
+        .chat-bubble:hover {
+            transform: translateY(-2px);
         }
 
         /* Benutzer- und Bot-Nachrichten-Stile */
         .user-message {
-            background-color: #D4E4BC;  /* Pastellsalbei */
+            background-color: var(--primary-light);
+            color: var(--text-dark);
+            border-radius: 18px 18px 4px 18px;
             align-self: flex-end;
-            border-bottom-right-radius: 5px;  /* Angepasste Ecken für bessere Optik */
         }
 
         .bot-message {
-            background-color: #E6E2D7;  /* Warmes Grau */
+            background-color: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 18px 18px 18px 4px;
             align-self: flex-start;
-            border-bottom-left-radius: 5px;  /* Angepasste Ecken für bessere Optik */
         }
 
         /* Codeblock-Stil in Chat-Blasen */
@@ -103,6 +142,36 @@
         #download_md:hover {
             background-color: #456859;  /* Dunklere Variation des Salbeigrüns */
         }
+
+        .btn-primary {
+            background-color: var(--accent);
+            border: none;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent);
+            filter: brightness(90%);
+            transform: translateY(-1px);
+        }
+
+        #download_md {
+            background-color: var(--primary);
+            color: var(--text-light);
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        #download_md:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+
+
+
+
     </style>
 </head>
 <body>
