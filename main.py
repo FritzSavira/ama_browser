@@ -21,7 +21,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Konstanten
-DATA_DIR = '' #'/data'
+DATA_DIR = '/data'
 LOG_FILE = os.path.join(DATA_DIR, 'ama_log.json')
 ANTWORT_FOOTER = ("\n\n *Dies ist eine mögliche Antwort."
                   " Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*")
