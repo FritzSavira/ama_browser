@@ -39,7 +39,7 @@ ALLOWED_ATTRIBUTES = {
 
 # LLM-Konfiguration
 ANTWORT_LLM = 'openai/gpt-4o-2024-11-20'
-TAGS_LLM = 'openai/gpt-4o-min'
+TAGS_LLM = 'openai/gpt-4o-mini'
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
