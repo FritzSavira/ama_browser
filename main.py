@@ -4,7 +4,7 @@ Gehostet auf Fly.io in einem Docker-Container.
 """
 
 from flask import Flask, render_template, request, jsonify
-from prompt import prompt
+from prompt import prompt_antwort, prompt_tags
 from aio_straico import straico_client
 import os
 import json
@@ -49,10 +49,21 @@ class ChatService:
         """Generiert eine KI-Antwort auf die gegebene Frage."""
         try:
             with straico_client(API_KEY=straico_api_key) as client:
-                reply = client.prompt_completion(ACTIVE_LLM, prompt + frage)
+                reply = client.prompt_completion(ACTIVE_LLM, prompt_antwort + frage)
                 return reply
         except Exception as e:
             logger.error(f"Fehler bei der Antwortgenerierung: {str(e)}")
+            raise
+
+    @staticmethod
+    def generate_tags(antwort_markdown: str) -> Dict:
+        """Generiert Tags zur gegebenen KI-Antwort """
+        try:
+            with straico_client(API_KEY=straico_api_key) as client:
+                reply = client.prompt_completion(ACTIVE_LLM, prompt_tags + antwort_markdown)
+                return reply
+        except Exception as e:
+            logger.error(f"Fehler beim Tagging: {str(e)}")
             raise
 
     @staticmethod
@@ -68,13 +79,14 @@ class ChatService:
 
 class LoggingService:
     @staticmethod
-    def save_log(frage: str, prompt_text: str, reply: Dict) -> None:
+    def save_log(frage: str, prompt_text: str, reply: Dict, tags: Dict) -> None:
         """Speichert Chat-Interaktionen in der Log-Datei."""
         try:
             log_entry = {
                 "frage": frage,
                 "prompt": prompt_text,
                 "reply": reply,
+                "tags": tags
             }
 
             data = LoggingService.read_log_file()
@@ -137,7 +149,9 @@ def ask():
                             + ANTWORT_FOOTER)
         antwort_html = ChatService.convert_markdown_to_html(antwort_markdown)
 
-        LoggingService.save_log(frage, prompt, reply)
+        tags = ChatService.generate_tags(antwort_markdown)
+
+        LoggingService.save_log(frage, prompt_antwort, reply, tags)
 
         return jsonify({
             'antwort': antwort_html,
