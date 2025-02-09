@@ -72,7 +72,7 @@ Schlüssel: Wert -> "konfession": ""
 Schlüssel: Wert -> "zentrale_personen": []
 7. Pastorale/seelsorgerliche Themen (Gemeindeaufbau, Spiritual Care, Predigtlehre etc.)
 Schlüssel: Wert -> "pastorale_themen": []
-Ausgabeformat: JSON
+Ausgabeformat: Dictionary
 
 Bitte analysiere nun folgenden Text und gib die Informationen strukturiert aus:
 '''
