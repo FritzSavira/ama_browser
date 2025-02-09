@@ -152,7 +152,6 @@ def ask():
 
         reply = ChatService.generate_tags(antwort_markdown)
         tags = (reply['completion']['choices'][0]['message']['content'])
-        print(tags)
 
         LoggingService.save_log(frage, prompt_antwort, reply, tags)
 
