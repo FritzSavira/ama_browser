@@ -13,6 +13,7 @@ import bleach
 from typing import Dict, List, Union
 import logging
 
+
 # Logging-Konfiguration
 logging.basicConfig(
     level=logging.INFO,
