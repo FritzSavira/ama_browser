@@ -75,7 +75,6 @@ class LoggingService:
                 "frage": frage,
                 "prompt": prompt_text,
                 "reply": reply,
-                "timestamp": logging.Formatter().converter()
             }
 
             data = LoggingService.read_log_file()
