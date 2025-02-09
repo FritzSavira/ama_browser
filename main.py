@@ -12,7 +12,7 @@ import markdown
 import bleach
 from typing import Dict, List, Union
 import logging
-
+import re
 
 # Logging-Konfiguration
 logging.basicConfig(
@@ -39,7 +39,7 @@ ALLOWED_ATTRIBUTES = {
 
 # LLM-Konfiguration
 ANTWORT_LLM = 'openai/gpt-4o-2024-11-20'
-TAGS_LLM = 'openai/gpt-4o-mini'
+TAGS_LLM = 'anthropic/claude-3.5-sonnet'
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
@@ -81,8 +81,9 @@ class ChatService:
 
 class LoggingService:
     @staticmethod
-    def save_log(frage: str, prompt_text: str, reply: Dict, tags: Dict) -> None:
+    def save_log(frage: str, prompt_text: str, reply: Dict, tags: str) -> None:
         """Speichert Chat-Interaktionen in der Log-Datei."""
+        tags = json.loads(tags)
         try:
             log_entry = {
                 "frage": frage,
@@ -153,6 +154,7 @@ def ask():
 
         reply_tags = ChatService.generate_tags(antwort_markdown)
         tags = (reply_tags['completion']['choices'][0]['message']['content'])
+        tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
 
         LoggingService.save_log(frage, prompt_antwort, reply, tags)
 
@@ -160,10 +162,6 @@ def ask():
             'antwort': antwort_html,
             'antwort_markdown': antwort_markdown,
             'frage': frage
-
-
-
-
         })
     except Exception as e:
         logger.error(f"Fehler in /ask: {str(e)}")
