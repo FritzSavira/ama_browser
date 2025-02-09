@@ -150,8 +150,8 @@ def ask():
                             + ANTWORT_FOOTER)
         antwort_html = ChatService.convert_markdown_to_html(antwort_markdown)
 
-        reply = ChatService.generate_tags(antwort_markdown)
-        tags = (reply['completion']['choices'][0]['message']['content'])
+        reply_tags = ChatService.generate_tags(antwort_markdown)
+        tags = (reply_tags['completion']['choices'][0]['message']['content'])
 
         LoggingService.save_log(frage, prompt_antwort, reply, tags)
 
