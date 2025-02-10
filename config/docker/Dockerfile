@@ -34,4 +34,4 @@ COPY ../.. .
 EXPOSE 5000
 
 # Definiere den Befehl zum Starten der Anwendung
-CMD ["python", "main.py"]
+CMD ["python", "/app/main.py"]
