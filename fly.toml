@@ -7,6 +7,7 @@ app = 'ama-browser'
 primary_region = 'fra'
 
 [build]
+dockerfile = '/config/docker/Dockerfile'
 
 [http_service]
   internal_port = 5000

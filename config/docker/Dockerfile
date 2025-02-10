@@ -16,16 +16,16 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 WORKDIR /app
 
 # Kopiere die requirements.txt und installiere Python-Abhängigkeiten
-COPY requirements.txt .
+COPY ../../requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Kopiere die package.json und package-lock.json (falls vorhanden) und installiere JavaScript-Abhängigkeiten
-COPY package.json package-lock.json* ./
+COPY ../../package.json package-lock.json* ./
 RUN npm install
 
 # Kopiere den Rest der Anwendung
-COPY . .
+COPY ../.. .
 
 # Optional: Build-Schritte für das Frontend (falls verwendet)
 # RUN npm run build
