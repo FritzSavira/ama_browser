@@ -16,7 +16,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 WORKDIR /app
 
 # Kopiere die requirements.txt und installiere Python-Abhängigkeiten
-COPY ../../requirements.txt .
+COPY ../requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
