@@ -4,13 +4,13 @@ Gehostet auf Fly.io in einem Docker-Container.
 """
 
 from flask import Flask, render_template, request, jsonify
-from prompt import prompt_antwort, prompt_tags
+from app.utils.prompt import prompt_antwort, prompt_tags
 from aio_straico import straico_client
 import os
 import json
 import markdown
 import bleach
-from typing import Dict, List, Union
+from typing import Dict, List
 import logging
 import re
 
@@ -41,7 +41,7 @@ ALLOWED_ATTRIBUTES = {
 ANTWORT_LLM = 'openai/gpt-4o-2024-11-20'
 TAGS_LLM = 'anthropic/claude-3.5-sonnet'
 
-app = Flask(__name__, static_folder='static', template_folder='templates')
+app = Flask(__name__, static_folder='../static', template_folder='../templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
 
