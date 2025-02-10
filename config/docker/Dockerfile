@@ -18,7 +18,7 @@ WORKDIR /app
 # Kopiere die requirements.txt und installiere Python-Abhängigkeiten
 COPY ../config/requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install -r ../config/requirements.txt
+RUN pip install -r requirements.txt
 
 # Kopiere die package.json und package-lock.json (falls vorhanden) und installiere JavaScript-Abhängigkeiten
 COPY ../../package.json package-lock.json* ./
