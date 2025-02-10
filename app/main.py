@@ -4,7 +4,7 @@ Gehostet auf Fly.io in einem Docker-Container.
 """
 
 from flask import Flask, render_template, request, jsonify
-from app.prompt import prompt_antwort, prompt_tags
+from prompt import prompt_antwort, prompt_tags
 from aio_straico import straico_client
 import os
 import json
