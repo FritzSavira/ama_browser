@@ -3,6 +3,8 @@ Flask-Anwendung für einen Frage-Antwort-Chat mit KI-Unterstützung.
 Gehostet auf Fly.io in einem Docker-Container.
 """
 
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
 from flask import Flask, render_template, request, jsonify
 from prompt import prompt_antwort, prompt_tags
 from aio_straico import straico_client
@@ -43,6 +45,28 @@ TAGS_LLM = 'anthropic/claude-3.5-sonnet'
 
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
+
+# Globaler Thread-Pool für asynchrone Operationen
+executor = ThreadPoolExecutor(max_workers=3)
+
+
+def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict):
+    """Verarbeitet Tags und Logging asynchron nach der Hauptantwort."""
+    try:
+        # Tags generieren
+        reply_tags = ChatService.generate_tags(antwort_markdown)
+        tags = reply_tags['completion']['choices'][0]['message']['content']
+        # JSON-Struktur aus dem String extrahieren
+        tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
+
+        # Log speichern
+        LoggingService.save_log(frage, prompt_antwort, reply, tags)
+
+        logger.info(f"Tags und Logging erfolgreich verarbeitet für Frage: {frage[:50]}...")
+    except Exception as e:
+        logger.error(f"Fehler bei der Tag-Verarbeitung und Logging: {str(e)}")
+
+
 
 
 class ChatService:
@@ -149,14 +173,11 @@ def ask():
 
         reply = ChatService.generate_reply(frage)
         antwort_markdown = (reply['completion']['choices'][0]['message']['content']
-                            + ANTWORT_FOOTER)
+                          + ANTWORT_FOOTER)
         antwort_html = ChatService.convert_markdown_to_html(antwort_markdown)
 
-        reply_tags = ChatService.generate_tags(antwort_markdown)
-        tags = (reply_tags['completion']['choices'][0]['message']['content'])
-        tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
-
-        LoggingService.save_log(frage, prompt_antwort, reply, tags)
+        # Asynchrone Verarbeitung von Tags und Logging starten
+        executor.submit(process_tags_and_logging, antwort_markdown, frage, reply)
 
         return jsonify({
             'antwort': antwort_html,
