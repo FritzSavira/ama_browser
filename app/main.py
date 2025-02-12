@@ -6,7 +6,7 @@ Gehostet auf Fly.io in einem Docker-Container.
 from concurrent.futures import ThreadPoolExecutor
 import asyncio
 from flask import Flask, render_template, request, jsonify
-from prompt import prompt_antwort, prompt_tags
+from prompt import prompt_pastor, prompt_theologe, prompt_prediger, prompt_tags
 from aio_straico import straico_client
 import os
 import json
@@ -60,7 +60,7 @@ def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict):
         tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
 
         # Log speichern
-        LoggingService.save_log(frage, prompt_antwort, reply, tags)
+        LoggingService.save_log(frage, prompt_theologe, reply, tags)
 
         logger.info(f"Tags und Logging erfolgreich verarbeitet für Frage: {frage[:50]}...")
     except Exception as e:
@@ -75,7 +75,7 @@ class ChatService:
         """Generiert eine KI-Antwort auf die gegebene Frage."""
         try:
             with straico_client(API_KEY=straico_api_key) as client:
-                reply = client.prompt_completion(ANTWORT_LLM, prompt_antwort + frage)
+                reply = client.prompt_completion(ANTWORT_LLM, prompt_theologe + frage)
                 return reply
         except Exception as e:
             logger.error(f"Fehler bei der Antwortgenerierung: {str(e)}")
