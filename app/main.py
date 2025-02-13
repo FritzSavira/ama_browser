@@ -60,7 +60,7 @@ def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict):
         tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
 
         # Log speichern
-        LoggingService.save_log(frage, prompt_prediger, reply, tags)
+        LoggingService.save_log(frage, prompt_pastor, reply, tags)
 
         logger.info(f"Tags und Logging erfolgreich verarbeitet für Frage: {frage[:50]}...")
     except Exception as e:
@@ -75,7 +75,7 @@ class ChatService:
         """Generiert eine KI-Antwort auf die gegebene Frage."""
         try:
             with straico_client(API_KEY=straico_api_key) as client:
-                reply = client.prompt_completion(ANTWORT_LLM, prompt_prediger + frage)
+                reply = client.prompt_completion(ANTWORT_LLM, prompt_pastor + frage)
                 return reply
         except Exception as e:
             logger.error(f"Fehler bei der Antwortgenerierung: {str(e)}")
