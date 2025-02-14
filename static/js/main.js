@@ -17,7 +17,26 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     frageForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        // Erfassen der Frage
         const frageInput = document.getElementById('frage').value;
+
+        // Erfassen des ausgewählten Agenten
+        const agentInput = document.querySelector('input[name="agent"]:checked');
+
+        // Überprüfen, ob eine Frage eingegeben wurde
+        if (frageInput.trim() === '') {
+            alert('Bitte gib eine Frage ein.');
+            return;
+        }
+
+        // Überprüfen, ob ein Agent ausgewählt wurde
+        if (!agentInput) {
+            alert('Bitte wählen Sie einen Agenten aus.');
+            return;
+        }
+
+        const agentValue = agentInput.value;
 
         // Überprüfen, ob die Frage nicht leer ist
         if (frageInput.trim() === '') {
@@ -61,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ frage: frageInput })
+                body: JSON.stringify({ frage: frageInput, agent: agentValue })
             });
 
             // Ladeintervall stoppen

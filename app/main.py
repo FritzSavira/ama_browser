@@ -50,35 +50,35 @@ straico_api_key = os.getenv('STRAICO_API_KEY')
 executor = ThreadPoolExecutor(max_workers=3)
 
 
-def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict):
-    """Verarbeitet Tags und Logging asynchron nach der Hauptantwort."""
+def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict, prompt_text: str):
+    """Processes tags and logging asynchronously after the main answer."""
     try:
-        # Tags generieren
+        # Generate tags
         reply_tags = ChatService.generate_tags(antwort_markdown)
         tags = reply_tags['completion']['choices'][0]['message']['content']
-        # JSON-Struktur aus dem String extrahieren
+        # Extract JSON structure from the string
         tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
 
-        # Log speichern
-        LoggingService.save_log(frage, prompt_pastor, reply, tags)
+        # Save log
+        LoggingService.save_log(frage, prompt_text, reply, tags)
 
-        logger.info(f"Tags und Logging erfolgreich verarbeitet für Frage: {frage[:50]}...")
+        logger.info(f"Tags and logging successfully processed for question: {frage[:50]}...")
     except Exception as e:
-        logger.error(f"Fehler bei der Tag-Verarbeitung und Logging: {str(e)}")
+        logger.error(f"Error in tag processing and logging: {str(e)}")
 
 
 
 
 class ChatService:
     @staticmethod
-    def generate_reply(frage: str) -> Dict:
-        """Generiert eine KI-Antwort auf die gegebene Frage."""
+    def generate_reply(frage: str, prompt_text: str) -> Dict:
+        """Generates an AI answer to the given question using the specified prompt."""
         try:
             with straico_client(API_KEY=straico_api_key) as client:
-                reply = client.prompt_completion(ANTWORT_LLM, prompt_pastor + frage)
+                reply = client.prompt_completion(ANTWORT_LLM, prompt_text + frage)
                 return reply
         except Exception as e:
-            logger.error(f"Fehler bei der Antwortgenerierung: {str(e)}")
+            logger.error(f"Error generating reply: {str(e)}")
             raise
 
     @staticmethod
@@ -163,21 +163,35 @@ def index():
 
 @app.route('/ask', methods=['POST'])
 def ask():
-    """Verarbeitet Fragen und generiert Antworten."""
+    """Processes questions and generates answers."""
     try:
         data = request.get_json()
         frage = data.get('frage', '')
+        agent = data.get('agent', '')
 
         if not frage:
             return jsonify({'antwort': 'Keine Frage gestellt.'}), 400
+        if not agent:
+            return jsonify({'antwort': 'Kein Agent ausgewählt.'}), 400
 
-        reply = ChatService.generate_reply(frage)
+        # Map the agent to the appropriate prompt
+        if agent == 'pastoral-seelsorgerlich':
+            prompt_text = prompt_pastor
+        elif agent == 'theologisch-wissenschaftlich':
+            prompt_text = prompt_theologe
+        elif agent == 'predigend-erzählend':
+            prompt_text = prompt_prediger
+        else:
+            return jsonify({'antwort': 'Ungültiger Agent ausgewählt.'}), 400
+
+        # Generate reply using the appropriate prompt
+        reply = ChatService.generate_reply(frage, prompt_text)
         antwort_markdown = (reply['completion']['choices'][0]['message']['content']
-                          + ANTWORT_FOOTER)
+                            + ANTWORT_FOOTER)
         antwort_html = ChatService.convert_markdown_to_html(antwort_markdown)
 
-        # Asynchrone Verarbeitung von Tags und Logging starten
-        executor.submit(process_tags_and_logging, antwort_markdown, frage, reply)
+        # Asynchronous processing of tags and logging
+        executor.submit(process_tags_and_logging, antwort_markdown, frage, reply, prompt_text)
 
         return jsonify({
             'antwort': antwort_html,
@@ -185,8 +199,8 @@ def ask():
             'frage': frage
         })
     except Exception as e:
-        logger.error(f"Fehler in /ask: {str(e)}")
-        return jsonify({'error': 'Interner Server-Fehler'}), 500
+        logger.error(f"Error in /ask: {str(e)}")
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 
 @app.route('/feedback', methods=['POST'])

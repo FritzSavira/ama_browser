@@ -111,6 +111,28 @@ body {
     color: #2C3E2E;
 }
 
+/* Stil für das Feldset in der Chat-Eingabe */
+.chat-input fieldset {
+    margin-bottom: 15px;
+}
+
+.chat-input legend {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.form-check-input {
+    margin-right: 5px;
+}
+
+.form-check-label {
+    margin-right: 15px;
+    font-weight: 400;
+}
+
+
 /* Download-Button anpassen */
 #download_md {
     margin: 10px;
