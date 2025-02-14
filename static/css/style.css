@@ -204,6 +204,40 @@ body {
     animation: slideIn 0.3s ease forwards;
 }
 
+/* Feedback Form Styles */
+.feedback-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin-top: 20px;
+}
+
+.feedback-options label {
+    cursor: pointer;
+}
+
+.feedback-options i {
+    font-size: 3em;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.feedback-positive i {
+    color: #28a745; /* Green color */
+}
+
+.feedback-negative i {
+    color: #dc3545; /* Red color */
+}
+
+.feedback-options input[type="radio"]:checked + i {
+    transform: scale(1.2);
+}
+
+.feedback-options input[type="radio"] {
+    display: none;
+}
+
 /* Hover-Effekte für interaktive Elemente */
 .btn {
     position: relative;

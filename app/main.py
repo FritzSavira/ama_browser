@@ -1,8 +1,4 @@
-"""
-Flask-Anwendung für einen Frage-Antwort-Chat mit KI-Unterstützung.
-Gehostet auf Fly.io in einem Docker-Container.
-"""
-
+import uuid  # Import uuid to generate unique IDs
 from concurrent.futures import ThreadPoolExecutor
 import asyncio
 from flask import Flask, render_template, request, jsonify
@@ -50,7 +46,7 @@ straico_api_key = os.getenv('STRAICO_API_KEY')
 executor = ThreadPoolExecutor(max_workers=3)
 
 
-def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict, prompt_text: str):
+def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict, prompt_text: str, unique_id: str):
     """Processes tags and logging asynchronously after the main answer."""
     try:
         # Generate tags
@@ -60,13 +56,11 @@ def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict, pro
         tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
 
         # Save log
-        LoggingService.save_log(frage, prompt_text, reply, tags)
+        LoggingService.save_log(frage, prompt_text, reply, tags, unique_id)
 
         logger.info(f"Tags and logging successfully processed for question: {frage[:50]}...")
     except Exception as e:
         logger.error(f"Error in tag processing and logging: {str(e)}")
-
-
 
 
 class ChatService:
@@ -105,11 +99,12 @@ class ChatService:
 
 class LoggingService:
     @staticmethod
-    def save_log(frage: str, prompt_text: str, reply: Dict, tags: str) -> None:
+    def save_log(frage: str, prompt_text: str, reply: Dict, tags: str, entry_id: str) -> None:
         """Speichert Chat-Interaktionen in der Log-Datei."""
         tags = json.loads(tags)
         try:
             log_entry = {
+                "id": entry_id,  # Add the unique ID to the log entry
                 "frage": frage,
                 "prompt": prompt_text,
                 "reply": reply,
@@ -138,15 +133,17 @@ class LoggingService:
             return []
 
     @staticmethod
-    def save_feedback(frage: str, feedback: Dict) -> None:
+    def save_feedback(entry_id: str, feedback: Dict) -> None:
         """Speichert Benutzer-Feedback zu einer Antwort."""
         try:
             log_data = LoggingService.read_log_file()
 
             for entry in reversed(log_data):
-                if entry['frage'] == frage and 'feedback' not in entry:
+                if entry.get('id') == entry_id and 'feedback' not in entry:
                     entry['feedback'] = feedback
                     break
+            else:
+                logger.error(f"No matching entry found for ID: {entry_id}")
 
             with open(LOG_FILE, 'w', encoding='utf-8') as file:
                 json.dump(log_data, file, ensure_ascii=False, indent=4)
@@ -190,13 +187,17 @@ def ask():
                             + ANTWORT_FOOTER)
         antwort_html = ChatService.convert_markdown_to_html(antwort_markdown)
 
+        # Generate unique ID for logging and feedback
+        unique_id = str(uuid.uuid4())
+
         # Asynchronous processing of tags and logging
-        executor.submit(process_tags_and_logging, antwort_markdown, frage, reply, prompt_text)
+        executor.submit(process_tags_and_logging, antwort_markdown, frage, reply, prompt_text, unique_id)
 
         return jsonify({
             'antwort': antwort_html,
             'antwort_markdown': antwort_markdown,
-            'frage': frage
+            'frage': frage,
+            'id': unique_id  # Include the unique id in response
         })
     except Exception as e:
         logger.error(f"Error in /ask: {str(e)}")
@@ -208,15 +209,15 @@ def feedback():
     """Verarbeitet Benutzer-Feedback."""
     try:
         data = request.get_json()
-        frage = data.pop('frage', None)
+        entry_id = data.pop('id', None)
 
-        if not frage:
+        if not entry_id:
             return jsonify({
                 'status': 'error',
-                'message': 'Keine gültige Frage gefunden.'
+                'message': 'Keine gültige ID gefunden.'
             }), 400
 
-        LoggingService.save_feedback(frage, data)
+        LoggingService.save_feedback(entry_id, data)
         return jsonify({'status': 'success'}), 200
     except Exception as e:
         logger.error(f"Fehler in /feedback: {str(e)}")

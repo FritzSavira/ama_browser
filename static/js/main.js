@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Variablen zum Speichern der aktuellen Frage und Antwort in Markdown
     let aktuelleFrage = '';
     let aktuelleAntwortMarkdown = '';
+    let aktuelleID = ''; // Variable zum Speichern der ID
 
     /**
      * Event Listener für das Absenden der Frage.
@@ -94,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 aktuelleFrage = data.frage;
                 aktuelleAntwortMarkdown = data.antwort_markdown;
                 downloadButton.style.display = 'inline-block';
+                aktuelleID = data.id; // Zeile zum Speichern der ID
 
                 // Feedback-Aufforderung als separate Bot-Nachricht
                 const feedbackPrompt = displayMessage('Bitte bewerte die Antwort, vielen Dank!:', 'bot-message');
@@ -116,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     formData.forEach((value, key) => {
                         feedbackData[key] = value;
                     });
-                    feedbackData['frage'] = data.frage; // Frage hinzufügen
+                    feedbackData['id'] = aktuelleID; // ID dem Feedback hinzufügen
 
                     // Sende das Feedback an das Backend
                     const feedbackResponse = await fetch('/feedback', {
@@ -171,83 +173,56 @@ document.addEventListener('DOMContentLoaded', () => {
         form.id = 'feedbackForm';
         form.classList.add('mt-3');
 
-        // Definieren der Merkmale für das Feedback
-        const merkmale = [
-            {
-                name: 'Inhalt',
-                beschreibungen: [
-                    '0 - Der Inhalt fehlt oder ist verwirrend.',
-                    '1 - Schlecht entworfener Inhalt, relevante Details fehlen.',
-                    '2 - Akzeptabler Inhalt, vermittelt die Hauptbotschaft.',
-                    '3 - Informative und gut durchdachte Inhalte, gibt Einblicke tieferes Verständnis.',
-                    '4 - Sehr ausführlicher und gut recherchierter Inhalt, bietet eine umfassende Analyse.',
-                    '5 - Transformative Inhalte, die neue Perspektiven bieten.'
-                ]
-            },
-            {
-                name: 'Theologie',
-                beschreibungen: [
-                    '0 - Kein theologischer Bezug oder falsche theologische Aussagen.',
-                    '1 - Schwache theologische Grundlagen, die theologische Tiefe fehlt.',
-                    '2 - Basisanwendung theologischer Konzepte.',
-                    '3 - Solide theologische Ansätze, berücksichtigt wichtige theologische Lehrmeinungen.',
-                    '4 - Gut informierte und präzise Verwendung theologischer Lehre.',
-                    '5 - Innovative theologische Gedanken, die das theologische Verständnis erweitern.'
-                ]
-            },
-            {
-                name: 'Seelsorge',
-                beschreibungen: [
-                    '0 - Keine seelsorglichen Aspekte oder unangemessene Empfehlungen.',
-                    '1 - Ungefährliche, aber wenig nützliche seelsorgliche Inputs.',
-                    '2 - Grundlegende seelsorgerische Begleitung, bietet Gewohnheitslösungen.',
-                    '3 - Hilfreiche und ermutigende Seelsorge, bietet praktische Schritte.',
-                    '4 - Tiefgreifende und empathische Seelsorge, versteht die individuellen Herausforderungen.',
-                    '5 - Transformative Seelsorge, die Heilung und Wachstum fördert.'
-                ]
-            },
-        ];
-
-        // Überschrift des Formulars
+        // Heading of the form
         const heading = document.createElement('h5');
-        heading.textContent = 'Bitte bewerte die Antwort, vielen Dank!:';
+        heading.textContent = 'Wie fandest du die Antwort?';
         form.appendChild(heading);
 
-        // Generierung der Bewertungsfelder für jedes Merkmal
-        merkmale.forEach((merkmalObj) => {
-            const merkmal = merkmalObj.name;
-            const beschreibungen = merkmalObj.beschreibungen;
+        // Container for feedback options
+        const feedbackOptions = document.createElement('div');
+        feedbackOptions.classList.add('feedback-options');
 
-            const fieldset = document.createElement('fieldset');
-            fieldset.style.marginTop = '20px';
-            const legend = document.createElement('legend');
-            legend.style.fontWeight = 'bold';
-            legend.textContent = merkmal;
-            fieldset.appendChild(legend);
+        // Positive feedback option (thumbs up)
+        const positiveLabel = document.createElement('label');
+        positiveLabel.classList.add('feedback-positive');
+        positiveLabel.style.cursor = 'pointer';
 
-            beschreibungen.forEach((beschreibung, index) => {
-                const label = document.createElement('label');
-                label.style.display = 'block';
-                label.style.marginBottom = '5px';
+        const positiveInput = document.createElement('input');
+        positiveInput.type = 'radio';
+        positiveInput.name = 'bewertung';
+        positiveInput.value = 'positiv';
+        positiveInput.style.display = 'none';
+        positiveInput.required = true;
+        positiveLabel.appendChild(positiveInput);
 
-                const input = document.createElement('input');
-                input.type = 'radio';
-                input.name = merkmal;
-                input.value = index;
-                input.required = true;
-                label.appendChild(input);
+        const positiveIcon = document.createElement('i');
+        positiveIcon.classList.add('fas', 'fa-thumbs-up');
+        positiveLabel.appendChild(positiveIcon);
 
-                // Füge die Beschreibung hinzu
-                const beschreibungText = document.createTextNode(' ' + beschreibung);
-                label.appendChild(beschreibungText);
+        feedbackOptions.appendChild(positiveLabel);
 
-                fieldset.appendChild(label);
-            });
+        // Negative feedback option (thumbs down)
+        const negativeLabel = document.createElement('label');
+        negativeLabel.classList.add('feedback-negative');
+        negativeLabel.style.cursor = 'pointer';
 
-            form.appendChild(fieldset);
-        });
+        const negativeInput = document.createElement('input');
+        negativeInput.type = 'radio';
+        negativeInput.name = 'bewertung';
+        negativeInput.value = 'negativ';
+        negativeInput.style.display = 'none';
+        negativeInput.required = true;
+        negativeLabel.appendChild(negativeInput);
 
-        // Freitext-Eingabefeld hinzufügen
+        const negativeIcon = document.createElement('i');
+        negativeIcon.classList.add('fas', 'fa-thumbs-down');
+        negativeLabel.appendChild(negativeIcon);
+
+        feedbackOptions.appendChild(negativeLabel);
+
+        form.appendChild(feedbackOptions);
+
+        // Free-text field
         const freitextLabel = document.createElement('label');
         freitextLabel.style.display = 'block';
         freitextLabel.style.marginTop = '20px';
@@ -258,12 +233,13 @@ document.addEventListener('DOMContentLoaded', () => {
         freitextTextarea.name = 'freitext';
         freitextTextarea.rows = 4;
         freitextTextarea.style.width = '100%';
+        freitextTextarea.style.resize = 'vertical';
         freitextTextarea.placeholder = 'Optional: Deine Anmerkungen oder Verbesserungsvorschläge';
 
         freitextLabel.appendChild(freitextTextarea);
         form.appendChild(freitextLabel);
 
-        // Senden-Button für das Feedback-Formular
+        // Submit button
         const submitButton = document.createElement('button');
         submitButton.type = 'submit';
         submitButton.textContent = 'Feedback senden';
