@@ -222,29 +222,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.appendChild(feedbackOptions);
 
-        // Free-text field
+        // Label for the free-text field
         const freitextLabel = document.createElement('label');
         freitextLabel.style.display = 'block';
         freitextLabel.style.marginTop = '20px';
         freitextLabel.style.fontWeight = 'bold';
         freitextLabel.textContent = 'Weitere Anmerkungen:';
+        form.appendChild(freitextLabel);
 
+        // Create an input group for the textarea and button
+        const inputGroup = document.createElement('div');
+        inputGroup.classList.add('input-group');
+
+        // Create the textarea
         const freitextTextarea = document.createElement('textarea');
         freitextTextarea.name = 'freitext';
         freitextTextarea.rows = 4;
-        freitextTextarea.style.width = '100%';
+        freitextTextarea.classList.add('form-control');
         freitextTextarea.style.resize = 'vertical';
         freitextTextarea.placeholder = 'Optional: Deine Anmerkungen oder Verbesserungsvorschläge';
 
-        freitextLabel.appendChild(freitextTextarea);
-        form.appendChild(freitextLabel);
+        // Append the textarea to the input group
+        inputGroup.appendChild(freitextTextarea);
 
-        // Submit button
+        // Create the input group append for the button
+        const inputGroupAppend = document.createElement('div');
+        inputGroupAppend.classList.add('input-group-append');
+
+        // Create the submit button with the paper plane icon
         const submitButton = document.createElement('button');
         submitButton.type = 'submit';
-        submitButton.textContent = 'Feedback senden';
-        submitButton.classList.add('btn', 'btn-success', 'mt-3');
-        form.appendChild(submitButton);
+        submitButton.classList.add('btn', 'btn-success');
+        const sendIcon = document.createElement('i');
+        sendIcon.classList.add('fas', 'fa-paper-plane');
+        submitButton.appendChild(sendIcon);
+
+        // Append the button to the input group append
+        inputGroupAppend.appendChild(submitButton);
+
+        // Append the input group append to the input group
+        inputGroup.appendChild(inputGroupAppend);
+
+        // Append the input group to the form
+        form.appendChild(inputGroup);
 
         return form;
     }

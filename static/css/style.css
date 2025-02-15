@@ -223,11 +223,16 @@ body {
 }
 
 .feedback-positive i {
-    color: #28a745; /* Green color */
+    color: #2C4A3B; /* primary-dark */
+}
+
+.feedback-positive i:hover {
+    color: #1F3329;  /* Dunkleres Grün beim Hover */
+    transform: scale(1.1);  /* Leichte Vergrößerung beim Hover */
 }
 
 .feedback-negative i {
-    color: #dc3545; /* Red color */
+    color: #8b0000; /* dark red */
 }
 
 .feedback-options input[type="radio"]:checked + i {
@@ -279,6 +284,29 @@ body {
 
 .success-animation {
     animation: success 0.3s ease;
+}
+
+/* Ensure the textarea fills the remaining space */
+.input-group textarea.form-control {
+    flex: 1 1 auto;
+    width: auto;
+}
+
+/* Adjust the height of the button to match the textarea */
+.input-group .btn {
+    align-self: flex-start;
+    height: auto;
+}
+
+/* Optional: Customize the appearance of the textarea and button */
+.input-group textarea.form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group-append .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 /* Responsive Breakpoints */
