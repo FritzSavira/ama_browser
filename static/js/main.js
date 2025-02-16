@@ -142,7 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 body: JSON.stringify(feedbackData)
                             });
                             if (feedbackResponse.ok) {
-                                alert('Danke für dein Feedback!');
+                                const feedbackPrompt = displayMessage('Danke für dein Feedback', 'bot-message');
+                                // alert('Danke für dein Feedback!');
                                 feedbackPrompt.remove();    // Remove the feedback prompt
                                 feedbackOptionsContainer.remove() // Remove the feedback options prompt
                                 freitextContainer.remove(); // Remove the freitext form
