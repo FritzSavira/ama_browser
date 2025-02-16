@@ -100,40 +100,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Feedback-Aufforderung als separate Bot-Nachricht
                 const feedbackPrompt = displayMessage('Bitte bewerte die Antwort, vielen Dank!:', 'bot-message');
 
-                // Feedback-Formular als Benutzernachricht
-                const feedbackContainer = displayMessage('', 'user-message');
-                const feedbackForm = createFeedbackForm();
-                // Entferne die Überschrift aus dem Formular, da sie bereits angezeigt wurde
-                feedbackForm.querySelector('h5').remove();
-                feedbackContainer.appendChild(feedbackForm);
+                // Feedback options form in its own bubble
+                const feedbackOptionsContainer = displayMessage('', 'user-message');
+                const feedbackOptionsForm = createFeedbackOptionsForm();
+                feedbackOptionsContainer.appendChild(feedbackOptionsForm);
 
                 // Scrolle zur Antwort
                 loadingMessage.scrollIntoView({ behavior: 'smooth' });
 
-                // Event Listener für das Absenden des Feedback-Formulars
-                feedbackForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const formData = new FormData(feedbackForm);
-                    const feedbackData = {};
-                    formData.forEach((value, key) => {
-                        feedbackData[key] = value;
-                    });
-                    feedbackData['id'] = aktuelleID; // ID dem Feedback hinzufügen
+                // Variable to store the selected feedback option
+                let selectedFeedback = '';
 
-                    // Sende das Feedback an das Backend
-                    const feedbackResponse = await fetch('/feedback', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(feedbackData)
-                    });
-                    if (feedbackResponse.ok) {
-                        alert('Danke für dein Feedback!');
-                        feedbackContainer.remove(); // Formular entfernen
-                        feedbackPrompt.remove(); // Aufforderung entfernen
-                    } else {
-                        alert('Fehler beim Senden des Feedbacks.');
+                // Event listener for feedback options
+                feedbackOptionsForm.addEventListener('change', (e) => {
+                    if (e.target.name === 'bewertung') {
+                        selectedFeedback = e.target.value;
+                        // Optionally disable the feedback options to prevent further changes
+                        feedbackOptionsForm.querySelectorAll('input[name="bewertung"]').forEach(input => {
+                            input.disabled = true;
+                        });
+                        // Display the freitext form in a new bubble
+                        const freitextContainer = displayMessage('', 'user-message');
+                        const freitextForm = createFreitextForm();
+                        freitextContainer.appendChild(freitextForm);
+
+                        // Handle freitext form submission
+                        freitextForm.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const freitext = freitextForm.querySelector('textarea[name="freitext"]').value;
+                            const feedbackData = {
+                                bewertung: selectedFeedback,
+                                freitext: freitext,
+                                id: aktuelleID  // Ensure you have this variable available
+                            };
+                            // Send feedback to the server
+                            const feedbackResponse = await fetch('/feedback', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(feedbackData)
+                            });
+                            if (feedbackResponse.ok) {
+                                alert('Danke für dein Feedback!');
+                                freitextContainer.remove(); // Remove the freitext form
+                                feedbackPrompt.remove();    // Remove the feedback prompt
+                            } else {
+                                alert('Fehler beim Senden des Feedbacks.');
+                            }
+                        });
                     }
                 });
 
@@ -165,24 +180,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Erstellt das Feedback-Formular.
-     * @returns {HTMLFormElement} Das erstellte Feedback-Formular.
-     */
-    function createFeedbackForm() {
+    * generate only the feedback options form
+    */
+    function createFeedbackOptionsForm() {
         const form = document.createElement('form');
-        form.id = 'feedbackForm';
-        form.classList.add('mt-3');
+        form.id = 'feedbackOptionsForm';
 
-        // Heading of the form
-        const heading = document.createElement('h5');
-        heading.textContent = 'Wie fandest du die Antwort?';
-        form.appendChild(heading);
-
-        // Container for feedback options
+        // Feedback options container
         const feedbackOptions = document.createElement('div');
         feedbackOptions.classList.add('feedback-options');
 
-        // Positive feedback option (thumbs up)
+        // Positive feedback option
         const positiveLabel = document.createElement('label');
         positiveLabel.classList.add('feedback-positive');
         positiveLabel.style.cursor = 'pointer';
@@ -201,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         feedbackOptions.appendChild(positiveLabel);
 
-        // Negative feedback option (thumbs down)
+        // Negative feedback option
         const negativeLabel = document.createElement('label');
         negativeLabel.classList.add('feedback-negative');
         negativeLabel.style.cursor = 'pointer';
@@ -222,10 +230,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.appendChild(feedbackOptions);
 
-        // Label for the free-text field
+        return form;
+    }
+
+    /**
+    * function that generates the freitext field and send button
+    */
+    function createFreitextForm() {
+        const form = document.createElement('form');
+        form.id = 'freitextForm';
+        form.classList.add('mt-3');
+
+        // Label for the freitext field
         const freitextLabel = document.createElement('label');
         freitextLabel.style.display = 'block';
-        freitextLabel.style.marginTop = '20px';
         freitextLabel.style.fontWeight = 'bold';
         freitextLabel.textContent = 'Weitere Anmerkungen:';
         form.appendChild(freitextLabel);
@@ -242,7 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
         freitextTextarea.style.resize = 'vertical';
         freitextTextarea.placeholder = 'Optional: Deine Anmerkungen oder Verbesserungsvorschläge';
 
-        // Append the textarea to the input group
         inputGroup.appendChild(freitextTextarea);
 
         // Create the input group append for the button
@@ -257,13 +274,8 @@ document.addEventListener('DOMContentLoaded', () => {
         sendIcon.classList.add('fas', 'fa-paper-plane');
         submitButton.appendChild(sendIcon);
 
-        // Append the button to the input group append
         inputGroupAppend.appendChild(submitButton);
-
-        // Append the input group append to the input group
         inputGroup.appendChild(inputGroupAppend);
-
-        // Append the input group to the form
         form.appendChild(inputGroup);
 
         return form;
