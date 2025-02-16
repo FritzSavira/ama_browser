@@ -228,11 +228,16 @@ body {
 
 .feedback-positive i:hover {
     color: #1F3329;  /* Dunkleres Grün beim Hover */
-    transform: scale(1.1);  /* Leichte Vergrößerung beim Hover */
+    transform: scale(1.2);  /* Leichte Vergrößerung beim Hover */
 }
 
 .feedback-negative i {
     color: #8b0000; /* dark red */
+}
+
+.feedback-negative i:hover {
+    color: #800000;  /* Dunkleres Rot beim Hover */
+    transform: scale(1.2);  /* Leichte Vergrößerung beim Hover */
 }
 
 .feedback-options input[type="radio"]:checked + i {
