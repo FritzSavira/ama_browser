@@ -143,8 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             });
                             if (feedbackResponse.ok) {
                                 alert('Danke für dein Feedback!');
-                                freitextContainer.remove(); // Remove the freitext form
                                 feedbackPrompt.remove();    // Remove the feedback prompt
+                                freitextContainer.remove(); // Remove the freitext form
                             } else {
                                 alert('Fehler beim Senden des Feedbacks.');
                             }
