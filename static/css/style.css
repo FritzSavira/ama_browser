@@ -7,6 +7,8 @@
     --background: #F5F3EE;
     --text-dark: #2A2826;
     --text-light: #F9F6F0;
+    --dark-red: #8B0000;
+    --maroon: #800000; /* dark-dark-red
 }
 
 /* Allgemeine Stile */
@@ -223,20 +225,20 @@ body {
 }
 
 .feedback-positive i {
-    color: #2C4A3B; /* primary-dark */
+    color: var(--primary); /* primary-dark */
 }
 
 .feedback-positive i:hover {
-    color: #1F3329;  /* Dunkleres Grün beim Hover */
+    color: var(--primary-dark);  /* Dunkleres Grün beim Hover */
     transform: scale(1.2);  /* Leichte Vergrößerung beim Hover */
 }
 
 .feedback-negative i {
-    color: #8b0000; /* dark red */
+    color: var(--dark-red); /* dark red */
 }
 
 .feedback-negative i:hover {
-    color: #800000;  /* Dunkleres Rot beim Hover */
+    color: var(--maroon);  /* Dunkleres Rot beim Hover */
     transform: scale(1.2);  /* Leichte Vergrößerung beim Hover */
 }
 
