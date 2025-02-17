@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 # Konstanten
 DATA_DIR = '/data'
 LOG_FILE = os.path.join(DATA_DIR, 'ama_log.json')
-ANTWORT_FOOTER = ("\n\n *Dies ist eine mögliche Antwort."
+ANTWORT_FOOTER = ("\n\n *Diese Antwort wurde mit KI erstellt und kann fehlerhaft sein."
                   " Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*")
 
 # HTML-Sanitizer-Konfiguration
@@ -156,6 +156,10 @@ class LoggingService:
 def index():
     """Rendert die Hauptseite."""
     return render_template('index.html')
+
+@app.route('/legal')
+def legal():
+    return render_template('legal.html')
 
 
 @app.route('/ask', methods=['POST'])

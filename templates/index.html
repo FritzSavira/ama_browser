@@ -32,37 +32,43 @@
             <span class="ml-2">Frage und Antwort herunterladen</span>
         </button>
         <!-- Eingabebereich für neue Fragen -->
-<div class="chat-input">
-    <form id="frageForm" class="d-flex flex-column">
-        <!-- Agenten-Auswahl -->
-        <fieldset class="form-group">
-            <legend>Wähle das Format der Antwort:</legend>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="agent" id="agent_pastoral" value="pastoral-seelsorgerlich" required>
-                <label class="form-check-label" for="agent_pastoral">pastoral-seelsorgerlich</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="agent" id="agent_theologisch" value="theologisch-wissenschaftlich">
-                <label class="form-check-label" for="agent_theologisch">theologisch-wissenschaftlich</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="agent" id="agent_predigend" value="predigend-erzählend">
-                <label class="form-check-label" for="agent_predigend">predigend-erzählend</label>
-            </div>
-        </fieldset>
-        <!-- Frageingabe -->
-        <div class="input-group">
-            <input type="text" id="frage" name="frage" required class="form-control" placeholder="Schreibe deine Frage hier...">
-            <div class="input-group-append">
-                <!-- Sende-Button  -->
-                <button type="submit" class="btn btn-primary ml-2">
-                    <i class="fas fa-paper-plane"></i>
-                    <span class="d-none d-sm-inline ml-2"></span>
-                </button>
-            </div>
+        <div class="chat-input">
+            <form id="frageForm" class="d-flex flex-column">
+                <!-- Agenten-Auswahl -->
+                <fieldset class="form-group">
+                    <legend>Wähle das Format der Antwort:</legend>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="agent" id="agent_pastoral" value="pastoral-seelsorgerlich" required>
+                        <label class="form-check-label" for="agent_pastoral">pastoral-seelsorgerlich</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="agent" id="agent_theologisch" value="theologisch-wissenschaftlich">
+                        <label class="form-check-label" for="agent_theologisch">theologisch-wissenschaftlich</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="agent" id="agent_predigend" value="predigend-erzählend">
+                        <label class="form-check-label" for="agent_predigend">predigend-erzählend</label>
+                    </div>
+                </fieldset>
+                <!-- Frageingabe -->
+                <div class="input-group">
+                    <input type="text" id="frage" name="frage" required class="form-control" placeholder="Schreibe deine Frage hier...">
+                    <div class="input-group-append">
+                        <!-- Sende-Button  -->
+                        <button type="submit" class="btn btn-primary ml-2">
+                            <i class="fas fa-paper-plane"></i>
+                            <span class="d-none d-sm-inline ml-2"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
+        <!-- Footer mit rechtlichen Links -->
+        <!--
+        <div class="footer mt-3">
+            <a href="{{ url_for('legal') }}" class="btn btn-link">Rechtliche Hinweise</a>
+        </div>
+        -->
     </div>
 
     <!-- Einbinden von jQuery und Bootstrap JS über CDN -->
