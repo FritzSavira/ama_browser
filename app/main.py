@@ -46,21 +46,73 @@ straico_api_key = os.getenv('STRAICO_API_KEY')
 executor = ThreadPoolExecutor(max_workers=3)
 
 
-def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict, prompt_text: str, unique_id: str):
-    """Processes tags and logging asynchronously after the main answer."""
+def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict,
+                           prompt_text: str, unique_id: str):
+    """Verarbeitet Tags, Abstraktion und Logging asynchron nach der Hauptantwort."""
     try:
         # Generate tags
         reply_tags = ChatService.generate_tags(antwort_markdown)
         tags = reply_tags['completion']['choices'][0]['message']['content']
-        # Extract JSON structure from the string
         tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
 
-        # Save log
-        LoggingService.save_log(frage, prompt_text, reply, tags, unique_id)
+        # Generate abstraction
+        with straico_client(API_KEY=straico_api_key) as client:
+            abstraction = AbstractionService.abstract_question(frage, client)
 
-        logger.info(f"Tags and logging successfully processed for question: {frage[:50]}...")
+        # Save log with abstraction
+        LoggingService.save_log(frage, prompt_text, reply, tags,
+                              abstraction, unique_id)
+
+        logger.info(f"Tags, abstraction and logging processed for question: {frage[:50]}...")
     except Exception as e:
-        logger.error(f"Error in tag processing and logging: {str(e)}")
+        logger.error(f"Error in processing: {str(e)}")
+
+
+class AbstractionService:
+    @staticmethod
+    def abstract_question(question: str, llm_client) -> Dict:
+        """Erstellt eine datenschutzkonforme Abstraktion der Benutzeranfrage."""
+        abstraction_prompt = """
+        Analysiere die folgende Frage und erstelle eine strukturierte Abstraktion in folgendem JSON-Format:
+        {
+            "categorization": {
+                "category": "",
+                "subcategory": "",
+                "type": "",
+                "complexity": 0
+            },
+            "tagging": {
+                "tags": [],
+                "relation": "",
+                "abstraction_level": ""
+            },
+            "intent": {
+                "main_goal": "",
+                "context": "",
+                "expected_output": ""
+            },
+            "semantic": {
+                "generic_query": "",
+                "domain": "",
+                "information_goal": ""
+            }
+        }
+
+        Frage: """
+
+        try:
+            reply = llm_client.prompt_completion(
+                TAGS_LLM,
+                abstraction_prompt + question
+            )
+            abstraction = json.loads(
+                reply['completion']['choices'][0]['message']['content']
+            )
+            return abstraction
+        except Exception as e:
+            logger.error(f"Fehler bei der Abstraktion: {str(e)}")
+            return {}
+
 
 
 class ChatService:
@@ -99,13 +151,14 @@ class ChatService:
 
 class LoggingService:
     @staticmethod
-    def save_log(frage: str, prompt_text: str, reply: Dict, tags: str, entry_id: str) -> None:
-        """Speichert Chat-Interaktionen in der Log-Datei."""
+    def save_log(frage: str, prompt_text: str, reply: Dict, tags: str,
+                 abstraction: Dict, entry_id: str) -> None:
+        """Speichert Chat-Interaktionen mit Abstraktion in der Log-Datei."""
         tags = json.loads(tags)
         try:
             log_entry = {
-                "id": entry_id,  # Add the unique ID to the log entry
-                "frage": frage,
+                "id": entry_id,
+                "frage_abstraktion": abstraction,  # Neue abstrahierte Version
                 "prompt": prompt_text,
                 "reply": reply,
                 "tags": tags
