@@ -2,10 +2,177 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Landing Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theologische Beratung & Seelsorge</title>
+
+    <!-- Bereits vorhandene Style-Einbindungen -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Serif+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Willkommen zur Web-App!</h1>
-    <p><a href="{{ url_for('chat') }}">Zur App</a></p>
+    <!-- Header -->
+    <header class="py-5" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
+        <div class="container text-center text-light">
+            <h1 class="display-4 mb-4" style="font-family: 'Playfair Display', serif;">
+                Theologisch fundierte Unterstützung für Ihre seelsorgerliche Arbeit
+            </h1>
+            <p class="lead mb-5">Von Seelsorgern für Seelsorger entwickelt</p>
+            <a href="{{ url_for('chat') }}" class="btn btn-lg" style="background-color: var(--accent); color: var(--text-light);">
+                Jetzt kostenfrei testen
+            </a>
+        </div>
+    </header>
+
+    <!-- Hauptnutzen-Sektion -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-heart fa-3x mb-3" style="color: var(--primary)"></i>
+                            <h3 class="h4 mb-3">Pastoral-seelsorgerlich beraten</h3>
+                            <p>Einfühlsame Unterstützung für seelsorgerliche Gespräche und pastorale Begleitung.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-book-bible fa-3x mb-3" style="color: var(--primary)"></i>
+                            <h3 class="h4 mb-3">Theologisch-wissenschaftlich reflektieren</h3>
+                            <p>Fundierte theologische Analysen und biblische Perspektiven für Ihre Themen.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-microphone-alt fa-3x mb-3" style="color: var(--primary)"></i>
+                            <h3 class="h4 mb-3">Predigend-erzählend vermitteln</h3>
+                            <p>Inspirierende Impulse für Ihre Verkündigung und Lehre.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wichtiger Hinweis -->
+    <section class="py-4" style="background-color: var(--accent);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="text-light text-center">
+                        <h3 class="mb-3"><i class="fas fa-exclamation-circle mr-2"></i>Wichtiger Hinweis zur Nutzung</h3>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <h5><i class="fas fa-pen mr-2"></i>Formulierungshilfe</h5>
+                                <p>Nutzen Sie die App ausschließlich als Formulierungshilfe für Antworten, die Sie aus eigener Überzeugung geben würden</p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <h5><i class="fas fa-bible mr-2"></i>Biblische Grundlage</h5>
+                                <p>Verwenden Sie nur Bibelstellen, die Sie durch eigenes Studium und geistliche Erkenntnis als passend erachten</p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <h5><i class="fas fa-pray mr-2"></i>Geistliches Wachstum</h5>
+                                <p>Diese App ersetzt nicht das persönliche Gebet, Bibelstudium und eigenes geistliches Wachstum</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Theologische Fundierung -->
+    <!-- section class="py-5">
+        <!div class="container">
+            <!h2 class="text-center mb-5">Unsere geistliche Grundlage</h2>
+            <!div class="row align-items-center">
+                <!div class="col-md-6">
+                    <!h3>Die Bibel als Autorität</h3>
+                    <!p>Unsere Antworten basieren auf dem Wort Gottes als höchster Autorität und orientieren sich an bewährter theologischer Tradition.</p>
+                    <!h3 class="mt-4">Denominationsübergreifend</h3>
+                    <!p>Wir respektieren die Vielfalt christlicher Traditionen und bieten ausgewogene, biblisch fundierte Perspektiven.</p>
+                <!/div>
+                <!div class="col-md-6">
+                    <!img src="{{ url_for('static', filename='img/bible-study.jpg') }}" alt="Bibel Studium" class="img-fluid rounded shadow">
+                <!/div>
+            <!/div>
+        <!/div>
+    <!/section-->
+
+    <!-- Praktische Anwendung -->
+    <!-- section class="py-5 bg-light">
+        <!div class="container">
+            <!h2 class="text-center mb-5">So unterstützen wir Sie im Alltag</h2>
+            <!div class="row">
+                <!div class="col-md-6">
+                    <!div class="card mb-4 border-0 shadow-sm">
+                        <!div class="card-body">
+                            <!h3 class="h5">Seelsorgerliche Gespräche</h3>
+                            <!p>Schnelle, fundierte Unterstützung bei der Vorbereitung schwieriger Gespräche.</p>
+                        <!/div>
+                    <!/div>
+                <!/div>
+                <!div class="col-md-6">
+                    <!div class="card mb-4 border-0 shadow-sm">
+                        <!div class="card-body">
+                            <!h3 class="h5">Predigtvorbereitung</h3>
+                            <!p>Theologische Reflexion und praktische Anwendungen für Ihre Verkündigung.</p>
+                        <!/div>
+                    <!/div>
+                <!/div>
+            <!/div>
+        <!/div>
+    <!/section-->
+
+    <!-- Call-to-Action -->
+    <!-- section class="py-5 text-center" style="background-color: var(--primary-dark); color: var(--text-light);">
+        <!div class="container">
+            <!h2 class="mb-4">Beginnen Sie noch heute</h2>
+            <!p class="mb-4">Erleben Sie, wie unsere App Ihren pastoralen Dienst bereichert.</p>
+            <!a href="{{ url_for('chat') }}" class="btn btn-lg" style="background-color: var(--accent); color: var(--text-light);">
+                Kostenfrei testen
+            <!/a>
+        <!/div>
+    <!/section-->
+
+    <!-- Footer -->
+    <!-- footer class="py-4" style="background-color: var(--primary);">
+        <!div class="container text-light">
+            <!div class="row">
+                <!div class="col-md-4 mb-3">
+                    <!h4>Kontakt</h4>
+                    <!p><i class="fas fa-envelope"></i> kontakt@theologische-beratung.de</p>
+                <!/div>
+                <!div class="col-md-4 mb-3">
+                    <!h4>Links</h4>
+                    <!p><a href="#" class="text-light">Theologische Grundlagen</a></p>
+                    <!p><a href="#" class="text-light">Datenschutz</a></p>
+                <!/div>
+                <!div class="col-md-4 mb-3">
+                    <!h4>Newsletter</h4>
+                    <!form>
+                        <!div class="input-group">
+                            <!input type="email" class="form-control" placeholder="Ihre E-Mail">
+                            <!div class="input-group-append">
+                                <!button class="btn" style="background-color: var(--accent); color: var(--text-light);" type="submit">
+                                    Anmelden
+                                <!/button>
+                            <!/div>
+                        <!/div>
+                    <!/form>
+                <!/div>
+            <!/div>
+        <!/div>
+    <!/footer -->
+
+    <!-- JavaScript-Einbindungen -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
