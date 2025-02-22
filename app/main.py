@@ -205,8 +205,8 @@ class LoggingService:
             raise
 
 
-@app.route('/')
-def index():
+@app.route('/chat')
+def chat():
     """Rendert die Hauptseite."""
     return render_template('index.html')
 
@@ -283,3 +283,7 @@ def feedback():
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
+@app.route('/')
+def index():
+    """Rendert die Landing Page."""
+    return render_template('landing.html')

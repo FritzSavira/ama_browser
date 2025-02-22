@@ -13,7 +13,7 @@
     <!-- Icons Import -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Externe CSS-Datei -->
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <!-- Hauptcontainer für den Chat -->
@@ -76,6 +76,6 @@
     <!-- Popper.js und Bootstrap JS (falls Bootstrap JS-Komponenten verwendet werden) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
     <!-- Externe JavaScript-Datei -->
-    <script src="../static/js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
