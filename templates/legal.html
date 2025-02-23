@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rechtliche Hinweise</title>
+
+    <!-- Einbinden von Bootstrap CSS über CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <!-- Icons Import -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Externe CSS-Datei -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container my-5">
+        <!-- Zurück zu landing.html -->
+        <div class="text-left mb-4">
+            <a href="{{ url_for('index') }}" class="btn btn-primary"><i class="fas fa-home"></i></a>
+        </div>
+        <!-- Impressum -->
+        <section id="impressum" class="mb-5">
+            <h2>Impressum</h2>
+            <p><strong>Vollständiger Name:</strong>Friedemann Decker<br>
+                <strong>Adresse:</strong> Seegasse 2, 96135 Stegaurach<br>
+                <!-- strong>Kontakt:</strong> <a href="mailto:kontakt@musterfirma.de">kontakt@musterfirma.de</a>, Telefon: +49 1234 567890<br -->
+            </p>
+        </section>
+
+        <!-- Datenschutzerklärung -->
+        <section id="datenschutz" class="mb-5">
+            <h2>Datenschutzerklärung</h2>
+            <p><strong>Verantwortlicher:</strong> Friedemann Decker, Seegasse 2, 96135 Stegaurach</p>
+            <h4>Verarbeitete Daten und Zweck</h4>
+            <ul>
+                <li>Diese Anwendung (Web-App) verarbeitet Eingaben der Nutzer (Fragen im Chat), um eine passende Chat-Completion Ausgabe durch ein Sprachmodell (LLM) zu generieren und diese bereitzustellen.</li>
+                <li><strong>Zweck:</strong> Generierung und Auswertung von Chat-Completion Ausgaben basierend auf Nutzereingaben</li>
+
+                <li><strong>Rechtsgrundlage:</strong> Berechtigtes Interesse gemäß Art. 6 Abs. 1 lit. f DSGVO</li>
+            </ul>
+
+            <h4>Speicherung und Löschung von Daten in dieser Web-App</h4>
+            <p>Daten werden nur so lange gespeichert, wie dies für den genannten Zweck erforderlich sind, und anschließend gelöscht. Der Wortlaut der Nutzereigaben wird nicht gespeichert.</p>
+
+            <h4>Rechte der Nutzer</h4>
+            <ul>
+                <li>Recht auf Auskunft.</li>
+                <li>Personenbezogene Daten werden von dieser Web-App nicht erfasst und nicht gespeichert.</li>
+
+            </ul>
+
+            <h4>Datenweitergabe</h4>
+            <p>Die eingegebenen Daten werden an externe Sprachmodell-Application Programming Interface (API) weitergegeben,
+                um Chat-Completion Ausgaben zu erstellen: Straico · AI Inspire Labs LLC: https://straico.com/privacy-policy/</p>
+            <p>Datenschutzerklärung genutzter Sprachmodellanbieter:</p>
+            <p>OpenAI: https://openai.com/policies/privacy-policy/</p>
+            <p>Anthopic/C: https://www.anthropic.com/legal/privacy</p>
+            <h4>Cookies</h4>
+            <p>Es werden keine Cookies eingesetzt.</p>
+        </section>
+
+        <!-- Nutzungsbedingungen / Haftungsausschluss -->
+        <section id="nutzungsbedingungen" class="mb-5">
+            <h2>Nutzungsbedingungen / Haftungsausschluss</h2>
+
+            <h4>Charakter der Antworten</h4>
+            <p>Die Chat-Completion Ausgaben in diesem Chat werden von einem Sprachmodell (LLM) generiert. Sie dienen ausschließlich zu Informationszwecken und stellen keinerlei individuelle Beratung dar, beispielsweise in rechtlichen, medizinischen, steuerlichen oder persönlichen Angelegenheiten. Wir übernehmen keine Garantie für die Richtigkeit, Vollständigkeit oder Aktualität der bereitgestellten Antworten.</p>
+
+            <h4>Haftungsbeschränkung</h4>
+            <p>Die Nutzung der bereitgestellten Informationen erfolgt auf eigene Gefahr. Wir haften nicht für Schäden materieller oder immaterieller Art, die durch die Nutzung der Informationen direkt oder indirekt entstehen. Ausgenommen hiervon sind Fälle von Vorsatz, grober Fahrlässigkeit oder Schäden aus der Verletzung von Leben, Körper oder Gesundheit.</p>
+
+            <h4>Verantwortlichkeit für Nutzerfragen</h4>
+            <p>Die Eingabe von personenbezogenen Daten ist verboten.</p>
+            <p>Die Nutzer sind allein verantwortlich für den Inhalt ihrer getätigten Eingaben. Der Betreiber haftet nicht für rechtswidrige oder beleidigende Inhalte, die von Nutzern eingegeben werden. Sobald wir von rechtswidrigen Inhalten Kenntnis erlangen, werden diese entfernt.</p>
+        </section>
+
+        <!-- Navigation für rechtliche Abschnitte -->
+        <div class="mt-5 text-center">
+            <a href="#impressum" class="btn btn-secondary">Zum Impressum</a>
+            <a href="#datenschutz" class="btn btn-secondary">Zur Datenschutzerklärung</a>
+            <a href="#nutzungsbedingungen" class="btn btn-secondary">Zu den Nutzungsbedingungen</a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

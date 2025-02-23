@@ -19,7 +19,7 @@
                 Theologisch fundierte Unterstützung für Ihre seelsorgerliche Arbeit
             </h1>
             <p class="lead mb-5">Von Seelsorgern für Seelsorger entwickelt</p>
-            <a href="{{ url_for('chat') }}" class="btn btn-lg" style="background-color: var(--accent); color: var(--text-light);">
+            <a href="{{ url_for('chat') }}" class="btn btn-primary" style="background-color: var(--accent); color: var(--text-light);">
                 Jetzt kostenfrei testen
             </a>
         </div>
@@ -131,45 +131,35 @@
     <!/section-->
 
     <!-- Call-to-Action -->
-    <!-- section class="py-5 text-center" style="background-color: var(--primary-dark); color: var(--text-light);">
-        <!div class="container">
-            <!h2 class="mb-4">Beginnen Sie noch heute</h2>
-            <!p class="mb-4">Erleben Sie, wie unsere App Ihren pastoralen Dienst bereichert.</p>
-            <!a href="{{ url_for('chat') }}" class="btn btn-lg" style="background-color: var(--accent); color: var(--text-light);">
+    <section class="py-5 text-center" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
+        <div class="container text-light">
+            <h4 class="mb-4">Beginnen Sie noch heute</h4>
+            <p class="mb-4">ohne Konto, keine Cookies, keine Abfrage oder Speicherung personenbezogener Daten in dieser App.</p>
+            <a href="{{ url_for('chat') }}" class="btn btn-primary" style="background-color: var(--accent); color: var(--text-light);">
                 Kostenfrei testen
-            <!/a>
-        <!/div>
-    <!/section-->
+            </a>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <!-- footer class="py-4" style="background-color: var(--primary);">
-        <!div class="container text-light">
-            <!div class="row">
-                <!div class="col-md-4 mb-3">
-                    <!h4>Kontakt</h4>
-                    <!p><i class="fas fa-envelope"></i> kontakt@theologische-beratung.de</p>
-                <!/div>
-                <!div class="col-md-4 mb-3">
-                    <!h4>Links</h4>
-                    <!p><a href="#" class="text-light">Theologische Grundlagen</a></p>
-                    <!p><a href="#" class="text-light">Datenschutz</a></p>
-                <!/div>
-                <!div class="col-md-4 mb-3">
-                    <!h4>Newsletter</h4>
-                    <!form>
-                        <!div class="input-group">
-                            <!input type="email" class="form-control" placeholder="Ihre E-Mail">
-                            <!div class="input-group-append">
-                                <!button class="btn" style="background-color: var(--accent); color: var(--text-light);" type="submit">
-                                    Anmelden
-                                <!/button>
-                            <!/div>
-                        <!/div>
-                    <!/form>
-                <!/div>
-            <!/div>
-        <!/div>
-    <!/footer -->
+    <footer class="py-4" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
+        <div class="container text-light">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <!--p><i class="fas fa-envelope"></i> kontakt@theologische-beratung.de</p-->
+                </div>
+                <div class="col-md-4 mb-3">
+                    <p><a href="{{ url_for('theolog') }}" class="text-light">Theologische Grundlagen</a></p>
+                </div>
+                <!-- Footer mit rechtlichen Links -->
+                <div class="col-md-4 mb-3">
+                    <a href="{{ url_for('legal') }}" class="text-light">Rechtliche Hinweise</a>
+                </div>
+
+
+            </div>
+        </div>
+    </footer>
 
     <!-- JavaScript-Einbindungen -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

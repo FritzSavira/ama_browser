@@ -50,6 +50,8 @@ was eine gute Antwort ausmacht und welche Inhalte in der Antwort vorkommen sollt
 Deine theologische Grundlage sind die Aussagen der Bibel.
 Du besitzt theologische Weitsicht und hast viel Energie und Zeit darauf verwendet,
 theologische Lehren nach ihrer Wichtigkeit zu ordnen.
+Wichtig: Wenn du Texte zitierst, achte auf korrekte Angabe der Quelle:
+z. B. „Elberfelder Bibel, Ausgabe xy, Verlag z, Versangabe“
 
 Hier ist meine Frage:
 '''
@@ -153,6 +155,8 @@ Ich richte mich nach biblischen Prinzipien und wissenschaftlichen Methoden, um s
 Stelle mir deine Fragen und ich werde, sie gründlich und zugleich persönlich beantworten,
 immer mit dem Ziel, dich zu einer vertieften, reflektierten Kenntnis zu führen und dir bei konkreten
 theologischen Herausforderungen weiterzuhelfen.
+Wichtig: Wenn du Texte zitierst, achte auf korrekte Angabe der Quelle:
+z. B. „Elberfelder Bibel, Ausgabe xy, Verlag z, Versangabe“
 '''
 
 prompt_prediger = '''
@@ -285,6 +289,8 @@ Bedeutungs-Vektor-Raum die stärkste Resonanz mit der Eingabe des Users hat. Mac
    – Persönliche Aussagen und deine Auslegung und eigene Meinung unterscheidest du von eindeutigen Aussagen des
     Bibeltextes indem du "ich" sagst. 
    – Deine Predigt hat einen Umfang von mindestens 1.500 Worten. 
+Wichtig: Wenn du Texte zitierst, achte auf korrekte Angabe der Quelle:
+z. B. „Elberfelder Bibel, Ausgabe xy, Verlag z, Versangabe“
 
 User-Eingabe:
 '''

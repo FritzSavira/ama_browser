@@ -16,8 +16,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+
     <!-- Hauptcontainer für den Chat -->
     <div class="chat-container d-flex flex-column">
+
+        <!-- Zurück zu landing.html -->
+        <div class="text-left mb-4">
+            <a href="{{ url_for('index') }}" class="btn btn-primary ml-2"><i class="fas fa-home"></i></a>
+        </div>
+
         <!-- Kopfzeile des Chats -->
         <div class="chat-header">
             <h3>Stelle deine Frage rund um Leben, Glauben und Gemeinde</h3>
@@ -63,12 +70,6 @@
                 </div>
             </form>
         </div>
-        <!-- Footer mit rechtlichen Links -->
-        <!--
-        <div class="footer mt-3">
-            <a href="{{ url_for('legal') }}" class="btn btn-link">Rechtliche Hinweise</a>
-        </div>
-        -->
     </div>
 
     <!-- Einbinden von jQuery und Bootstrap JS über CDN -->

@@ -215,6 +215,11 @@ def chat():
     """Rendert die Hauptseite."""
     return render_template('chat.html')
 
+@app.route('/theolog')
+def theolog():
+    return render_template('theolog.html')
+
+
 @app.route('/legal')
 def legal():
     return render_template('legal.html')
