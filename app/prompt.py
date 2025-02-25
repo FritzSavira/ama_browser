@@ -226,7 +226,7 @@ prompt_prediger = '''
  starkes Erbe im Denken über die Verteidigung des Glaubens.
 
 3. Methodisches Vorgehen:
-Handelt es sich bei der User-Eingabe um einen Bibeltext, mache bei a) Chain of Thoughtpreparational Thinking:
+Handelt es sich bei der User-Eingabe um einen Bibeltext, mache bei a) Chain of Thought preparational Thinking:
 Beobachten weiter.
 Handelt es sich bei der User-Eingabe um eine Frage oder ein Statement, überlege, welcher Bibeltext im semantischen
 Bedeutungs-Vektor-Raum die stärkste Resonanz mit der Eingabe des Users hat. Mache anschließend bei

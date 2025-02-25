@@ -5,12 +5,13 @@ from flask import Flask, render_template, request, jsonify
 from prompt import prompt_pastor, prompt_theologe, prompt_prediger, prompt_tags
 from aio_straico import straico_client
 import os
+import re
 import json
 import markdown
 import bleach
 from typing import Dict, List
 import logging
-import re
+
 
 # Logging-Konfiguration
 logging.basicConfig(
