@@ -48,7 +48,7 @@ executor = ThreadPoolExecutor(max_workers=3)
 
 
 def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict,
-                           prompt_text: str, unique_id: str):
+                           prompt_text: str, unique_id: str, abstraction):
     """Verarbeitet Tags, Abstraktion und Logging asynchron nach der Hauptantwort."""
     try:
         # Generate tags
@@ -57,8 +57,8 @@ def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict,
         tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
 
         # Generate abstraction
-        with straico_client(API_KEY=straico_api_key) as client:
-            abstraction = AbstractionService.abstract_question(frage, client)
+        # with straico_client(API_KEY=straico_api_key) as client:
+        #    abstraction = AbstractionService.abstract_question(frage, client)
 
         # Save log with abstraction
         LoggingService.save_log(frage, prompt_text, reply, tags,
@@ -118,11 +118,11 @@ class AbstractionService:
 
 class ChatService:
     @staticmethod
-    def generate_reply(frage: str, prompt_text: str) -> Dict:
+    def generate_reply(abstraction, frage: str, prompt_text: str) -> Dict:
         """Generates an AI answer to the given question using the specified prompt."""
         try:
             with straico_client(API_KEY=straico_api_key) as client:
-                reply = client.prompt_completion(ANTWORT_LLM, prompt_text + frage)
+                reply = client.prompt_completion(ANTWORT_LLM, prompt_text + abstraction + frage)
                 return reply
         except Exception as e:
             logger.error(f"Error generating reply: {str(e)}")
@@ -249,8 +249,12 @@ def ask():
         else:
             return jsonify({'antwort': 'Ungültiger Agent ausgewählt.'}), 400
 
+        # Generate abstraction
+        with straico_client(API_KEY=straico_api_key) as client:
+            abstraction = AbstractionService.abstract_question(frage, client)
+
         # Generate reply using the appropriate prompt
-        reply = ChatService.generate_reply(frage, prompt_text)
+        reply = ChatService.generate_reply(abstraction, frage, prompt_text)
         antwort_markdown = (reply['completion']['choices'][0]['message']['content']
                             + ANTWORT_FOOTER)
         antwort_html = ChatService.convert_markdown_to_html(antwort_markdown)
@@ -259,7 +263,7 @@ def ask():
         unique_id = str(uuid.uuid4())
 
         # Asynchronous processing of tags and logging
-        executor.submit(process_tags_and_logging, antwort_markdown, frage, reply, prompt_text, unique_id)
+        executor.submit(process_tags_and_logging, antwort_markdown, frage, reply, prompt_text, unique_id, abstraction)
 
         return jsonify({
             'antwort': antwort_html,

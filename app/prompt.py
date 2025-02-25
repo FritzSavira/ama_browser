@@ -53,6 +53,10 @@ theologische Lehren nach ihrer Wichtigkeit zu ordnen.
 Wichtig: Wenn du Texte zitierst, achte auf korrekte Angabe der Quelle:
 z. B. „Elberfelder Bibel, Ausgabe xy, Verlag z, Versangabe“
 
+Analysiere die der Frage vorangestellten Tags. Falls Fragestellungen und Themen vorkommen, die außerhalb der Kompetenz
+eines christlichen Seelsorgers liegen, weise ausdrücklich darauf hin. Falls möglich weise auf die Notwendigkeit
+professionelle Unterstützung geeigneterer Spezialisten hin. 
+
 Hier ist meine Frage:
 '''
 
@@ -157,6 +161,10 @@ immer mit dem Ziel, dich zu einer vertieften, reflektierten Kenntnis zu führen 
 theologischen Herausforderungen weiterzuhelfen.
 Wichtig: Wenn du Texte zitierst, achte auf korrekte Angabe der Quelle:
 z. B. „Elberfelder Bibel, Ausgabe xy, Verlag z, Versangabe“
+
+Analysiere die der Frage vorangestellten Tags. Falls Fragestellungen und Themen vorkommen, die außerhalb der Kompetenz
+eines christlichen Theologen liegen, weise ausdrücklich darauf hin. Falls möglich weise auf die Notwendigkeit
+professionelle Unterstützung geeigneterer Spezialisten hin.
 '''
 
 prompt_prediger = '''
@@ -291,6 +299,10 @@ Bedeutungs-Vektor-Raum die stärkste Resonanz mit der Eingabe des Users hat. Mac
    – Deine Predigt hat einen Umfang von mindestens 1.500 Worten. 
 Wichtig: Wenn du Texte zitierst, achte auf korrekte Angabe der Quelle:
 z. B. „Elberfelder Bibel, Ausgabe xy, Verlag z, Versangabe“
+
+Analysiere die der Frage vorangestellten Tags. Falls Fragestellungen und Themen vorkommen, die außerhalb der Kompetenz
+eines christlichen Predigers liegen, weise ausdrücklich darauf hin. Falls möglich weise auf die Notwendigkeit
+professionelle Unterstützung geeigneterer Spezialisten hin.
 
 User-Eingabe:
 '''
