@@ -122,7 +122,8 @@ class ChatService:
         """Generates an AI answer to the given question using the specified prompt."""
         try:
             with straico_client(API_KEY=straico_api_key) as client:
-                reply = client.prompt_completion(ANTWORT_LLM, prompt_text + abstraction + frage)
+                abstraction_str = str(abstraction)
+                reply = client.prompt_completion(ANTWORT_LLM, prompt_text + abstraction_str + frage)
                 return reply
         except Exception as e:
             logger.error(f"Error generating reply: {str(e)}")
