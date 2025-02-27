@@ -34,28 +34,19 @@ COLLECTION_NAME = 'ama_log'
 
 # MongoDB Client Initialisierung
 def get_mongodb_client():
-    retries = 3
-    while retries > 0:
-        try:
-            client = MongoClient(
-                MONGODB_URI,
-                serverSelectionTimeoutMS=5000,
-                connectTimeoutMS=5000,
-                retryWrites=True
-            )
-            # Test the connection
-            client.admin.command('ping')
-            return client
-        except ServerSelectionTimeoutError as e:
-            retries -= 1
-            if retries == 0:
-                logger.error(f"Failed to connect to MongoDB after 3 attempts: {str(e)}")
-                raise
-            logger.warning(f"MongoDB connection attempt failed, retrying... ({retries} attempts left)")
-            time.sleep(1)
-        except PyMongoError as e:
-            logger.error(f"MongoDB error: {str(e)}")
-            raise
+    try:
+        client = MongoClient(
+            MONGODB_URI,
+            serverSelectionTimeoutMS=5000,
+            connectTimeoutMS=5000,
+            ssl=True,
+            ssl_cert_reqs=ssl.CERT_REQUIRED,
+            ssl_ca_certs=certifi.where()
+        )
+        return client
+    except Exception as e:
+        logger.error(f"MongoDB connection error: {str(e)}")
+        raise
 
 
 # HTML-Sanitizer-Konfiguration
