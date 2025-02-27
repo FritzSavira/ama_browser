@@ -1,18 +1,18 @@
-import uuid  # Import uuid to generate unique IDs
 from concurrent.futures import ThreadPoolExecutor
-import asyncio
 from flask import Flask, render_template, request, jsonify
 from prompt import prompt_pastor, prompt_theologe, prompt_prediger, prompt_tags, prompt_abstraction
 from aio_straico import straico_client
+from pymongo import MongoClient
+from pymongo.errors import PyMongoError, ServerSelectionTimeoutError, OperationFailure
+from typing import Dict, List
+import uuid  # Import uuid to generate unique IDs
 import os
 import re
 import json
 import markdown
 import bleach
-from typing import Dict, List
 import logging
-
-
+import time
 
 # Logging-Konfiguration
 logging.basicConfig(
@@ -26,6 +26,37 @@ DATA_DIR = '/data'
 LOG_FILE = os.path.join(DATA_DIR, 'ama_log.json')
 ANTWORT_FOOTER = ("\n\n *Diese Antwort wurde mit KI erstellt und kann fehlerhaft sein."
                   " Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*")
+
+# MongoDB Konfiguration
+MONGODB_URI = os.getenv('MONGODB_URI')
+DB_NAME = 'ama_browser'
+COLLECTION_NAME = 'ama_log'
+
+# MongoDB Client Initialisierung
+def get_mongodb_client():
+    retries = 3
+    while retries > 0:
+        try:
+            client = MongoClient(
+                MONGODB_URI,
+                serverSelectionTimeoutMS=5000,
+                connectTimeoutMS=5000,
+                retryWrites=True
+            )
+            # Test the connection
+            client.admin.command('ping')
+            return client
+        except ServerSelectionTimeoutError as e:
+            retries -= 1
+            if retries == 0:
+                logger.error(f"Failed to connect to MongoDB after 3 attempts: {str(e)}")
+                raise
+            logger.warning(f"MongoDB connection attempt failed, retrying... ({retries} attempts left)")
+            time.sleep(1)
+        except PyMongoError as e:
+            logger.error(f"MongoDB error: {str(e)}")
+            raise
+
 
 # HTML-Sanitizer-Konfiguration
 ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS.union({
@@ -124,57 +155,52 @@ class ChatService:
             raise
 
 
+# Modifizierte LoggingService Klasse
 class LoggingService:
     @staticmethod
     def save_log(frage: str, prompt_text: str, reply: Dict, tags: str,
                  abstraction: Dict, entry_id: str) -> None:
-        """Speichert Chat-Interaktionen mit Abstraktion in der Log-Datei."""
+        """Speichert Chat-Interaktionen in MongoDB."""
         tags = json.loads(tags)
         try:
+            client = get_mongodb_client()
+            db = client[DB_NAME]
+            collection = db[COLLECTION_NAME]
+
             log_entry = {
                 "id": entry_id,
-                "frage_abstraktion": abstraction,  # Neue abstrahierte Version
+                "frage_abstraktion": abstraction,
                 "prompt": prompt_text,
                 "reply": reply,
                 "tags": tags
             }
 
-            data = LoggingService.read_log_file()
-            data.append(log_entry)
+            collection.insert_one(log_entry)
+            client.close()
 
-            with open(LOG_FILE, 'w', encoding='utf-8') as file:
-                json.dump(data, file, ensure_ascii=False, indent=4)
         except Exception as e:
-            logger.error(f"Fehler beim Speichern des Logs: {str(e)}")
+            logger.error(f"Fehler beim Speichern in MongoDB: {str(e)}")
             raise
 
     @staticmethod
-    def read_log_file() -> List:
-        """Liest die Log-Datei oder erstellt eine neue."""
-        try:
-            if not os.path.exists(LOG_FILE):
-                return []
-            with open(LOG_FILE, 'r', encoding='utf-8') as file:
-                return json.load(file)
-        except Exception as e:
-            logger.error(f"Fehler beim Lesen des Logs: {str(e)}")
-            return []
-
-    @staticmethod
     def save_feedback(entry_id: str, feedback: Dict) -> None:
-        """Speichert Benutzer-Feedback zu einer Antwort."""
+        """Speichert Benutzer-Feedback in MongoDB."""
         try:
-            log_data = LoggingService.read_log_file()
+            client = get_mongodb_client()
+            db = client[DB_NAME]
+            collection = db[COLLECTION_NAME]
 
-            for entry in reversed(log_data):
-                if entry.get('id') == entry_id and 'feedback' not in entry:
-                    entry['feedback'] = feedback
-                    break
-            else:
+            # Update the existing document with feedback
+            result = collection.update_one(
+                {"id": entry_id},
+                {"$set": {"feedback": feedback}}
+            )
+
+            if result.modified_count == 0:
                 logger.error(f"No matching entry found for ID: {entry_id}")
 
-            with open(LOG_FILE, 'w', encoding='utf-8') as file:
-                json.dump(log_data, file, ensure_ascii=False, indent=4)
+            client.close()
+
         except Exception as e:
             logger.error(f"Fehler beim Speichern des Feedbacks: {str(e)}")
             raise
@@ -269,7 +295,18 @@ def feedback():
         logger.error(f"Fehler in /feedback: {str(e)}")
         return jsonify({'error': 'Interner Server-Fehler'}), 500
 
+# Beim App-Start ausführen
+def setup_mongodb_indexes():
+    try:
+        client = get_mongodb_client()
+        db = client[DB_NAME]
+        collection = db[COLLECTION_NAME]
+        collection.create_index("id")
+        client.close()
+    except Exception as e:
+        logger.error(f"Error creating MongoDB indexes: {str(e)}")
 
 if __name__ == '__main__':
+    setup_mongodb_indexes()
     app.run(host="0.0.0.0", port=5000)
 
