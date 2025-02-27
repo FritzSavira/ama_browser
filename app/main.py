@@ -225,7 +225,7 @@ def ask():
 
         # Generate abstraction
         with straico_client(API_KEY=straico_api_key) as client:
-            abstraction = AbstractionService.abstract_question(frage, client)
+            abstraction = AbstractionService.abstract_question(frage, client, prompt_abstraction)
 
         # Generate reply using the appropriate prompt
         reply = ChatService.generate_reply(abstraction, frage, prompt_text)
