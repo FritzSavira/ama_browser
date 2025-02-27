@@ -28,7 +28,7 @@ ANTWORT_FOOTER = ("\n\n *Diese Antwort wurde mit KI erstellt und kann fehlerhaft
                   " Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*")
 
 # MongoDB Konfiguration
-MONGODB_URI = os.getenv('MONGODB_URI')
+MONGODB_URI = os.environ.get('MONGODB_URI')
 DB_NAME = 'ama_browser'
 COLLECTION_NAME = 'ama_log'
 
