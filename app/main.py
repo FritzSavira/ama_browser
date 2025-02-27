@@ -12,7 +12,8 @@ import json
 import markdown
 import bleach
 import logging
-import time
+import certifi
+import ssl
 
 # Logging-Konfiguration
 logging.basicConfig(
