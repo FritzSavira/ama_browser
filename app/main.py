@@ -13,6 +13,7 @@ from typing import Dict, List
 import logging
 
 
+
 # Logging-Konfiguration
 logging.basicConfig(
     level=logging.INFO,
