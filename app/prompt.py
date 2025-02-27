@@ -328,3 +328,31 @@ Ausgabeformat:
 
 Bitte analysiere nun folgenden Text und gib die Informationen strukturiert aus:
 '''
+
+prompt_abstraction = """
+        Analysiere die folgende Frage und erstelle eine strukturierte Abstraktion in folgendem JSON-Format:
+        {
+            "categorization": {
+                "category": "",
+                "subcategory": "",
+                "type": "",
+                "complexity": 0
+            },
+            "tagging": {
+                "tags": [],
+                "relation": "",
+                "abstraction_level": ""
+            },
+            "intent": {
+                "main_goal": "",
+                "context": "",
+                "expected_output": ""
+            },
+            "semantic": {
+                "generic_query": "",
+                "domain": "",
+                "information_goal": ""
+            }
+        }
+
+        Frage: """

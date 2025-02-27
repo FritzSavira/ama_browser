@@ -2,7 +2,7 @@ import uuid  # Import uuid to generate unique IDs
 from concurrent.futures import ThreadPoolExecutor
 import asyncio
 from flask import Flask, render_template, request, jsonify
-from prompt import prompt_pastor, prompt_theologe, prompt_prediger, prompt_tags
+from prompt import prompt_pastor, prompt_theologe, prompt_prediger, prompt_tags, prompt_abstraction
 from aio_straico import straico_client
 import os
 import re
@@ -72,40 +72,12 @@ def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict,
 
 class AbstractionService:
     @staticmethod
-    def abstract_question(question: str, llm_client) -> Dict:
+    def abstract_question(question: str, llm_client, prompt_abstraction: str) -> Dict:
         """Erstellt eine datenschutzkonforme Abstraktion der Benutzeranfrage."""
-        abstraction_prompt = """
-        Analysiere die folgende Frage und erstelle eine strukturierte Abstraktion in folgendem JSON-Format:
-        {
-            "categorization": {
-                "category": "",
-                "subcategory": "",
-                "type": "",
-                "complexity": 0
-            },
-            "tagging": {
-                "tags": [],
-                "relation": "",
-                "abstraction_level": ""
-            },
-            "intent": {
-                "main_goal": "",
-                "context": "",
-                "expected_output": ""
-            },
-            "semantic": {
-                "generic_query": "",
-                "domain": "",
-                "information_goal": ""
-            }
-        }
-
-        Frage: """
-
         try:
             reply = llm_client.prompt_completion(
                 TAGS_LLM,
-                abstraction_prompt + question
+                prompt_abstraction + question
             )
             abstraction = json.loads(
                 reply['completion']['choices'][0]['message']['content']
