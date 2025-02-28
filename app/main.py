@@ -174,21 +174,31 @@ class LoggingService:
             raise
 
     @staticmethod
-    def save_feedback(entry_id: str, feedback: Dict) -> None:
+    def save_feedback(entry_id: str, feedback_data: Dict) -> None:
         """Speichert Benutzer-Feedback in MongoDB."""
         try:
             client = get_mongodb_client()
             db = client[DB_NAME]
             collection = db[COLLECTION_NAME]
 
-            # Update the existing document with feedback
+            # Bereite die Felder vor, die aktualisiert werden sollen
+            update_fields = {}
+            for key, value in feedback_data.items():
+                if key in ['bewertung', 'freitext']:
+                    update_fields[f"feedback.{key}"] = value
+
+            if not update_fields:
+                logger.error(f"Keine gültigen Feedback-Daten für ID: {entry_id} bereitgestellt.")
+                return
+
+            # Aktualisiere das bestehende Dokument mit den Feedback-Feldern
             result = collection.update_one(
                 {"id": entry_id},
-                {"$set": {"feedback": feedback}}
+                {"$set": update_fields}
             )
 
             if result.modified_count == 0:
-                logger.error(f"No matching entry found for ID: {entry_id}")
+                logger.error(f"Kein passender Eintrag für ID: {entry_id} gefunden.")
 
             client.close()
 
@@ -271,8 +281,8 @@ def ask():
 def feedback():
     """Verarbeitet Benutzer-Feedback."""
     try:
-        data = request.get_json()
-        entry_id = data.pop('id', None)
+        feedback_data = request.get_json()
+        entry_id = feedback_data.pop('id', None)
 
         if not entry_id:
             return jsonify({
@@ -280,7 +290,7 @@ def feedback():
                 'message': 'Keine gültige ID gefunden.'
             }), 400
 
-        LoggingService.save_feedback(entry_id, data)
+        LoggingService.save_feedback(entry_id, feedback_data)
         return jsonify({'status': 'success'}), 200
     except Exception as e:
         logger.error(f"Fehler in /feedback: {str(e)}")
