@@ -40,9 +40,8 @@ def get_mongodb_client():
             MONGODB_URI,
             serverSelectionTimeoutMS=5000,
             connectTimeoutMS=5000,
-            ssl=True,
-            ssl_cert_reqs=ssl.CERT_REQUIRED,
-            ssl_ca_certs=certifi.where()
+            tls=True,
+            tlsCAFile=certifi.where()
         )
         return client
     except Exception as e:
