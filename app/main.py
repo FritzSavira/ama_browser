@@ -41,8 +41,8 @@ def get_mongodb_client():
             serverSelectionTimeoutMS=5000,
             connectTimeoutMS=5000,
             ssl=True,
-            ssl_cert_reqs=ssl.CERT_REQUIRED,
-            ssl_ca_certs=certifi.where()
+            ssl_cert_reqs=ssl.CERT_NONE  # Nur für Testzwecke!,
+            #ssl_ca_certs=certifi.where()
         )
         return client
     except Exception as e:
