@@ -84,74 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ frage: frageInput, agent: agentValue })
             });
 
-            // Ladeintervall stoppen
-            clearInterval(loadingInterval);
 
-            if (response.ok) {
-                const data = await response.json();
-
-                // Zeige die Antwort an
-                loadingMessage.innerHTML = data.antwort;
-                aktuelleFrage = data.frage;
-                aktuelleAntwortMarkdown = data.antwort_markdown;
-                downloadButton.style.display = 'inline-block';
-                aktuelleID = data.id; // Zeile zum Speichern der ID
-
-                // Feedback-Aufforderung als separate Bot-Nachricht
-                const feedbackPrompt = displayMessage('Bitte bewerte die Antwort, vielen Dank!:', 'bot-message');
-
-                // Feedback options form in its own bubble
-                const feedbackOptionsContainer = displayMessage('', 'user-message');
-                const feedbackOptionsForm = createFeedbackOptionsForm();
-                feedbackOptionsContainer.appendChild(feedbackOptionsForm);
-
-                // Scrolle zur Antwort
-                loadingMessage.scrollIntoView({ behavior: 'smooth' });
-
-                // Variable to store the selected feedback option
-                let selectedFeedback = '';
-
-                // Event listener for feedback options
-                feedbackOptionsForm.addEventListener('change', (e) => {
-                    if (e.target.name === 'bewertung') {
-                        selectedFeedback = e.target.value;
-                        // Optionally disable the feedback options to prevent further changes
-                        feedbackOptionsForm.querySelectorAll('input[name="bewertung"]').forEach(input => {
-                            input.disabled = true;
-                        });
-                        // Display the freitext form in a new bubble
-                        const freitextContainer = displayMessage('', 'user-message');
-                        const freitextForm = createFreitextForm();
-                        freitextContainer.appendChild(freitextForm);
-
-                        // Handle freitext form submission
-                        freitextForm.addEventListener('submit', async (e) => {
-                            e.preventDefault();
-                            const freitext = freitextForm.querySelector('textarea[name="freitext"]').value;
-                            const feedbackData = {
-                                bewertung: selectedFeedback,
-                                freitext: freitext,
-                                id: aktuelleID  // Ensure you have this variable available
-                            };
-                            // Send feedback to the server
-                            const feedbackResponse = await fetch('/feedback', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(feedbackData)
-                            });
-                            if (feedbackResponse.ok) {
-                                const feedbackThanks = displayMessage('Danke für dein Feedback!', 'bot-message');
-                                feedbackPrompt.remove();    // Remove the feedback prompt
-                                feedbackOptionsContainer.remove() // Remove the feedback options prompt
-                                freitextContainer.remove(); // Remove the freitext form
-                            } else {
-                                alert('Fehler beim Senden des Feedbacks.');
-                            }
-                        });
-                    }
-                });
 
 
             // Ladeintervall stoppen
