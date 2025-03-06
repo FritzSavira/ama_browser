@@ -32,7 +32,7 @@ ANTWORT_FOOTER = ("\n\n *Diese Antwort wurde mit KI erstellt und kann fehlerhaft
 MONGODB_URI = os.environ.get('MONGODB_URI')
 DB_NAME = 'ama_browser'
 COLLECTION_AMA_LOG = 'ama_log'
-COLLECTION_AMA_PROMPT = 'ama_prompts'
+COLLECTION_AMA_PROMPTS = 'ama_prompts'
 
 # MongoDB Client Initialisierung
 def get_mongodb_client():
@@ -79,10 +79,6 @@ def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict,
         reply_tags = ChatService.generate_tags(antwort_markdown)
         tags = reply_tags['completion']['choices'][0]['message']['content']
         tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
-
-        # Generate abstraction
-        # with straico_client(API_KEY=straico_api_key) as client:
-        #    abstraction = AbstractionService.abstract_question(frage, client)
 
         # Save log with abstraction
         LoggingService.save_log(prompt_text, reply, tags,
@@ -171,7 +167,7 @@ class LoggingService:
             client.close()
 
         except Exception as e:
-            logger.error(f"Fehler beim Speichern in MongoDB: {str(e)}")
+            logger.error(f"Fehler beim Speichern der Log-Daten in MongoDB: {str(e)}")
             raise
 
     @staticmethod
@@ -207,8 +203,27 @@ class LoggingService:
             logger.error(f"Fehler beim Speichern des Feedbacks: {str(e)}")
             raise
 
+    @staticmethod
     # Hier soll der Prompt in eine eigene Collection gespeichert werden.
-    # def save_prompt(self):
+    def save_prompt(prompt_version, prompt_text):
+        """Speichert den Prompt in MongoDB."""
+        try:
+            client = get_mongodb_client()
+            db = client[DB_NAME]
+            collection = db[COLLECTION_AMA_PROMPTS]
+
+            prompt_entry = {
+                "prompt_version": prompt_version,
+                "prompt_entry": prompt_text
+            }
+
+            collection.insert_one(prompt_entry)
+            client.close()
+
+        except Exception as e:
+            logger.error(f"Fehler beim Speichern von Prompt in MongoDB: {str(e)}")
+            raise
+
 
 
 @app.route('/')
