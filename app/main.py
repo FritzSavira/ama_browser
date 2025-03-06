@@ -31,7 +31,7 @@ ANTWORT_FOOTER = ("\n\n *Diese Antwort wurde mit KI erstellt und kann fehlerhaft
 # MongoDB Konfiguration
 MONGODB_URI = os.environ.get('MONGODB_URI')
 DB_NAME = 'ama_browser'
-COLLECTION_NAME = 'ama_log'
+COLLECTION_AMA_LOG = 'ama_log'
 
 # MongoDB Client Initialisierung
 def get_mongodb_client():
@@ -156,7 +156,7 @@ class LoggingService:
         try:
             client = get_mongodb_client()
             db = client[DB_NAME]
-            collection = db[COLLECTION_NAME]
+            collection = db[COLLECTION_AMA_LOG]
 
             log_entry = {
                 "id": entry_id,
@@ -179,7 +179,7 @@ class LoggingService:
         try:
             client = get_mongodb_client()
             db = client[DB_NAME]
-            collection = db[COLLECTION_NAME]
+            collection = db[COLLECTION_AMA_LOG]
 
             # Bereite die Felder vor, die aktualisiert werden sollen
             update_fields = {}
@@ -301,7 +301,7 @@ def setup_mongodb_indexes():
     try:
         client = get_mongodb_client()
         db = client[DB_NAME]
-        collection = db[COLLECTION_NAME]
+        collection = db[COLLECTION_AMA_LOG]
         collection.create_index("id")
         client.close()
     except Exception as e:
