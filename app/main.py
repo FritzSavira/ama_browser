@@ -72,7 +72,7 @@ executor = ThreadPoolExecutor(max_workers=3)
 
 
 def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict,
-                           prompt_text: str, unique_id: str, abstraction):
+                           prompt_text: str, unique_id: str, abstraction, agent):
     """Verarbeitet Tags, Abstraktion und Logging asynchron nach der Hauptantwort."""
     try:
         # Generate tags
@@ -80,9 +80,12 @@ def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict,
         tags = reply_tags['completion']['choices'][0]['message']['content']
         tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
 
+        # Save prompt
+        prompt_version = LoggingService.save_prompt(reply, prompt_text, agent)
+
         # Save log with abstraction
         LoggingService.save_log(prompt_text, reply, tags,
-                              abstraction, unique_id)
+                              abstraction, unique_id, prompt_version)
 
         logger.info(f"Tags, abstraction and logging processed for question: {frage[:50]}...")
     except Exception as e:
@@ -147,7 +150,7 @@ class ChatService:
 class LoggingService:
     @staticmethod
     def save_log(prompt_text: str, reply: Dict, tags: str,
-                 abstraction: Dict, entry_id: str) -> None:
+                 abstraction: Dict, entry_id: str, prompt_version) -> None:
         """Speichert Chat-Interaktionen in MongoDB."""
         tags = json.loads(tags)
         try:
@@ -158,7 +161,7 @@ class LoggingService:
             log_entry = {
                 "id": entry_id,
                 "frage_abstraktion": abstraction,
-                "prompt": prompt_text,
+                "prompt": prompt_version,
                 "reply": reply,
                 "tags": tags
             }
@@ -205,25 +208,50 @@ class LoggingService:
 
     @staticmethod
     # Hier soll der Prompt in eine eigene Collection gespeichert werden.
-    def save_prompt(prompt_version, prompt_text):
+    def save_prompt(reply, prompt_text, agent):
+
+        try:
+            # Weist der Variablen created den Unix-Zeitstempel aus ama_log zu.
+            created = reply['completion']['created']
+        except (KeyError, TypeError):
+            created = 'NA'
+
+        # Map the agent to the appropriate prompt_version
+        if agent == 'pastoral-seelsorgerlich':
+            prompt_version = "prompt_pastor_" + str(created)
+        elif agent == 'theologisch-wissenschaftlich':
+            prompt_version = "prompt_theologe_" + str(created)
+        elif agent == 'predigend-erzählend':
+            prompt_version = "prompt_prediger_" + str(created)
+        else:
+            prompt_version = "prompt_"
+
         """Speichert den Prompt in MongoDB."""
         try:
             client = get_mongodb_client()
             db = client[DB_NAME]
             collection = db[COLLECTION_AMA_PROMPTS]
 
-            prompt_entry = {
-                "prompt_version": prompt_version,
-                "prompt_entry": prompt_text
-            }
+            result = collection.find_one({'prompt_text': prompt_text})
 
-            collection.insert_one(prompt_entry)
-            client.close()
+            if not result:
+                # Falls Prompt nicht in Collection enthalten, schreibe Prompt in Collection
+                prompt_entry = {
+                    "prompt_version": prompt_version,
+                    "prompt_entry": prompt_text
+                }
+                collection.insert_one(prompt_entry)
+
+            else:
+                # Falls Prompt in Collection enthalten, gib Version des bereits vorhandenen Prompts zurück
+                prompt_version = collection.find_one({'prompt_text': prompt_text}).get('prompt_version')
+
+                client.close()
+            return prompt_version
 
         except Exception as e:
             logger.error(f"Fehler beim Speichern von Prompt in MongoDB: {str(e)}")
             raise
-
 
 
 @app.route('/')
@@ -283,7 +311,7 @@ def ask():
         unique_id = str(uuid.uuid4())
 
         # Asynchronous processing of tags and logging
-        executor.submit(process_tags_and_logging, antwort_markdown, frage, reply, prompt_text, unique_id, abstraction)
+        executor.submit(process_tags_and_logging, antwort_markdown, frage, reply, prompt_text, unique_id, abstraction, agent)
 
         return jsonify({
             'antwort': antwort_html,
