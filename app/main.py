@@ -3,8 +3,7 @@ from flask import Flask, render_template, request, jsonify
 from prompt import prompt_pastor, prompt_theologe, prompt_prediger, prompt_tags, prompt_abstraction
 from aio_straico import straico_client
 from pymongo import MongoClient
-from pymongo.errors import PyMongoError, ServerSelectionTimeoutError, OperationFailure
-from typing import Dict, List
+from typing import Dict
 import uuid  # Import uuid to generate unique IDs
 import os
 import re
@@ -13,7 +12,6 @@ import markdown
 import bleach
 import logging
 import certifi
-import ssl
 
 # Logging-Konfiguration
 logging.basicConfig(
