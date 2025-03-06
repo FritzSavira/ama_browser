@@ -32,6 +32,7 @@ ANTWORT_FOOTER = ("\n\n *Diese Antwort wurde mit KI erstellt und kann fehlerhaft
 MONGODB_URI = os.environ.get('MONGODB_URI')
 DB_NAME = 'ama_browser'
 COLLECTION_AMA_LOG = 'ama_log'
+COLLECTION_AMA_PROMPT = 'ama_prompts'
 
 # MongoDB Client Initialisierung
 def get_mongodb_client():
@@ -84,7 +85,7 @@ def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict,
         #    abstraction = AbstractionService.abstract_question(frage, client)
 
         # Save log with abstraction
-        LoggingService.save_log(frage, prompt_text, reply, tags,
+        LoggingService.save_log(prompt_text, reply, tags,
                               abstraction, unique_id)
 
         logger.info(f"Tags, abstraction and logging processed for question: {frage[:50]}...")
@@ -149,7 +150,7 @@ class ChatService:
 # Modifizierte LoggingService Klasse
 class LoggingService:
     @staticmethod
-    def save_log(frage: str, prompt_text: str, reply: Dict, tags: str,
+    def save_log(prompt_text: str, reply: Dict, tags: str,
                  abstraction: Dict, entry_id: str) -> None:
         """Speichert Chat-Interaktionen in MongoDB."""
         tags = json.loads(tags)
@@ -205,6 +206,8 @@ class LoggingService:
         except Exception as e:
             logger.error(f"Fehler beim Speichern des Feedbacks: {str(e)}")
             raise
+
+    def save_prompt(self):
 
 
 @app.route('/')
