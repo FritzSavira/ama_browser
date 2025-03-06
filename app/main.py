@@ -207,7 +207,8 @@ class LoggingService:
             logger.error(f"Fehler beim Speichern des Feedbacks: {str(e)}")
             raise
 
-    def save_prompt(self):
+    # Hier soll der Prompt in eine eigene Collection gespeichert werden.
+    # def save_prompt(self):
 
 
 @app.route('/')
