@@ -32,6 +32,7 @@ DB_NAME = 'ama_browser'
 COLLECTION_AMA_LOG = 'ama_log'
 COLLECTION_AMA_PROMPTS = 'ama_prompts'
 
+
 # MongoDB Client Initialisierung
 def get_mongodb_client():
     try:
@@ -80,10 +81,8 @@ def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict,
 
         # Save prompt
         prompt_version = LoggingService.save_prompt(reply, prompt_text, agent)
-
         # Save log with abstraction
-        LoggingService.save_log(prompt_text, reply, tags,
-                              abstraction, unique_id, prompt_version)
+        LoggingService.save_log(reply, tags, abstraction, unique_id, prompt_version)
 
         logger.info(f"Tags, abstraction and logging processed for question: {frage[:50]}...")
     except Exception as e:
@@ -106,7 +105,6 @@ class AbstractionService:
         except Exception as e:
             logger.error(f"Fehler bei der Abstraktion: {str(e)}")
             return {}
-
 
 
 class ChatService:
@@ -147,7 +145,7 @@ class ChatService:
 # Modifizierte LoggingService Klasse
 class LoggingService:
     @staticmethod
-    def save_log(prompt_text: str, reply: Dict, tags: str,
+    def save_log(reply: Dict, tags: str,
                  abstraction: Dict, entry_id: str, prompt_version) -> None:
         """Speichert Chat-Interaktionen in MongoDB."""
         tags = json.loads(tags)
@@ -254,13 +252,15 @@ class LoggingService:
 
 @app.route('/')
 def index():
-    """Rendert die Landing Page."""
+    """Rendert die Landing-Page."""
     return render_template('landing.html')
+
 
 @app.route('/chat')
 def chat():
     """Rendert die Hauptseite."""
     return render_template('chat.html')
+
 
 @app.route('/theolog')
 def theolog():
@@ -309,7 +309,8 @@ def ask():
         unique_id = str(uuid.uuid4())
 
         # Asynchronous processing of tags and logging
-        executor.submit(process_tags_and_logging, antwort_markdown, frage, reply, prompt_text, unique_id, abstraction, agent)
+        executor.submit(process_tags_and_logging, antwort_markdown,
+                        frage, reply, prompt_text, unique_id, abstraction, agent)
 
         return jsonify({
             'antwort': antwort_html,
@@ -341,6 +342,7 @@ def feedback():
         logger.error(f"Fehler in /feedback: {str(e)}")
         return jsonify({'error': 'Interner Server-Fehler'}), 500
 
+
 # Beim App-Start ausführen
 def setup_mongodb_indexes():
     try:
@@ -352,7 +354,7 @@ def setup_mongodb_indexes():
     except Exception as e:
         logger.error(f"Error creating MongoDB indexes: {str(e)}")
 
+
 if __name__ == '__main__':
     setup_mongodb_indexes()
     app.run(host="0.0.0.0", port=5000)
-
