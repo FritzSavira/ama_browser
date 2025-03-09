@@ -34,4 +34,4 @@ COPY ../.. .
 EXPOSE 5000
 
 # Start the Gunicorn server
-CMD ["gunicorn", "main:app", "--bind", "0.0.0.0:5000", "--workers", "4", "--threads", "2"]
+CMD ["gunicorn", "app.main:app", "--bind", "0.0.0.0:5000", "--workers", "4", "--threads", "2"]
