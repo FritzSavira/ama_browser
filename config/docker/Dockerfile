@@ -37,4 +37,4 @@ EXPOSE 5000
 # CMD ["python", "app/main.py"] <-- alt mit Flask
 
 # Start Gunicorn as the server
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "main:app"]  # "main" ist dein Python-File
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "app:app"]  # "app" ist dein Python-File
