@@ -378,10 +378,6 @@ class LoggingService:
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
-# Call setup_mongodb_indexes()
-setup_mongodb_indexes()
-
-
 
 @app.route('/')
 def index():
@@ -534,6 +530,9 @@ def setup_mongodb_indexes():
         client.close()
     except Exception as e:
         logger.error(f"Error creating MongoDB indexes: {str(e)}")
+
+# Call setup_mongodb_indexes()
+setup_mongodb_indexes()
 
 # Wird nicht für Gunicorn-Server benötigt
 # if __name__ == '__main__':
