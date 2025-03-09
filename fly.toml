@@ -11,11 +11,16 @@ dockerfile = '/config/docker/Dockerfile'
 
 [http_service]
   internal_port = 5000
+  protocol = "tcp"
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
   processes = ['app']
+
+[[services.ports]]
+    handlers = ["http"]
+    port = 80
 
 [[vm]]
   memory = '1gb'

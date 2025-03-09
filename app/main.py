@@ -58,6 +58,9 @@ TAGS_LLM = 'anthropic/claude-3.5-sonnet'
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
+# Call setup_mongodb_indexes()
+setup_mongodb_indexes()
+
 # Global thread pool for asynchronous operations
 executor = ThreadPoolExecutor(max_workers=3)
 
@@ -529,7 +532,7 @@ def setup_mongodb_indexes():
     except Exception as e:
         logger.error(f"Error creating MongoDB indexes: {str(e)}")
 
-
-if __name__ == '__main__':
-    setup_mongodb_indexes()
-    app.run(host="0.0.0.0", port=5000)
+# Wird nicht für Gunicorn-Server benötigt
+# if __name__ == '__main__':
+#    setup_mongodb_indexes()
+#    app.run(host="0.0.0.0", port=5000)

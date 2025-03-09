@@ -33,5 +33,5 @@ COPY ../.. .
 # Exponiere den Port, auf dem die Anwendung läuft (angenommen 5000)
 EXPOSE 5000
 
-# Definiere den Befehl zum Starten der Anwendung
-CMD ["python", "app/main.py"]
+# Start the Gunicorn server
+CMD ["gunicorn", "app/main:app", "--bind", "0.0.0.0:5000", "--workers", "4", "--threads", "2"]
