@@ -16,7 +16,7 @@ from pymongo import MongoClient
 
 # Local imports
 from aio_straico import straico_client
-from prompt import (
+from .prompt import (
     prompt_pastor, prompt_theologian, prompt_preacher,
     prompt_tags, prompt_abstraction
 )
