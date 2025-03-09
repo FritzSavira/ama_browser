@@ -1,40 +1,77 @@
-from concurrent.futures import ThreadPoolExecutor
-from flask import Flask, render_template, request, jsonify
-from prompt import prompt_pastor, prompt_theologe, prompt_prediger, prompt_tags, prompt_abstraction
-from aio_straico import straico_client
-from pymongo import MongoClient
-from typing import Dict
-import uuid  # Import uuid to generate unique IDs
+# Standard library imports
+import json
+import logging
 import os
 import re
-import json
-import markdown
-import bleach
-import logging
-import certifi
+import uuid
+from concurrent.futures import ThreadPoolExecutor
+from typing import Dict, Any
 
-# Logging-Konfiguration
+# Third-party imports
+import bleach
+import certifi
+import markdown
+from flask import Flask, render_template, request, jsonify
+from pymongo import MongoClient
+
+# Local imports
+from aio_straico import straico_client
+from prompt import (
+    prompt_pastor, prompt_theologian, prompt_preacher,
+    prompt_tags, prompt_abstraction
+)
+
+# Logging configuration
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
-# Konstanten
+# Constants and configuration
 DATA_DIR = '/data'
 LOG_FILE = os.path.join(DATA_DIR, 'ama_log.json')
-ANTWORT_FOOTER = ("\n\n *Diese Antwort wurde mit KI erstellt und kann fehlerhaft sein."
-                  " Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*")
+ANSWER_FOOTER = ("\n\n *Diese Antwort wurde mit KI erstellt und kann fehlerhaft sein." 
+                 " Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*")
 
-# MongoDB Konfiguration
+# MongoDB configuration
 MONGODB_URI = os.environ.get('MONGODB_URI')
 DB_NAME = 'ama_browser'
 COLLECTION_AMA_LOG = 'ama_log'
 COLLECTION_AMA_PROMPTS = 'ama_prompts'
 
+# HTML sanitizer configuration
+ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS.union({
+    'p', 'pre', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br'
+})
+ALLOWED_ATTRIBUTES = {
+    '*': ['class', 'id', 'style'],
+    'a': ['href', 'title'],
+    'img': ['src', 'alt', 'title'],
+}
 
-# MongoDB Client Initialisierung
-def get_mongodb_client():
+# LLM configuration
+ANSWER_LLM = 'openai/gpt-4o-2024-11-20'
+TAGS_LLM = 'anthropic/claude-3.5-sonnet'
+
+# Flask application initialization
+app = Flask(__name__, static_folder='../static', template_folder='../templates')
+straico_api_key = os.getenv('STRAICO_API_KEY')
+
+# Global thread pool for asynchronous operations
+executor = ThreadPoolExecutor(max_workers=3)
+
+
+def get_mongodb_client() -> MongoClient:
+    """
+    Initialize and return a MongoDB client with proper configuration.
+
+    Returns:
+        MongoClient: A configured MongoDB client instance
+
+    Raises:
+        Exception: If unable to connect to MongoDB
+    """
     try:
         client = MongoClient(
             MONGODB_URI,
@@ -49,50 +86,53 @@ def get_mongodb_client():
         raise
 
 
-# HTML-Sanitizer-Konfiguration
-ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS.union({
-    'p', 'pre', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br'
-})
-ALLOWED_ATTRIBUTES = {
-    '*': ['class', 'id', 'style'],
-    'a': ['href', 'title'],
-    'img': ['src', 'alt', 'title'],
-}
+def process_tags_and_logging(answer_markdown: str, question: str, reply: Dict,
+                             prompt_text: str, unique_id: str, abstraction: Dict, agent: str) -> None:
+    """
+    Process tags, abstraction, and logging asynchronously after the main response.
 
-# LLM-Konfiguration
-ANTWORT_LLM = 'openai/gpt-4o-2024-11-20'
-TAGS_LLM = 'anthropic/claude-3.5-sonnet'
-
-app = Flask(__name__, static_folder='../static', template_folder='../templates')
-straico_api_key = os.getenv('STRAICO_API_KEY')
-
-# Globaler Thread-Pool für asynchrone Operationen
-executor = ThreadPoolExecutor(max_workers=3)
-
-
-def process_tags_and_logging(antwort_markdown: str, frage: str, reply: Dict,
-                           prompt_text: str, unique_id: str, abstraction, agent):
-    """Verarbeitet Tags, Abstraktion und Logging asynchron nach der Hauptantwort."""
+    Args:
+        answer_markdown: The Markdown text of the AI answer
+        question: The user's question
+        reply: The LLM response
+        prompt_text: The prompt used for generation
+        unique_id: Unique ID for the interaction
+        abstraction: The question abstraction
+        agent: The agent type used
+    """
     try:
         # Generate tags
-        reply_tags = ChatService.generate_tags(antwort_markdown)
+        reply_tags = ChatService.generate_tags(answer_markdown)
         tags = reply_tags['completion']['choices'][0]['message']['content']
         tags = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', tags).group()
 
-        # Save prompt
+        # Save prompt and log
         prompt_version = LoggingService.save_prompt(reply, prompt_text, agent)
-        # Save log with abstraction
         LoggingService.save_log(reply, tags, abstraction, unique_id, prompt_version)
 
-        logger.info(f"Tags, abstraction and logging processed for question: {frage[:50]}...")
+        logger.info(f"Tags, abstraction and logging processed for question: {question[:50]}...")
     except Exception as e:
         logger.error(f"Error in processing: {str(e)}")
 
 
 class AbstractionService:
+    """
+    Service for creating privacy-compliant abstractions of user queries.
+    """
+
     @staticmethod
     def abstract_question(question: str, llm_client, prompt_abstraction: str) -> Dict:
-        """Erstellt eine datenschutzkonforme Abstraktion der Benutzeranfrage."""
+        """
+        Create a privacy-compliant abstraction of the user query.
+
+        Args:
+            question: The user's question
+            llm_client: The LLM client to use for abstraction
+            prompt_abstraction: The abstraction prompt
+
+        Returns:
+            Dict: The abstraction result
+        """
         try:
             reply = llm_client.prompt_completion(
                 TAGS_LLM,
@@ -103,51 +143,118 @@ class AbstractionService:
             )
             return abstraction
         except Exception as e:
-            logger.error(f"Fehler bei der Abstraktion: {str(e)}")
+            logger.error(f"Error during abstraction: {str(e)}")
             return {}
 
 
 class ChatService:
+    """
+    Service for generating AI responses and processing text.
+    """
+
     @staticmethod
-    def generate_reply(abstraction, frage: str, prompt_text: str) -> Dict:
-        """Generates an AI answer to the given question using the specified prompt."""
+    def generate_reply(abstraction: Dict, question: str, prompt_text: str) -> Dict:
+        """
+        Generate an AI answer to the given question using the specified prompt.
+
+        Args:
+            abstraction: The abstracted question information
+            question: The original user question
+            prompt_text: The prompt to use for generation
+
+        Returns:
+            Dict: The LLM response
+
+        Raises:
+            Exception: If an error occurs during generation
+        """
         try:
             with straico_client(API_KEY=straico_api_key) as client:
                 abstraction_str = str(abstraction)
-                reply = client.prompt_completion(ANTWORT_LLM, prompt_text + abstraction_str + frage)
+                reply = client.prompt_completion(
+                    ANSWER_LLM,
+                    prompt_text + abstraction_str + question
+                )
                 return reply
         except Exception as e:
             logger.error(f"Error generating reply: {str(e)}")
             raise
 
     @staticmethod
-    def generate_tags(antwort_markdown: str) -> Dict:
-        """Generiert Tags zur gegebenen KI-Antwort """
+    def generate_tags(answer_markdown: str) -> Dict:
+        """
+        Generate tags for the given AI response.
+
+        Args:
+            answer_markdown: The Markdown text of the AI response
+
+        Returns:
+            Dict: The LLM response containing tags
+
+        Raises:
+            Exception: If an error occurs during tag generation
+        """
         try:
             with straico_client(API_KEY=straico_api_key) as client:
-                reply = client.prompt_completion(TAGS_LLM, prompt_tags + antwort_markdown)
+                reply = client.prompt_completion(
+                    TAGS_LLM,
+                    prompt_tags + answer_markdown
+                )
                 return reply
         except Exception as e:
-            logger.error(f"Fehler beim Tagging: {str(e)}")
+            logger.error(f"Error generating tags: {str(e)}")
             raise
 
     @staticmethod
     def convert_markdown_to_html(markdown_text: str) -> str:
-        """Konvertiert Markdown zu sicherem HTML."""
+        """
+        Convert Markdown text to safe HTML.
+
+        Args:
+            markdown_text: The Markdown text to convert
+
+        Returns:
+            str: The sanitized HTML
+
+        Raises:
+            Exception: If an error occurs during conversion
+        """
         try:
-            html = markdown.markdown(markdown_text, extensions=['fenced_code', 'codehilite'])
-            return bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+            html = markdown.markdown(
+                markdown_text,
+                extensions=['fenced_code', 'codehilite']
+            )
+            return bleach.clean(
+                html,
+                tags=ALLOWED_TAGS,
+                attributes=ALLOWED_ATTRIBUTES
+            )
         except Exception as e:
-            logger.error(f"Fehler bei der Markdown-Konvertierung: {str(e)}")
+            logger.error(f"Error during markdown conversion: {str(e)}")
             raise
 
 
-# Modifizierte LoggingService Klasse
 class LoggingService:
+    """
+    Service for logging chat interactions and feedback.
+    """
+
     @staticmethod
-    def save_log(reply: Dict, tags: str,
-                 abstraction: Dict, entry_id: str, prompt_version) -> None:
-        """Speichert Chat-Interaktionen in MongoDB."""
+    def save_log(reply: Dict, tags: str, abstraction: Dict,
+                 entry_id: str, prompt_version: str) -> None:
+        """
+        Save chat interactions to MongoDB.
+
+        Args:
+            reply: The LLM response
+            tags: The generated tags
+            abstraction: The question abstraction
+            entry_id: Unique ID for the interaction
+            prompt_version: The prompt version used
+
+        Raises:
+            Exception: If an error occurs during saving
+        """
         tags = json.loads(tags)
         try:
             client = get_mongodb_client()
@@ -156,7 +263,7 @@ class LoggingService:
 
             log_entry = {
                 "id": entry_id,
-                "frage_abstraktion": abstraction,
+                "question_abstraction": abstraction,
                 "prompt": prompt_version,
                 "reply": reply,
                 "tags": tags
@@ -166,157 +273,212 @@ class LoggingService:
             client.close()
 
         except Exception as e:
-            logger.error(f"Fehler beim Speichern der Log-Daten in MongoDB: {str(e)}")
+            logger.error(f"Error saving log data to MongoDB: {str(e)}")
             raise
 
     @staticmethod
     def save_feedback(entry_id: str, feedback_data: Dict) -> None:
-        """Speichert Benutzer-Feedback in MongoDB."""
+        """
+        Save user feedback to MongoDB.
+
+        Args:
+            entry_id: The unique ID of the chat interaction
+            feedback_data: The feedback data to save
+
+        Raises:
+            Exception: If an error occurs during saving
+        """
         try:
             client = get_mongodb_client()
             db = client[DB_NAME]
             collection = db[COLLECTION_AMA_LOG]
 
-            # Bereite die Felder vor, die aktualisiert werden sollen
+            # Prepare fields to update
             update_fields = {}
             for key, value in feedback_data.items():
-                if key in ['bewertung', 'freitext']:
+                if key in ['rating', 'free_text']:
                     update_fields[f"feedback.{key}"] = value
 
             if not update_fields:
-                logger.error(f"Keine gültigen Feedback-Daten für ID: {entry_id} bereitgestellt.")
+                logger.error(f"No valid feedback data provided for ID: {entry_id}")
                 return
 
-            # Aktualisiere das bestehende Dokument mit den Feedback-Feldern
+            # Update the existing document with feedback fields
             result = collection.update_one(
                 {"id": entry_id},
                 {"$set": update_fields}
             )
 
             if result.modified_count == 0:
-                logger.error(f"Kein passender Eintrag für ID: {entry_id} gefunden.")
+                logger.error(f"No matching entry found for ID: {entry_id}")
 
             client.close()
 
         except Exception as e:
-            logger.error(f"Fehler beim Speichern des Feedbacks: {str(e)}")
+            logger.error(f"Error saving feedback: {str(e)}")
             raise
 
     @staticmethod
-    # Hier soll der Prompt in eine eigene Collection gespeichert werden.
-    def save_prompt(reply, prompt_text, agent):
+    def save_prompt(reply: Dict, prompt_text: str, agent: str) -> str:
+        """
+        Save the prompt to a dedicated MongoDB collection.
 
+        Args:
+            reply: The LLM response
+            prompt_text: The prompt text used
+            agent: The agent type
+
+        Returns:
+            str: The prompt version identifier
+
+        Raises:
+            Exception: If an error occurs during saving
+        """
         try:
-            # Weist der Variablen created den Unix-Zeitstempel aus ama_log zu.
+            # Get timestamp from reply
             created = reply['completion']['created']
         except (KeyError, TypeError):
             created = 'NA'
 
         # Map the agent to the appropriate prompt_version
         if agent == 'pastoral-seelsorgerlich':
-            prompt_version = "prompt_pastor_" + str(created)
+            prompt_version = f"prompt_pastor_{created}"
         elif agent == 'theologisch-wissenschaftlich':
-            prompt_version = "prompt_theologe_" + str(created)
+            prompt_version = f"prompt_theologian_{created}"
         elif agent == 'predigend-erzählend':
-            prompt_version = "prompt_prediger_" + str(created)
+            prompt_version = f"prompt_preacher_{created}"
         else:
-            prompt_version = "prompt_"
+            prompt_version = f"prompt_{created}"
 
-        """Speichert den Prompt in MongoDB."""
         try:
             client = get_mongodb_client()
             db = client[DB_NAME]
             collection = db[COLLECTION_AMA_PROMPTS]
 
-            result = collection.find_one({'prompt_text': prompt_text})
+            # Check if prompt already exists
+            result = collection.find_one({'prompt_entry': prompt_text})
 
             if not result:
-                # Falls Prompt nicht in Collection enthalten, schreibe Prompt in Collection
+                # If prompt not in collection, add it
                 prompt_entry = {
                     "prompt_version": prompt_version,
                     "prompt_entry": prompt_text
                 }
                 collection.insert_one(prompt_entry)
-
             else:
-                # Falls Prompt in Collection enthalten, gib Version des bereits vorhandenen Prompts zurück
-                prompt_version = collection.find_one({'prompt_text': prompt_text}).get('prompt_version')
+                # If prompt already exists, return the existing version
+                prompt_version = result.get('prompt_version')
 
-                client.close()
+            client.close()
             return prompt_version
 
         except Exception as e:
-            logger.error(f"Fehler beim Speichern von Prompt in MongoDB: {str(e)}")
+            logger.error(f"Error saving prompt to MongoDB: {str(e)}")
             raise
 
 
 @app.route('/')
 def index():
-    """Rendert die Landing-Page."""
+    """
+    Render the landing page.
+
+    Returns:
+        Rendered landing page template
+    """
     return render_template('landing.html')
 
 
 @app.route('/chat')
 def chat():
-    """Rendert die Hauptseite."""
+    """
+    Render the main chat page.
+
+    Returns:
+        Rendered chat page template
+    """
     return render_template('chat.html')
 
 
 @app.route('/theolog')
 def theolog():
+    """
+    Render the theologian page.
+
+    Returns:
+        Rendered theologian page template
+    """
     return render_template('theolog.html')
 
 
 @app.route('/legal')
 def legal():
+    """
+    Render the legal information page.
+
+    Returns:
+        Rendered legal page template
+    """
     return render_template('legal.html')
 
 
 @app.route('/ask', methods=['POST'])
 def ask():
-    """Processes questions and generates answers."""
+    """
+    Process questions and generate answers.
+
+    Returns:
+        JSON response with answer and metadata
+    """
     try:
         data = request.get_json()
-        frage = data.get('frage', '')
+        question = data.get('frage', '')  # Keep original key for backward compatibility
         agent = data.get('agent', '')
 
-        if not frage:
-            return jsonify({'antwort': 'Keine Frage gestellt.'}), 400
+        if not question:
+            return jsonify({'answer': 'No question provided.'}), 400
         if not agent:
-            return jsonify({'antwort': 'Kein Agent ausgewählt.'}), 400
+            return jsonify({'answer': 'No agent selected.'}), 400
 
         # Map the agent to the appropriate prompt
         if agent == 'pastoral-seelsorgerlich':
             prompt_text = prompt_pastor
         elif agent == 'theologisch-wissenschaftlich':
-            prompt_text = prompt_theologe
+            prompt_text = prompt_theologian
         elif agent == 'predigend-erzählend':
-            prompt_text = prompt_prediger
+            prompt_text = prompt_preacher
         else:
-            return jsonify({'antwort': 'Ungültiger Agent ausgewählt.'}), 400
+            return jsonify({'answer': 'Invalid agent selected.'}), 400
 
         # Generate abstraction
         with straico_client(API_KEY=straico_api_key) as client:
-            abstraction = AbstractionService.abstract_question(frage, client, prompt_abstraction)
+            abstraction = AbstractionService.abstract_question(question, client, prompt_abstraction)
 
         # Generate reply using the appropriate prompt
-        reply = ChatService.generate_reply(abstraction, frage, prompt_text)
-        antwort_markdown = (reply['completion']['choices'][0]['message']['content']
-                            + ANTWORT_FOOTER)
-        antwort_html = ChatService.convert_markdown_to_html(antwort_markdown)
+        reply = ChatService.generate_reply(abstraction, question, prompt_text)
+        answer_markdown = (reply['completion']['choices'][0]['message']['content']
+                           + ANSWER_FOOTER)
+        answer_html = ChatService.convert_markdown_to_html(answer_markdown)
 
         # Generate unique ID for logging and feedback
         unique_id = str(uuid.uuid4())
 
         # Asynchronous processing of tags and logging
-        executor.submit(process_tags_and_logging, antwort_markdown,
-                        frage, reply, prompt_text, unique_id, abstraction, agent)
+        executor.submit(
+            process_tags_and_logging,
+            answer_markdown,
+            question,
+            reply,
+            prompt_text,
+            unique_id,
+            abstraction,
+            agent
+        )
 
         return jsonify({
-            'antwort': antwort_html,
-            'antwort_markdown': antwort_markdown,
-            'frage': frage,
-            'id': unique_id  # Include the unique id in response
+            'antwort': answer_html,  # Keep original key for backward compatibility
+            'antwort_markdown': answer_markdown,  # Keep original key for backward compatibility
+            'frage': question,  # Keep original key for backward compatibility
+            'id': unique_id
         })
     except Exception as e:
         logger.error(f"Error in /ask: {str(e)}")
@@ -325,7 +487,12 @@ def ask():
 
 @app.route('/feedback', methods=['POST'])
 def feedback():
-    """Verarbeitet Benutzer-Feedback."""
+    """
+    Process user feedback.
+
+    Returns:
+        JSON response indicating success or failure
+    """
     try:
         feedback_data = request.get_json()
         entry_id = feedback_data.pop('id', None)
@@ -333,18 +500,26 @@ def feedback():
         if not entry_id:
             return jsonify({
                 'status': 'error',
-                'message': 'Keine gültige ID gefunden.'
+                'message': 'No valid ID found.'
             }), 400
+
+        # Map German keys to English for backward compatibility
+        if 'bewertung' in feedback_data:
+            feedback_data['rating'] = feedback_data.pop('bewertung')
+        if 'freitext' in feedback_data:
+            feedback_data['free_text'] = feedback_data.pop('freitext')
 
         LoggingService.save_feedback(entry_id, feedback_data)
         return jsonify({'status': 'success'}), 200
     except Exception as e:
-        logger.error(f"Fehler in /feedback: {str(e)}")
-        return jsonify({'error': 'Interner Server-Fehler'}), 500
+        logger.error(f"Error in /feedback: {str(e)}")
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 
-# Beim App-Start ausführen
 def setup_mongodb_indexes():
+    """
+    Set up MongoDB indexes at application startup.
+    """
     try:
         client = get_mongodb_client()
         db = client[DB_NAME]
