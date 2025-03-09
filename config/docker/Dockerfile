@@ -34,4 +34,7 @@ COPY ../.. .
 EXPOSE 5000
 
 # Definiere den Befehl zum Starten der Anwendung
-CMD ["python", "app/main.py"]
+# CMD ["python", "app/main.py"] <-- alt mit Flask
+
+# Start Gunicorn as the server
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "main:app"]  # "main" ist dein Python-File

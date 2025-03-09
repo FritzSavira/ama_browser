@@ -58,6 +58,7 @@ TAGS_LLM = 'anthropic/claude-3.5-sonnet'
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
+
 # Global thread pool for asynchronous operations
 executor = ThreadPoolExecutor(max_workers=3)
 
@@ -85,6 +86,22 @@ def get_mongodb_client() -> MongoClient:
         logger.error(f"MongoDB connection error: {str(e)}")
         raise
 
+def setup_mongodb_indexes():
+    """
+    Set up MongoDB indexes at application startup.
+    """
+    try:
+        client = get_mongodb_client()
+        db = client[DB_NAME]
+        collection = db[COLLECTION_AMA_LOG]
+        collection.create_index("id")
+        client.close()
+    except Exception as e:
+        logger.error(f"Error creating MongoDB indexes: {str(e)}")
+
+# Setup MongoDB indexes (runs once before first request)
+with app.app_context():
+    setup_mongodb_indexes()
 
 def process_tags_and_logging(answer_markdown: str, question: str, reply: Dict,
                              prompt_text: str, unique_id: str, abstraction: Dict, agent: str) -> None:
@@ -516,20 +533,6 @@ def feedback():
         return jsonify({'error': 'Internal Server Error'}), 500
 
 
-def setup_mongodb_indexes():
-    """
-    Set up MongoDB indexes at application startup.
-    """
-    try:
-        client = get_mongodb_client()
-        db = client[DB_NAME]
-        collection = db[COLLECTION_AMA_LOG]
-        collection.create_index("id")
-        client.close()
-    except Exception as e:
-        logger.error(f"Error creating MongoDB indexes: {str(e)}")
-
-
 if __name__ == '__main__':
-    setup_mongodb_indexes()
-    app.run(host="0.0.0.0", port=5000)
+    # app.run(host="0.0.0.0", port=5000) <-- Nur für lokale Tests
+    logger.warning("You are running the Flask development server. Use Gunicorn for production!")
