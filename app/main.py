@@ -54,12 +54,7 @@ ALLOWED_ATTRIBUTES = {
 ANSWER_LLM = 'openai/gpt-4o-2024-11-20'
 TAGS_LLM = 'anthropic/claude-3.5-sonnet'
 
-# Flask application initialization
-app = Flask(__name__, static_folder='../static', template_folder='../templates')
-straico_api_key = os.getenv('STRAICO_API_KEY')
 
-# Call setup_mongodb_indexes()
-setup_mongodb_indexes()
 
 # Global thread pool for asynchronous operations
 executor = ThreadPoolExecutor(max_workers=3)
@@ -378,6 +373,14 @@ class LoggingService:
         except Exception as e:
             logger.error(f"Error saving prompt to MongoDB: {str(e)}")
             raise
+
+# Flask application initialization
+app = Flask(__name__, static_folder='../static', template_folder='../templates')
+straico_api_key = os.getenv('STRAICO_API_KEY')
+
+# Call setup_mongodb_indexes()
+setup_mongodb_indexes()
+
 
 
 @app.route('/')
