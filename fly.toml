@@ -16,7 +16,7 @@ dockerfile = '/config/docker/Dockerfile'
   auto_start_machines = true
   min_machines_running = 0
   processes = ['app']
-  script = "gunicorn -w 4 -b 0.0.0.0:5000 main:app"
+  script = "gunicorn -w 4 -b 0.0.0.0:5000 app:app"
 
 [[vm]]
   memory = '1gb'
