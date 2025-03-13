@@ -5,7 +5,7 @@ import os
 import re
 import uuid
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, Any
+from typing import Dict
 
 # Third-party imports
 import bleach
@@ -41,7 +41,7 @@ COLLECTION_AMA_LOG = 'ama_log'
 COLLECTION_AMA_PROMPTS = 'ama_prompts'
 
 # HTML sanitizer configuration
-ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS.union({
+ALLOWED_TAGS = set(bleach.sanitizer.ALLOWED_TAGS).union({
     'p', 'pre', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br'
 })
 ALLOWED_ATTRIBUTES = {
@@ -54,7 +54,6 @@ ALLOWED_ATTRIBUTES = {
 # ANSWER_LLM = 'openai/gpt-4o-2024-11-20'
 ANSWER_LLM = 'anthropic/claude-3.7-sonnet:thinking'
 TAGS_LLM = 'anthropic/claude-3.5-sonnet'
-
 
 
 # Global thread pool for asynchronous operations
@@ -375,6 +374,7 @@ class LoggingService:
             logger.error(f"Error saving prompt to MongoDB: {str(e)}")
             raise
 
+
 # Flask application initialization
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
 straico_api_key = os.getenv('STRAICO_API_KEY')
@@ -531,6 +531,7 @@ def setup_mongodb_indexes():
         client.close()
     except Exception as e:
         logger.error(f"Error creating MongoDB indexes: {str(e)}")
+
 
 # Call setup_mongodb_indexes()
 setup_mongodb_indexes()
