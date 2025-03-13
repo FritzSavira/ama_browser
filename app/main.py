@@ -51,7 +51,8 @@ ALLOWED_ATTRIBUTES = {
 }
 
 # LLM configuration
-ANSWER_LLM = 'openai/gpt-4o-2024-11-20'
+# ANSWER_LLM = 'openai/gpt-4o-2024-11-20'
+ANSWER_LLM = 'anthropic/claude-3.7-sonnet:thinking'
 TAGS_LLM = 'anthropic/claude-3.5-sonnet'
 
 
