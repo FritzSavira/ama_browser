@@ -14,14 +14,21 @@
 <body>
     <!-- Header -->
     <header class="py-5" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
-        <div class="container text-center text-light">
-            <h1 class="display-4 mb-4" style="font-family: 'Playfair Display', serif;">
-                Theologisch fundierte Unterstützung für Ihre seelsorgerliche Arbeit
-            </h1>
-            <p class="lead mb-5">Von Seelsorgern für Seelsorger entwickelt</p>
-            <a href="{{ url_for('chat') }}" class="btn btn-primary" style="background-color: var(--accent); color: var(--text-light);">
-                Jetzt kostenfrei testen
-            </a>
+        <div class="container text-light">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-left mb-4 mb-md-0">
+                    <img src="{{ url_for('static', filename='images/logo_shepwise.png') }}" alt="ShepWise Logo" class="img-fluid" style="max-height: 120px;">
+                </div>
+                <div class="col-md-8 text-center">
+                    <h1 class="display-4 mb-4" style="font-family: 'Playfair Display', serif;">
+                        Theologisch fundierte Unterstützung für Ihre seelsorgerliche Arbeit
+                    </h1>
+                    <p class="lead mb-5">Von Seelsorgern für Seelsorger entwickelt</p>
+                    <a href="{{ url_for('chat') }}" class="btn btn-primary" style="background-color: var(--accent); color: var(--text-light);">
+                        Jetzt kostenfrei testen
+                    </a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -86,49 +93,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Theologische Fundierung -->
-    <!-- section class="py-5">
-        <!div class="container">
-            <!h2 class="text-center mb-5">Unsere geistliche Grundlage</h2>
-            <!div class="row align-items-center">
-                <!div class="col-md-6">
-                    <!h3>Die Bibel als Autorität</h3>
-                    <!p>Unsere Antworten basieren auf dem Wort Gottes als höchster Autorität und orientieren sich an bewährter theologischer Tradition.</p>
-                    <!h3 class="mt-4">Denominationsübergreifend</h3>
-                    <!p>Wir respektieren die Vielfalt christlicher Traditionen und bieten ausgewogene, biblisch fundierte Perspektiven.</p>
-                <!/div>
-                <!div class="col-md-6">
-                    <!img src="{{ url_for('static', filename='img/bible-study.jpg') }}" alt="Bibel Studium" class="img-fluid rounded shadow">
-                <!/div>
-            <!/div>
-        <!/div>
-    <!/section-->
-
-    <!-- Praktische Anwendung -->
-    <!-- section class="py-5 bg-light">
-        <!div class="container">
-            <!h2 class="text-center mb-5">So unterstützen wir Sie im Alltag</h2>
-            <!div class="row">
-                <!div class="col-md-6">
-                    <!div class="card mb-4 border-0 shadow-sm">
-                        <!div class="card-body">
-                            <!h3 class="h5">Seelsorgerliche Gespräche</h3>
-                            <!p>Schnelle, fundierte Unterstützung bei der Vorbereitung schwieriger Gespräche.</p>
-                        <!/div>
-                    <!/div>
-                <!/div>
-                <!div class="col-md-6">
-                    <!div class="card mb-4 border-0 shadow-sm">
-                        <!div class="card-body">
-                            <!h3 class="h5">Predigtvorbereitung</h3>
-                            <!p>Theologische Reflexion und praktische Anwendungen für Ihre Verkündigung.</p>
-                        <!/div>
-                    <!/div>
-                <!/div>
-            <!/div>
-        <!/div>
-    <!/section-->
 
     <!-- Call-to-Action -->
     <section class="py-5 text-center" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
