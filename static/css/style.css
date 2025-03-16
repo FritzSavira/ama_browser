@@ -8,14 +8,150 @@
     --text-dark: #2A2826;
     --text-light: #F9F6F0;
     --dark-red: #8B0000;
-    --maroon: #800000; /* dark-dark-red
+    --maroon: #800000; /* dark-dark-red */
+    --white: #FFFFFF; /* Weiß definiert */
 }
 
 /* Allgemeine Stile */
 body {
     background-color: var(--background);
     color: var(--text-dark);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Source Serif Pro', serif; /* Schriftart angepasst */
+}
+
+/* Navbar-Stile */
+.navbar-light .navbar-brand img {
+    max-height: 50px;
+}
+
+/* Hero Section */
+.hero {
+    background-color: var(--primary-dark);
+    color: var(--white);
+    padding: 60px 0;
+    text-align: center;
+}
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+}
+.hero ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px; /* Abstand unterhalb der Liste */
+}
+.hero ul li {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+.hero ul li i {
+    color: var(--accent);
+    margin-right: 10px;
+}
+
+/* Section Divider */
+.section-divider {
+    border-top: 1px solid #eaeaea;
+    margin: 50px 0;
+}
+
+/* Card Icons */
+.card i {
+    color: var(--accent);
+}
+
+/* Notice Section */
+.notice-section {
+    background-color: #f8f9fa;
+    padding: 40px 0;
+}
+.notice-section h3 {
+    color: var(--primary-dark);
+    margin-bottom: 30px;
+    font-family: 'Playfair Display', serif;
+}
+.notice-section h5 {
+    color: var(--primary);
+    margin-bottom: 15px;
+}
+
+/* CTA Section */
+.cta-section {
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 60px 0;
+    text-align: center;
+}
+.cta-section .btn {
+    background-color: var(--accent);
+    color: var(--text-light);
+    padding: 15px 30px;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+}
+.cta-section .btn:hover {
+    filter: brightness(90%);
+    transform: translateY(-2px);
+}
+
+/* Footer */
+.footer {
+    background-color: var(--primary-dark);
+    color: var(--white);
+    padding: 20px 0;
+    text-align: center;
+}
+.footer a {
+    color: var(--white);
+    text-decoration: none;
+}
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn-primary, .btn-light {
+    border: none;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+.btn-primary:hover, .btn-light:hover {
+    filter: brightness(90%);
+    transform: translateY(-1px);
+}
+
+/* Schriftarten für Überschriften */
+h1, h3, h4, h5 {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Responsiveness */
+@media (max-width: 767px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+    .hero ul li {
+        font-size: 1rem;
+    }
+    .cta-section .btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}
+
+/* Zusätzliche Stile von der ursprünglichen style.css */
+
+/* Chat-Container-Stile */
+.chat-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(44,74,59,0.08);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
 }
 
 /* Chat-Container-Stile */

@@ -5,60 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Theologische Beratung & Seelsorge</title>
 
-    <!-- Bereits vorhandene Style-Einbindungen -->
+    <!-- Style-Einbindungen -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Serif+Pro:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Eigene CSS-Datei -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <!-- Headers -->
-    <header class="py-5" style="background: linear-gradient(135deg, var(--white) 0%, var(--primary-dark) 100%);">
-        <div class="container text-light">
-            <div class="row align-items-center">
-                <div class="col-md-4 text-center text-md-left mb-4 mb-md-0">
-                    <img src="{{ url_for('static', filename='images/logo_shepwise_text2.png') }}" alt="ShepWise Logo" class="img-fluid" style="max-height: 240px;">
-                </div>
-                <div class="col-md-8 text-center">
-                    <h4 class="display-4 mb-4" style="font-family: 'Playfair Display', serif;" >
-                        Theologisch fundierte Unterstützung für Ihre seelsorgerliche Arbeit
-                    </h4>
-                    <p class="lead mb-5">Von Seelsorgern für Seelsorger entwickelt</p>
-                    <a href="{{ url_for('chat') }}" class="btn btn-primary" style="background-color: var(--accent); color: var(--text-light);">
-                        Jetzt kostenfrei testen
-                    </a>
-                </div>
-            </div>
+
+    <!-- Navbar mit Logo -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/logo_shepwise_text2.png') }}" alt="ShepWise Logo" style="max-height: 50px;">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero text-center">
+        <div class="container">
+            <h1 class="mb-4">
+                Theologisch fundierte Unterstützung<br>
+                für Ihre seelsorgerliche Arbeit
+            </h1>
+            <p class="lead mb-4">Von Seelsorgern für Seelsorger entwickelt</p>
+            <!-- Vorteilspunkte -->
+            <ul class="mb-5">
+                <li><i class="fas fa-check-circle"></i> Pastoral-seelsorgerliche Beratungshilfen</li>
+                <li><i class="fas fa-check-circle"></i> Theologisch-wissenschaftliche Reflexionen</li>
+                <li><i class="fas fa-check-circle"></i> Inspirierende Impulse für Predigten</li>
+            </ul>
+            <!-- Call-to-Action Button -->
+            <a href="{{ url_for('chat') }}" class="btn btn-lg btn-primary" style="background-color: var(--accent); color: var(--text-light);">
+                Jetzt kostenfrei testen
+            </a>
         </div>
     </header>
 
+    <!-- Trennlinie -->
+    <div class="section-divider"></div>
+
     <!-- Hauptnutzen-Sektion -->
-    <section class="py-5 bg-light">
+    <section class="py-5">
         <div class="container">
             <div class="row">
+                <!-- Karte 1 -->
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body text-center">
-                            <i class="fas fa-heart fa-3x mb-3" style="color: var(--primary)"></i>
-                            <h3 class="h4 mb-3">Pastoral-seelsorgerlich beraten</h3>
+                            <i class="fas fa-heart fa-3x mb-3"></i>
+                            <h3 class="h5 mb-3">Pastoral-seelsorgerlich beraten</h3>
                             <p>Einfühlsame Unterstützung für seelsorgerliche Gespräche und pastorale Begleitung.</p>
                         </div>
                     </div>
                 </div>
+                <!-- Karte 2 -->
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body text-center">
-                            <i class="fas fa-book-bible fa-3x mb-3" style="color: var(--primary)"></i>
-                            <h3 class="h4 mb-3">Theologisch-wissenschaftlich reflektieren</h3>
+                            <i class="fas fa-book-bible fa-3x mb-3"></i>
+                            <h3 class="h5 mb-3">Theologisch-wissenschaftlich reflektieren</h3>
                             <p>Fundierte theologische Analysen und biblische Perspektiven für Ihre Themen.</p>
                         </div>
                     </div>
                 </div>
+                <!-- Karte 3 -->
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body text-center">
-                            <i class="fas fa-microphone-alt fa-3x mb-3" style="color: var(--primary)"></i>
-                            <h3 class="h4 mb-3">Predigend-erzählend vermitteln</h3>
+                            <i class="fas fa-microphone-alt fa-3x mb-3"></i>
+                            <h3 class="h5 mb-3">Predigend-erzählend vermitteln</h3>
                             <p>Inspirierende Impulse für Ihre Verkündigung und Lehre.</p>
                         </div>
                     </div>
@@ -68,26 +86,25 @@
     </section>
 
     <!-- Wichtiger Hinweis -->
-    <section class="py-4" style="background-color: var(--accent);">
+    <section class="notice-section">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <div class="text-light text-center">
-                        <h3 class="mb-3"><i class="fas fa-exclamation-circle mr-2"></i>Wichtiger Hinweis zur Nutzung</h3>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <h5><i class="fas fa-pen mr-2"></i>Formulierungshilfe</h5>
-                                <p>Nutzen Sie die App ausschließlich als Formulierungshilfe für Antworten, die Sie aus eigener Überzeugung geben würden</p>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <h5><i class="fas fa-bible mr-2"></i>Biblische Grundlage</h5>
-                                <p>Verwenden Sie nur Bibelstellen, die Sie durch eigenes Studium und geistliche Erkenntnis als passend erachten</p>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <h5><i class="fas fa-pray mr-2"></i>Geistliches Wachstum</h5>
-                                <p>Diese App ersetzt nicht das persönliche Gebet, Bibelstudium und eigenes geistliches Wachstum</p>
-                            </div>
-                        </div>
+            <div class="text-center">
+                <h3><i class="fas fa-exclamation-circle mr-2"></i>Wichtiger Hinweis zur Nutzung</h3>
+                <div class="row">
+                    <!-- Hinweis 1 -->
+                    <div class="col-md-4 mb-3">
+                        <h5><i class="fas fa-pen mr-2"></i>Formulierungshilfe</h5>
+                        <p>Nutzen Sie die App ausschließlich als Formulierungshilfe für Antworten, die Sie aus eigener Überzeugung geben würden.</p>
+                    </div>
+                    <!-- Hinweis 2 -->
+                    <div class="col-md-4 mb-3">
+                        <h5><i class="fas fa-bible mr-2"></i>Biblische Grundlage</h5>
+                        <p>Verwenden Sie nur Bibelstellen, die Sie durch eigenes Studium und geistliche Erkenntnis als passend erachten.</p>
+                    </div>
+                    <!-- Hinweis 3 -->
+                    <div class="col-md-4 mb-3">
+                        <h5><i class="fas fa-pray mr-2"></i>Geistliches Wachstum</h5>
+                        <p>Diese App ersetzt nicht das persönliche Gebet, Bibelstudium und eigenes geistliches Wachstum.</p>
                     </div>
                 </div>
             </div>
@@ -95,32 +112,32 @@
     </section>
 
     <!-- Call-to-Action -->
-    <section class="py-5 text-center" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
-        <div class="container text-light">
+    <section class="cta-section text-center">
+        <div class="container">
             <h4 class="mb-4">Beginnen Sie noch heute</h4>
-            <p class="mb-4">ohne Konto, keine Cookies, keine Abfrage oder Speicherung personenbezogener Daten in dieser App.</p>
-            <a href="{{ url_for('chat') }}" class="btn btn-primary" style="background-color: var(--accent); color: var(--text-light);">
+            <p class="mb-4">Ohne Konto, keine Cookies, keine Abfrage oder Speicherung personenbezogener Daten in dieser App.</p>
+            <a href="{{ url_for('chat') }}" class="btn btn-lg btn-light" style="color: var(--primary-dark);">
                 Kostenfrei testen
             </a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-4" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
-        <div class="container text-light">
+    <footer class="footer">
+        <div class="container text-center">
             <div class="row">
+                <!-- Kontakt -->
                 <div class="col-md-4 mb-3">
-                    <p><i class="fas fa-envelope"></i><a href="mailto:info@shepwise.com" class="text-light"> info@shepwise.com</a></p>
+                    <p><i class="fas fa-envelope"></i><a href="mailto:info@shepwise.com"> info@shepwise.com</a></p>
                 </div>
+                <!-- Theologische Grundlagen -->
                 <div class="col-md-4 mb-3">
-                    <p><a href="{{ url_for('theolog') }}" class="text-light">Theologische Grundlagen</a></p>
+                    <p><a href="{{ url_for('theolog') }}">Theologische Grundlagen</a></p>
                 </div>
-                <!-- Footer mit rechtlichen Links -->
+                <!-- Rechtliche Hinweise -->
                 <div class="col-md-4 mb-3">
-                    <a href="{{ url_for('legal') }}" class="text-light">Rechtliche Hinweise</a>
+                    <a href="{{ url_for('legal') }}">Rechtliche Hinweise</a>
                 </div>
-
-
             </div>
         </div>
     </footer>
