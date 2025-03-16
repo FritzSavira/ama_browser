@@ -16,7 +16,12 @@
 body {
     background-color: var(--background);
     color: var(--text-dark);
-    font-family: 'Source Serif Pro', serif; /* Schriftart angepasst */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; /* Sans-serif als Standard */
+}
+
+/* Spezielle Serif-Klasse nur für die Hauptüberschrift */
+.serif-font {
+    font-family: 'Playfair Display', serif;
 }
 
 /* Navbar-Stile */
@@ -122,7 +127,17 @@ body {
 
 /* Schriftarten für Überschriften */
 h1, h3, h4, h5 {
-    font-family: 'Playfair Display', serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+}
+
+.notice-section h3 {
+    color: var(--primary-dark);
+    margin-bottom: 30px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
 /* Responsiveness */
