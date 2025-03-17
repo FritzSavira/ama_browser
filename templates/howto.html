@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to</title>
+
+    <!-- Einbinden von Bootstrap CSS über CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <!-- Icons Import -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Externe CSS-Datei -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container my-5">
+        <!-- Zurück zu landing.html -->
+        <div class="text-left mb-4">
+            <a href="{{ url_for('index') }}" class="btn btn-primary"><i class="fas fa-home"></i></a>
+        </div>
+        <!-- How to -->
+        <section id="theologische_grundlagen" class="mb-5">
+            <h3>So einfach nutzen sie ShepWise</h3>
+
+            <p>In vier Schritten zur theologischen Unterstützung:</p>
+
+            <p><strong>1. Frage formulieren</strong></p>
+            <p>Geben Sie Ihre Frage zu Leben, Glauben oder Gemeinde in das Textfeld ein.
+                Je konkreter Ihre Frage, desto gezielter die Antwort.</p>
+
+            <p><strong>2. Format wählen</strong></p>
+            <p>Entscheiden Sie, welche Art der Antwort Sie benötigen:</p>
+            <ul>
+                <li><strong>Pastoral-seelsorgerlich</strong>: Für einfühlsame Begleitung und Gesprächsführung</li>
+                <li><strong>theologisch-wissenschaftlich</strong>: Für fundierte biblische Analysen und Hintergründe</li>
+                <li><strong>Predigend-erzählend</strong>: Für inspirierende Impulse und Verkündigungshilfen</li>
+            </ul>
+
+            <p><strong>3. Antwort erhalten</strong></p>
+            <p>Nach dem Absenden Ihrer Frage generiert ShepWise sofort eine
+                biblisch fundierte Antwort im gewünschten Format – ohne Wartezeit, ohne Anmeldung.</p>
+
+            <p><strong>4. Antwort nutzen</strong></p>
+            <p>Die erhaltene Antwort steht Ihnen sofort zur Verfügung. Sie können sie:</p>
+            <ul>
+                <li>- Direkt in der App lesen und reflektieren</li>
+                <li>- Als Grundlage für Ihre eigene Arbeit verwenden</li>
+                <li>- Mit einem Klick herunterladen für die spätere Nutzung</li>
+            </ul>
+
+            <p><strong>Datenschutz & Vertraulichkeit</strong>: ShepWise arbeitet ohne Konto,
+                ohne Cookies und ohne Speicherung personenbezogener Daten.
+                Ihre Fragen bleiben vertraulich und werden nicht gespeichert.</p>
+        </section>
+    </div>
+
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
