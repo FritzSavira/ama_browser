@@ -402,7 +402,7 @@ def chat():
     return render_template('chat.html')
 
 @app.route('/howto')
-def theolog():
+def howto():
     """
     Render the howto page.
 
