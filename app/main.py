@@ -401,6 +401,16 @@ def chat():
     """
     return render_template('chat.html')
 
+@app.route('/howto')
+def theolog():
+    """
+    Render the howto page.
+
+    Returns:
+        Rendered howto page template
+    """
+    return render_template('howto.html')
+
 
 @app.route('/theolog')
 def theolog():
