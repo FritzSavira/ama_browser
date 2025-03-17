@@ -534,3 +534,44 @@ h1, h3, h4, h5 {
         max-height: 50vh;
     }
 }
+
+/* FAQ Tabelle */
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.faq-question {
+    cursor: pointer;
+}
+
+.faq-answer {
+    background-color: #f9f9f9;
+}
+
+.toggle-answer {
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+}
+
+.toggle-answer:focus {
+    outline: none;
+}
+
+/* Stil für die Antworten */
+.faq-answer td {
+    padding-top: 0;
+    padding-bottom: 15px;
+}
+
+/* Verhindert, dass der Hover-Effekt auf die Antwortzeilen angewendet wird */
+.faq-answer:hover {
+    background-color: #f9f9f9 !important;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 767px) {
+    .faq-question td {
+        font-size: 1rem;
+    }
+}

@@ -381,3 +381,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// FAQ Toggle-Funktion
+$(document).ready(function() {
+    $('.toggle-answer').click(function() {
+        // Alle Antworten ausblenden
+        $('.faq-answer').hide();
+        // Alle Icons zurücksetzen
+        $('.toggle-answer i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+
+        // Die zugehörige Antwortzeile finden
+        var answerRow = $(this).closest('tr').next('.faq-answer');
+        if (answerRow.is(':visible')) {
+            // Wenn sichtbar, ausblenden
+            answerRow.hide();
+            $(this).find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+        } else {
+            // Wenn nicht sichtbar, anzeigen
+            answerRow.show();
+            $(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+        }
+    });
+});

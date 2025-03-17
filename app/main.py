@@ -433,6 +433,24 @@ def legal():
     """
     return render_template('legal.html')
 
+@app.route('/faq')
+def faq():
+    faqs = [
+        {
+            'question': 'Welche theologische Ausrichtung hat ShepWise?',
+            'answer': 'ShepWise basiert auf einer biblisch fundierten Theologie. Die Antworten orientieren sich an der Autorität der Heiligen Schrift (sola scriptura) und stehen in der Tradition reformatorischer Theologie. Die denominative Tendenz der Antworten kann durch die Justierung der Persona des Systemprompts eingestellt werden (Pro-Version). In der voreingestellten Version antwortet das mit evangelikalen Tendenzen.'
+        },
+        {
+            'question': 'Wie stellt ShepWise sicher, dass die Antworten theologisch fundiert sind?',
+            'answer': 'Die App greift auf ein breites Spektrum theologischer Ressourcen zurück, darunter systematische Theologie, Hermeneutik, Bibelauslegung, Kirchengeschichte, Apologetik und klassische christliche Schriften. Jede Antwort wird auf Grundlage dieser Quellen generiert.'
+        },
+        {
+            'question': 'Ersetzt ShepWise das eigene Bibelstudium?',
+            'answer': 'Nein. Wie in den Nutzungshinweisen betont, ersetzt ShepWise nicht das persönliche Gebet, Bibelstudium und geistliche Wachstum. Die App dient als Formulierungshilfe und theologische Unterstützung, nicht als Ersatz für die eigene theologische Reflexion.'
+        },
+    ]
+    return render_template('faq.html', faqs=faqs)
+
 
 @app.route('/ask', methods=['POST'])
 def ask():
