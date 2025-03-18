@@ -28,18 +28,11 @@ body {
 .navbar-light .navbar-brand img {
     max-height: 50px;
 }
-
-.outline-icon {
-  color: #f8f9fa; /* Fast weiß */
-  text-shadow:
-    -1px -1px 0 #9e9e9e,
-    1px -1px 0 #9e9e9e,
-    -1px 1px 0 #9e9e9e,
-    1px 1px 0 #9e9e9e;
+.outline-home {
+  color: transparent;
+  -webkit-text-stroke: 1px #9e9e9e; /* Hellgrau */
   font-size: 20px;
 }
-
-
 
 /* Hero Section */
 .hero {
