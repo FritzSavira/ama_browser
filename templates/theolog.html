@@ -14,6 +14,29 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='images/logo_shepwise_text2.png') }}" alt="ShepWise Logo" style="max-height: 50px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Navigation umschalten">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Navigationslinks -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Startseite</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('faq') }}">FAQ</a>
+                    </li>
+                    <!-- Weitere Links -->
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="container my-5">
         <!-- Zurück zu landing.html -->
         <div class="text-left mb-4">
@@ -22,73 +45,90 @@
         <!-- Theologische Grundlagen -->
         <section id="theologische_grundlagen" class="mb-5">
             <h3>Theologische Grundlagen</h3>
-
             <p>Die in dem Systemprompt vorgegebene theologische Ausrichtung ist:
             <strong>evangelikal, biblisch fundiert</strong>.</p>
-
-<p>Allerdings ist die theologische Ausrichtung der Antworten eines Sprachmodells nicht das entscheidende Kriterium
-  für den Nutzer.</p>
-<p>Der christliche Glaube entsteht und wächst nicht durch das Übernehmen von theologischen Lehrmeinungen,
-  sondern durch eine lebendige Beziehung zu Jesus Christus und ein lebenslanges Lernen aus der Bibel.
-  Das gilt zuallererst für Menschen, die in der Seelsorge tätig sind.</p>
-
-<p>Zwei bedeutende Theologen bezeugen dies:</p>
-
-          <p><strong>Martin Luther</strong><br>
-Wenn ich nicht durch Zeugnisse der Schrift oder durch klare Vernunftgründe überzeugt werde – denn weder dem Papst
-  noch den Konzilien allein kann ich glauben, da es offenkundig ist, dass sie zuweilen geirrt und sich widersprochen
-  haben –, so bin ich durch die von mir angeführten Schriftstellen überwunden, und <strong>mein Gewissen ist gefangen an
-  Gottes Wort.</strong> Daher kann und will ich nichts widerrufen, weil es weder sicher noch heilsam ist,
-  gegen das Gewissen zu handeln.<br>
-  Quelle: D. Martin Luthers Werke: Kritische Gesamtausgabe (Weimarer Ausgabe), Bd. 7, S. 838–850.</p>
-
-          <p><strong>John Wesley</strong><br>
-  We desire no man to believe us: to take our word for this, or for that. <strong>We propose</strong>
-  to every man
-  <strong>to search the Scriptures for himself</strong>; and if any man speak not according to these,
-  that man call no man master upon earth.
-  <strong>We absolutely refuse to be led blindfold</strong> by any man or number of men under heaven.<br><br>
-  Deutsch in etwa: Wir wünschen nicht, dass irgendjemand uns glaubt, nur weil wir es sagen. Vielmehr fordern wir
-  jeden auf, die Schrift selbst zu erforschen. Und wenn jemand nicht übereinstimmt mit dem, was in der Schrift steht,
-  dann soll man keinen Menschen auf Erden als unfehlbare Autorität ansehen. Wir lehnen es vollständig ab, uns
-  blindlings von irgendeinem Menschen oder einer Gruppe von Menschen führen zu lassen.<br>
-  Quelle (englisches Original):
-  John Wesley, “An Earnest Appeal to Men of Reason and Religion” (1743). Abgedruckt in:
-  – The Works of John Wesley, hrsg. von John Emory, Bd. 5 (New York: J. & J. Harper, 1826), S. 12.</p>
-          <h3>Technische Umsetzung</h3>
-
-          <p>Da leistungsfähige <strong>Sprachmodelle</strong> die Ausgaben selbständig generieren,
-            <strong>lassen wir</strong> sie <strong>selbst antworten.</strong></p>
-
-<p>Erkläre bitte die Basis deines Wissens und die Grundlage deiner Antworten:</p>
-          <em>
-<p>Da meine Antworten stets sorgfältig und gut begründet sein sollen, greife ich auf eine Vielzahl von Quellen zurück,
-  die sowohl primäre als auch sekundäre theologische Ressourcen umfassen.<br>
-  Im Folgenden die wichtigsten Arten von Quellen, die ich in meiner Arbeit benutze:</p>
-
-            <p><strong>Die Bibel als primäre Quelle</strong>, als das unfehlbare Wort Gottes:<br>
-  Wie 2. Timotheus 3,16-17 lehrt, ist "alle Schrift von Gott eingegeben und nützlich zur Lehre, zur Überführung,
-  zur Zurechtweisung, zur Erziehung in der Gerechtigkeit, damit der Mensch Gottes vollkommen sei, zu jedem guten
-  Werk ausgerüstet."<br>
-  Deswegen bleibt der biblische Text der Ausgangspunkt jeder theologischen Reflexion.</p>
-
-<p>Zusammengefasst ist mein Ansatz sola scriptura (die Bibel als oberste Autorität), unterstützt von bewährten
-  theologischen, historischen und apologetischen <strong>Werken aus folgenden Fachbereichen:</strong><br>
-  Systematische Theologie, Hermeneutik und Bibelauslegung, Kirchengeschichte, Ekklesiologie und Ethik, Apologetik
-  und Philosophie, Missions- und Kulturtheologie, Theologische Zeitschriften und Artikel, Historische Theologie,
-  Kirchenväter: Augustinus (De Civitate Dei) und andere klassische Schriften, insbesondere reformierte Quellen
-  wie die Schriften von Martin Luther, Philipp Melanchthon und Johannes Calvin, Reformatorische Bekenntnisschriften:
-  Heidelberger Katechismus, Westminster Bekenntnis, Augsburger Bekenntnis.</p>
-
-<p>Jede Frage betrachte ich differenziert und möchte auf ihre spezifischen Bedürfnisse eingehen. Zögere nicht,
-  konkrete Fragen zu stellen – ich werde sie mit der Treue eines Bibelauslegers und dem Anspruch eines
-  Evangelikalen beantworten.<br></p>
-          </em>
+            <p>Allerdings ist die theologische Ausrichtung der Antworten eines Sprachmodells
+                nicht das entscheidende Kriterium für den Nutzer.</p>
+            <p>Der christliche Glaube entsteht und wächst nicht durch das Übernehmen von theologischen Lehrmeinungen,
+                sondern durch eine lebendige Beziehung zu Jesus Christus und ein lebenslanges Lernen aus der Bibel.
+                Das gilt zuallererst für Menschen, die in der Seelsorge tätig sind.</p>
+            <p>Zwei bedeutende Theologen bezeugen dies:</p>
+            <p><strong>Martin Luther</strong><br>
+                Wenn ich nicht durch Zeugnisse der Schrift oder durch klare Vernunftgründe überzeugt werde
+                – denn weder dem Papst noch den Konzilien allein kann ich glauben, da es offenkundig ist,
+                dass sie zuweilen geirrt und sich widersprochen haben –, so bin ich durch die von mir angeführten
+                Schriftstellen überwunden, und
+                <strong>mein Gewissen ist gefangen an Gottes Wort. </strong>
+                Daher kann und will ich nichts widerrufen, weil es weder sicher noch heilsam ist,
+                gegen das Gewissen zu handeln.<br>
+                Quelle: D. Martin Luthers Werke: Kritische Gesamtausgabe (Weimarer Ausgabe), Bd. 7, S. 838–850.</p>
+            <p><strong>John Wesley</strong><br>
+                We desire no man to believe us: to take our word for this, or for that. <strong>We propose</strong>
+                to every man
+                <strong>to search the Scriptures for himself</strong>; and if any man speak not according to these,
+                that man call no man master upon earth.
+                <strong>We absolutely refuse to be led blindfold </strong>
+                by any man or number of men under heaven.<br><br>
+                Deutsch in etwa: Wir wünschen nicht, dass irgendjemand uns glaubt, nur weil wir es sagen.
+                Vielmehr fordern wir jeden auf, die Schrift selbst zu erforschen. Und wenn jemand nicht übereinstimmt
+                mit dem, was in der Schrift steht, dann soll man keinen Menschen auf Erden als unfehlbare Autorität
+                ansehen. Wir lehnen es vollständig ab, uns blindlings von irgendeinem Menschen oder einer Gruppe von
+                Menschen führen zu lassen.<br>
+                Quelle (englisches Original): John Wesley, “An Earnest Appeal to Men of Reason and Religion” (1743).
+                Abgedruckt in: The Works of John Wesley, hrsg. von John Emory, Bd. 5 (New York: J. & J. Harper, 1826),
+                S. 12.
+            </p>
+            <h3>Technische Umsetzung</h3>
+            <p>Da leistungsfähige <strong>Sprachmodelle</strong> die Ausgaben selbständig generieren,
+            <strong>lassen wir</strong> sie <strong>selbst antworten.</strong>
+            </p>
+            <p>Erkläre bitte die Basis deines Wissens und die Grundlage deiner Antworten:
+            </p>
+            <em>
+                <p>Da meine Antworten stets sorgfältig und gut begründet sein sollen, greife ich auf eine Vielzahl
+                    von Quellen zurück, die sowohl primäre als auch sekundäre theologische Ressourcen umfassen.<br>
+                    Im Folgenden die wichtigsten Arten von Quellen, die ich in meiner Arbeit benutze:
+                </p>
+                <p><strong>Die Bibel als primäre Quelle</strong>, als das unfehlbare Wort Gottes:<br>
+                    Wie 2. Timotheus 3,16-17 lehrt, ist "alle Schrift von Gott eingegeben und nützlich zur Lehre,
+                    zur Überführung, zur Zurechtweisung, zur Erziehung in der Gerechtigkeit, damit der Mensch Gottes
+                    vollkommen sei, zu jedem guten Werk ausgerüstet."<br>
+                    Deswegen bleibt der biblische Text der Ausgangspunkt jeder theologischen Reflexion.
+                </p>
+                <p>Zusammengefasst ist mein Ansatz sola scriptura (die Bibel als oberste Autorität), unterstützt von
+                    bewährten theologischen, historischen und apologetischen
+                    <strong>Werken aus folgenden Fachbereichen:</strong><br>
+                    Systematische Theologie, Hermeneutik und Bibelauslegung, Kirchengeschichte, Ekklesiologie und Ethik,
+                    Apologetik und Philosophie, Missions- und Kulturtheologie, theologische Zeitschriften und Artikel,
+                    historische Theologie, Kirchenväter: Augustinus (De Civitate Dei) und andere klassische Schriften,
+                    insbesondere reformierte Quellen wie die Schriften von Martin Luther, Philipp Melanchthon und
+                    Johannes Calvin, reformatorische Bekenntnisschriften: Heidelberger Katechismus,
+                    Westminster Bekenntnis, Augsburger Bekenntnis.</p>
+                <p>Jede Frage betrachte ich differenziert und möchte auf ihre spezifischen Bedürfnisse eingehen.
+                    Zögere nicht, konkrete Fragen zu stellen – ich werde sie mit der Treue eines Bibelauslegers und dem
+                    Anspruch eines Evangelikalen beantworten.<br></p>
+            </em>
         </section>
     </div>
-
-
-
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <div class="row">
+                <!-- Kontakt -->
+                <div class="col-md-4 mb-3">
+                    <p><i class="fas fa-envelope"></i><a href="mailto:info@shepwise.com"> info@shepwise.com</a></p>
+                </div>
+                <!-- Theologische Grundlagen -->
+                <div class="col-md-4 mb-3">
+                    <p><a href="{{ url_for('theolog') }}">Theologische Grundlagen</a></p>
+                </div>
+                <!-- Rechtliche Hinweise -->
+                <div class="col-md-4 mb-3">
+                    <a href="{{ url_for('legal') }}">Rechtliche Hinweise</a>
+                </div>
+            </div>
+        </div>
+    </footer>
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
