@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-
     <!-- Navbar mit Logo -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container">
@@ -21,16 +20,18 @@
                 <img src="{{ url_for('static', filename='images/logo_shepwise_text2.png') }}" alt="ShepWise Logo" style="max-height: 100px;">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Navigation umschalten">
-            <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
             </button>
-        </div>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- Navigationslinks -->
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('faq') }}">FAQ</a>
-                </li>
-            </ul>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Navigationslinks -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('faq') }}">FAQ</a>
+                    </li>
+                    <!-- Weitere Links -->
+                </ul>
+            </div>
         </div>
     </nav>
 
