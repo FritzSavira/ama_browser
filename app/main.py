@@ -528,7 +528,7 @@ def faq():
         {
             'question': 'Kann ich ShepWise auch auf mobilen Geräten nutzen?',
             'answer': 'Ja, ShepWise ist für alle Geräte mit Internetzugang geeignet,'
-                      'vom Desktop-Computer bis zum Smartphone.'
+                      ' vom Desktop-Computer bis zum Smartphone.'
         },
         {
             'question': 'Wie kann ich Feedback geben?',
