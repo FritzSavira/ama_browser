@@ -386,17 +386,19 @@ document.addEventListener('DOMContentLoaded', () => {
 $(document).ready(function() {
     $('.toggle-answer').click(function() {
         // Alle Antworten ausblenden
-        $('.faq-answer').slideUp();
+        $('.faq-answer').hide();
         // Alle Icons zurücksetzen
         $('.toggle-answer i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
 
         // Die zugehörige Antwortzeile finden
         var answerRow = $(this).closest('tr').next('.faq-answer');
         if (answerRow.is(':visible')) {
-            answerRow.slideUp();
+            // Wenn sichtbar, ausblenden
+            answerRow.hide();
             $(this).find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
         } else {
-            answerRow.slideDown();
+            // Wenn nicht sichtbar, anzeigen
+            answerRow.show();
             $(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
         }
     });
