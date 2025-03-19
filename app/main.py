@@ -539,6 +539,25 @@ def faq():
     return render_template('faq.html', faqs=faqs)
 
 
+@app.route('/settings', methods=['GET', 'POST'])
+def settings():
+    if request.method == 'POST':
+        # Daten vom Frontend empfangen
+        data = request.get_json()
+        system_prompt = data.get('system_prompt')
+        system_prompt_json = data.get('system_prompt_json')
+
+        # Hier können Sie die Daten speichern oder weiterverarbeiten
+        # Zum Beispiel: Speichern in einer Datenbank oder Datei
+
+        # Für jetzt geben wir nur eine Erfolgsmeldung zurück
+        return jsonify({'message': 'Daten erfolgreich empfangen.'})
+    else:
+        # Rendern der HTML-Vorlage
+        return render_template('settings.html')
+
+
+
 @app.route('/ask', methods=['POST'])
 def ask():
     """
