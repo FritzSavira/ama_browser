@@ -16,7 +16,8 @@ from pymongo import MongoClient
 
 # Local imports
 from aio_straico import straico_client
-from .prompt import (
+# .prompt muss für gunicorn auf Fly.io sein
+from prompt import (
     prompt_pastor, prompt_theologian, prompt_preacher,
     prompt_tags, prompt_abstraction
 )
@@ -547,11 +548,18 @@ def settings():
         system_prompt = data.get('system_prompt')
         system_prompt_json = data.get('system_prompt_json')
 
-        # Hier können Sie die Daten speichern oder weiterverarbeiten
-        # Zum Beispiel: Speichern in einer Datenbank oder Datei
+        # Beispiel: Speichern der Daten in einer Datei
+        with open('app/system_prompt.py', 'w', encoding='utf-8') as f:
+            f.write(system_prompt)
+
+        with open('app/system_prompt.jsonl', 'w', encoding='utf-8') as f:
+            json.dump(system_prompt_json, f, ensure_ascii=False)
 
         # Für jetzt geben wir nur eine Erfolgsmeldung zurück
-        return jsonify({'message': 'Daten erfolgreich empfangen.'})
+        return jsonify({
+            'message': 'Daten erfolgreich gespeichert.',
+            'system_prompt': system_prompt
+        })
     else:
         # Rendern der HTML-Vorlage
         return render_template('settings.html')
@@ -671,6 +679,6 @@ def setup_mongodb_indexes():
 setup_mongodb_indexes()
 
 # Wird nicht für Gunicorn-Server benötigt
-# if __name__ == '__main__':
-#    setup_mongodb_indexes()
-#    app.run(host="0.0.0.0", port=5000)
+if __name__ == '__main__':
+    setup_mongodb_indexes()
+    app.run(host="0.0.0.0", port=5000)

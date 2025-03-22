@@ -90,66 +90,241 @@
 
             <!-- Formular für die Persönlichkeitsdimensionen -->
             <form id="personality-form">
-                <!-- 1. Offenheit für Erfahrungen -->
+
+                <div id="facets-container"></div>
+
+<!--
+                 1. Offenheit für Erfahrungen
                 <div class="dimension">
                     <h2>1. Offenheit für Erfahrungen</h2>
                     <p>Wie neugierig, kreativ und offen für Abwechslung soll das LLM wirken? Passe die Offenheit für Erfahrungen an, indem du unterschiedliche Sub-Facetten justierst.</p>
-                    <!-- Sub-Facetten -->
+                     Sub-Facetten
                     <div class="facet">
                         <label class="slider-label">Ist originell, entwickelt neue Ideen</label>
                         <input type="range" min="1" max="7" value="4" class="slider" id="facet1">
+                        <span id="facet1-label" class="selected-label">mäßig originell</span>
                     </div>
                     <div class="facet">
                         <label class="slider-label">Ist vielseitig interessiert</label>
                         <input type="range" min="1" max="7" value="4" class="slider" id="facet2">
+                        <span id="facet2-label" class="selected-label">mäßig vielseitig</span>
                     </div>
-                    <!-- Weitere Facetten hier hinzufügen -->
+                    <div class="facet">
+                        <label class="slider-label">Ist einfallsreich und tiefsinnig</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet3">
+                        <span id="facet3-label" class="selected-label">mäßig tiefsinnig</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Hat eine lebhafte Fantasie</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="face4">
+                        <span id="facet4-label" class="selected-label">mäßig fantasievoll</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist erfinderisch</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet5">
+                        <span id="facet5-label" class="selected-label">mäßig erfinderisch</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Reflektiert gerne, spielt mit Ideen</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet6">
+                        <span id="facet6-label" class="selected-label">mäßig reflektiert</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Hat wenig künstlerische Interessen</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet7">
+                        <span id="facet7-label" class="selected-label">einige künstlerische Interessen</span>
+                    </div>
                 </div>
 
-                <!-- 2. Gewissenhaftigkeit -->
+                 2. Gewissenhaftigkeit
                 <div class="dimension">
                     <h2>2. Gewissenhaftigkeit</h2>
                     <p>Beschreibt Selbstdisziplin, Pflichtbewusstsein und Streben nach Leistung.</p>
                     <div class="facet">
                         <label class="slider-label">Erledigt Aufgaben gründlich</label>
-                        <input type="range" min="1" max="7" value="4" class="slider" id="facet11">
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet8">
+                        <span id="facet8-label" class="selected-label">mittelmäßig gründlich</span>
                     </div>
-                    <!-- Weitere Facetten hier hinzufügen -->
+                    <div class="facet">
+                        <label class="slider-label">Kann manchmal nachlässig sei</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet9">
+                        <span id="facet9-label" class="selected-label">gelegentlich nachlässig</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist ein zuverlässiger Arbeiter</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet10">
+                        <span id="facet10-label" class="selected-label">mäßig zuverlässig</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Neigt zur Unordentlichkeit</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet11">
+                        <span id="facet11-label" class="selected-label">mittelmäßig ordentlich</span>
+                    </div>
+                                        <div class="facet">
+                        <label class="slider-label">Neigt zur Faulheit</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet12">
+                        <span id="facet12-label" class="selected-label">mittelmäßig fleißig</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Führt Aufgaben bis zum Ende durch</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet13">
+                        <span id="facet13-label" class="selected-label">mittelmäßig beharrlich</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Erledigt Dinge effizient</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet14">
+                        <span id="facet14-label" class="selected-label">mittelmäßig effizient</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Plant und hält sich an diese Pläne</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet15">
+                        <span id="facet15-label" class="selected-label">planst regelmäßig</span>
+                    </div>
+                                        <div class="facet">
+                        <label class="slider-label">Lässt sich leicht ablenken</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet16">
+                        <span id="facet16-label" class="selected-label">mäßig fokussiert</span>
+                    </div>
                 </div>
 
-                <!-- 3. Extraversion -->
+                 3. Extraversion
                 <div class="dimension">
                     <h2>3. Extraversion</h2>
                     <p>Beschreibt Geselligkeit, Durchsetzungsvermögen und Energieniveau.</p>
                     <div class="facet">
                         <label class="slider-label">Ist gesprächig</label>
-                        <input type="range" min="1" max="7" value="4" class="slider" id="facet21">
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet17">
+                        <span id="facet17-label" class="selected-label">mäßig gesprächig</span>
                     </div>
-                    <!-- Weitere Facetten hier hinzufügen -->
+                    <div class="facet">
+                        <label class="slider-label">Ist zurückhaltend</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet18">
+                        <span id="facet18-label" class="selected-label">mittelmäßig zurückhaltend</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist voller Energie</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet19">
+                        <span id="facet19-label" class="selected-label">mäßig energisch</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist begeisterungsfähig und motivierend</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet20">
+                        <span id="facet20-label" class="selected-label">mäßig begeisterungsfähig</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist eher still</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet21">
+                        <span id="facet21-label" class="selected-label">mittelmäßig kommunikativ</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Hat eine durchsetzungsfähige Persönlichkeit</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet22">
+                        <span id="facet22-label" class="selected-label">mäßig durchsetzungsfähig</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist manchmal schüchtern und gehemmt</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet23">
+                        <span id="facet23-label" class="selected-label">teils gehemmt, teils ungezwungen</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist kontaktfreudig und gesellig</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet24">
+                        <span id="facet24-label" class="selected-label">mäßig gesellig</span>
+                    </div>
                 </div>
 
-                <!-- 4. Verträglichkeit -->
+                 4. Verträglichkeit
                 <div class="dimension">
                     <h2>4. Verträglichkeit</h2>
                     <p>Beschreibt zwischenmenschliches Verhalten wie Mitgefühl, Kooperationsbereitschaft und Vertrauen.</p>
                     <div class="facet">
-                        <label class="slider-label">Ist hilfsbereit und selbstlos gegenüber anderen</label>
-                        <input type="range" min="1" max="7" value="4" class="slider" id="facet31">
+                        <label class="slider-label">Neigt dazu, andere zu kritisieren</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet25">
+                        <span id="facet25-label" class="selected-label">gelegentlich kritisch</span>
                     </div>
-                    <!-- Weitere Facetten hier hinzufügen -->
+                    <div class="facet">
+                        <label class="slider-label">Ist hilfsbereit und selbstlos gegenüber anderen</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet26">
+                        <span id="facet26-label" class="selected-label">mäßig hilfsbereit</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Beginnt Streit mit anderen</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet27">
+                        <span id="facet27-label" class="selected-label">gelegentlich streitbar</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Hat ein verzeihendes Wesen</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet28">
+                        <span id="facet28-label" class="selected-label">manchmal verzeihend</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist grundsätzlich vertrauensvoll</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet29">
+                        <span id="facet29-label" class="selected-label">vorsichtig abwägend</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Kann kühl und distanziert sein</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet30">
+                        <span id="facet30-label" class="selected-label">teils warm, teils distanziert</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist rücksichtsvoll und freundlich zu fast allen Menschen</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet31">
+                        <span id="facet31-label" class="selected-label">neutral im Umgang</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist manchmal unhöflich zu anderen</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet32">
+                        <span id="facet32-label" class="selected-label">meist höflich, gelegentlich nicht</span>
+                    </div>
+                                        <div class="facet">
+                        <label class="slider-label">Arbeitet gerne mit anderen zusammen</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet33">
+                        <span id="facet33-label" class="selected-label">neutral zur Zusammenarbeit</span>
+                    </div>
                 </div>
 
-                <!-- 5. Neurotizismus -->
+                 5. Neurotizismus
                 <div class="dimension">
                     <h2>5. Neurotizismus</h2>
                     <p>Beschreibt emotionale Stabilität bzw. Instabilität.</p>
                     <div class="facet">
                         <label class="slider-label">Ist niedergeschlagen, deprimiert</label>
-                        <input type="range" min="1" max="7" value="4" class="slider" id="facet41">
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet34">
+                        <span id="facet34-label" class="selected-label">manchmal niedergeschlagen</span>
                     </div>
-                    <!-- Weitere Facetten hier hinzufügen -->
+                    <div class="facet">
+                        <label class="slider-label">Ist entspannt, geht gut mit Stress um</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet35">
+                        <span id="facet35-label" class="selected-label">mäßig stressresistent</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Kann angespannt sein</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet36">
+                        <span id="facet36-label" class="selected-label">gelegentlich angespannt</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Macht sich viele Sorgen</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet37">
+                        <span id="facet37-label" class="selected-label">Gelegentlich besorgt</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Ist emotional stabil, nicht leicht aus der Fassung zu bringen</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet38">
+                        <span id="facet38-label" class="selected-label">mäßig stabil</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Kann launisch sein</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet39">
+                        <span id="facet39-label" class="selected-label">gelegentlich launisch</span>
+                    </div>
+                    <div class="facet">
+                        <label class="slider-label">Wird leicht nervös</label>
+                        <input type="range" min="1" max="7" value="4" class="slider" id="facet40">
+                        <span id="facet40-label" class="selected-label">Gelegentlich nervös</span>
+                    </div>
                 </div>
-
+-->
                 <!-- Zusammenfassung und Prompt-Generator -->
                 <div id="summary">
                     <h2>Dein fertiges Persönlichkeitsprofil</h2>
