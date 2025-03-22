@@ -11,7 +11,7 @@ from typing import Dict
 import bleach
 import certifi
 import markdown
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from pymongo import MongoClient
 
 # Local imports
@@ -21,6 +21,7 @@ from prompt import (
     prompt_pastor, prompt_theologian, prompt_preacher,
     prompt_tags, prompt_abstraction
 )
+
 
 # Logging configuration
 logging.basicConfig(
@@ -60,6 +61,10 @@ TAGS_LLM = 'anthropic/claude-3.5-sonnet'
 # Global thread pool for asynchronous operations
 executor = ThreadPoolExecutor(max_workers=3)
 
+
+# Hilfsfunktion: Ist der Benutzer ein Pro-Nutzer?
+def is_pro_user():
+    return session.get('is_pro', False)
 
 def get_mongodb_client() -> MongoClient:
     """
@@ -542,6 +547,10 @@ def faq():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
+    # Pro-Schutz: Nur Pro-Nutzer können auf die Einstellungen zugreifen
+    if not is_pro_user():
+        return redirect(url_for('upgrade'))
+
     if request.method == 'POST':
         # Daten vom Frontend empfangen
         data = request.get_json()
@@ -563,6 +572,17 @@ def settings():
     else:
         # Rendern der HTML-Vorlage
         return render_template('settings.html')
+
+
+@app.route('/upgrade')
+def legal():
+    """
+    Render the legal information page.
+
+    Returns:
+        Rendered legal page template
+    """
+    return render_template('upgrade.html')
 
 
 
@@ -677,8 +697,14 @@ def setup_mongodb_indexes():
 
 # Call setup_mongodb_indexes()
 setup_mongodb_indexes()
+@app.before_request
+def before_request():
+    session['is_pro'] = 'False'
 
 # Wird nicht für Gunicorn-Server benötigt
 if __name__ == '__main__':
     setup_mongodb_indexes()
     app.run(host="0.0.0.0", port=5000)
+    @app.before_request
+    def before_request():
+        session['is_pro'] = 'True'
