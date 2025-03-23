@@ -66,8 +66,6 @@ executor = ThreadPoolExecutor(max_workers=3)
 def is_pro_user():
     return session.get('is_pro', False)
 
-
-
 def get_mongodb_client() -> MongoClient:
     """
     Initialize and return a MongoDB client with proper configuration.

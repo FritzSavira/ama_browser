@@ -42,12 +42,13 @@
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#" data-toggle="tooltip" title="Nur in der Pro-Version verfügbar">
+                        <a class="nav-link disabled" href="#" data-toggle="tooltip" title="Nur in Pro-Version. Wollen Sie die Pro-Version nutzen? --> info@shepwise.com">
                             Settings <i class="fas fa-lock small"></i>
                         </a>
                     </li>
+                    <!-- Für Produktionsumgebung kein Schalter vorhanden
+                    Version-Schalter (für Entwicklungszwecke)
                     {% endif %}
-                    <!-- Version-Schalter (für Entwicklungszwecke) -->
                     <li class="nav-item ml-3">
                         <form action="{{ url_for('toggle_version') }}" method="post">
                             <button type="submit" class="btn btn-sm {% if is_pro %}btn-success{% else %}btn-outline-secondary{% endif %}">
@@ -55,6 +56,7 @@
                             </button>
                         </form>
                     </li>
+                    -->
                     <!-- Weitere Links -->
                 </ul>
             </div>
@@ -65,7 +67,7 @@
     <div class="chat-container d-flex flex-column">
         <!-- Kopfzeile des Chats -->
         <div class="chat-header">
-            <h3>Stelle deine Frage rund um Leben, Glauben und Gemeinde</h3>
+            <h3>Stellen Sie Ihre Frage rund um Leben, Glauben und Gemeinde</h3>
         </div>
         <!-- Bereich für die Chat-Nachrichten -->
         <div id="chatMessages" class="chat-messages d-flex flex-column">
@@ -81,7 +83,7 @@
             <form id="frageForm" class="d-flex flex-column">
                 <!-- Agenten-Auswahl -->
                 <fieldset class="form-group">
-                    <legend>Wähle das Format der Antwort:</legend>
+                    <legend>Wählen Sie das Format der Antwort:</legend>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="agent" id="agent_pastoral" value="pastoral-seelsorgerlich" required>
                         <label class="form-check-label" for="agent_pastoral">pastoral-seelsorgerlich</label>
@@ -97,7 +99,7 @@
                 </fieldset>
                 <!-- Frageingabe -->
                 <div class="input-group">
-                    <input type="text" id="frage" name="frage" required class="form-control" placeholder="Schreibe deine Frage hier...">
+                    <input type="text" id="frage" name="frage" required class="form-control" placeholder="Schreiben Sie Ihre Frage hier...">
                     <div class="input-group-append">
                         <!-- Sende-Button  -->
                         <button type="submit" class="btn btn-primary ml-2">
