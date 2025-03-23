@@ -403,3 +403,11 @@ $(document).ready(function() {
         }
     });
 });
+
+// Beim Laden der Seite
+document.addEventListener('DOMContentLoaded', function() {
+    // Tooltip-Initialisierung für gesperrte Features
+    if (typeof $ !== 'undefined') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+});

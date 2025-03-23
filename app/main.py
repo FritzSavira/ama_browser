@@ -66,6 +66,8 @@ executor = ThreadPoolExecutor(max_workers=3)
 def is_pro_user():
     return session.get('is_pro', False)
 
+
+
 def get_mongodb_client() -> MongoClient:
     """
     Initialize and return a MongoDB client with proper configuration.
@@ -383,8 +385,19 @@ class LoggingService:
 
 # Flask application initialization
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
+app.secret_key = 'dein_geheimer_schluessel'  # In Produktion aus Umgebungsvariablen laden
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
+# Middleware zur Initialisierung von session['is_pro']
+@app.before_request
+def initialize_session():
+    if 'is_pro' not in session:
+        session['is_pro'] = False  # Standardmäßig sind neue Benutzer Free-Nutzer
+
+# Alle Templates erhalten die Pro-Status-Information
+@app.context_processor
+def inject_pro_status():
+    return {'is_pro': is_pro_user()}
 
 @app.route('/')
 def index():
@@ -575,14 +588,22 @@ def settings():
 
 
 @app.route('/upgrade')
-def legal():
+def upgrade():
     """
-    Render the legal information page.
+    Render the upgrade page.
 
     Returns:
-        Rendered legal page template
+        Rendered upgrade page template
     """
     return render_template('upgrade.html')
+
+@app.route('/toggle_version', methods=['POST'])
+def toggle_version():
+    # Aktuellen Status bekommen oder False, wenn nicht vorhanden
+    current_status = session.get('is_pro', False)
+    # Umschalten und speichern
+    session['is_pro'] = not current_status
+    return redirect(url_for('index'))
 
 
 
@@ -697,14 +718,9 @@ def setup_mongodb_indexes():
 
 # Call setup_mongodb_indexes()
 setup_mongodb_indexes()
-@app.before_request
-def before_request():
-    session['is_pro'] = 'False'
+
 
 # Wird nicht für Gunicorn-Server benötigt
 if __name__ == '__main__':
     setup_mongodb_indexes()
     app.run(host="0.0.0.0", port=5000)
-    @app.before_request
-    def before_request():
-        session['is_pro'] = 'True'
