@@ -1,4 +1,3 @@
-
 // document.addEventListener('DOMContentLoaded', function() {
 
 // settings.js - Add at the top or in a separate JS file
@@ -858,7 +857,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function generateSystemPrompt(facetsValues) {
-        let prompt = "Du bist ein KI-Assistent mit folgenden Persönlichkeitsmerkmalen:\n";
+        let prompt = "Du besitzt folgenden Persönlichkeitsmerkmalen und verhältst dich entsprechend:\n";
 
         // Group facets by dimension
         const groupedFacets = {};
