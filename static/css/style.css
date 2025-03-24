@@ -594,6 +594,28 @@ h1, h3, h4, h5 {
 .facet {
     margin-left: 20px;
     margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.facet-label {
+    flex: 1 1 200px;
+    margin-right: 10px;
+}
+
+.slider-container {
+    flex: 1 1 300px;
+    margin-right: 10px;
+}
+
+.prompt-characteristic {
+    flex: 1 1 200px;
+    margin-right: 10px;
+}
+
+.selected-label {
+    flex: 1 1 200px;
 }
 
 .slider-label {
