@@ -14,44 +14,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <title>Dein LLM-Persönlichkeitsprofil</title>
-    <style>
-        /* Einfaches Styling für Übersichtlichkeit */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .dimension {
-            margin-bottom: 30px;
-        }
-        .facet {
-            margin-left: 20px;
-            margin-bottom: 10px;
-        }
-        .slider-label {
-            display: inline-block;
-            width: 400px;
-        }
-        .slider {
-            width: 300px;
-        }
-        #results {
-            margin-top: 30px;
-        }
-        textarea {
-            width: 100%;
-            font-family: monospace;
-        }
-        #start-button {
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-        #generate-prompt-button {
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-    </style>
+
 </head>
-<body>
+<body class="settings-body">
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
@@ -79,25 +44,20 @@
         </div>
     </nav>
     <div class="container my-5">
-
-
         <h1>Dein LLM-Persönlichkeitsprofil</h1>
         <p>Lege fest, wie das Large Language Model (LLM) in seinen Antworten auftreten soll. Wähle dafür Ausprägungen in den fünf grundlegenden Persönlichkeitsdimensionen. Passe für jede Dimension die Intensität an und erhalte am Ende ein zusammenfassendes System-Prompt-Template.</p>
 
-        <button id="start-button">Jetzt Big-Five-Profil anpassen</button>
+        <button id="start-button" class="btn btn-primary">Jetzt Big-Five-Profil anpassen</button>
 
         <div id="main-content" style="display:none;">
-
             <!-- Formular für die Persönlichkeitsdimensionen -->
             <form id="personality-form">
-
                 <div id="facets-container"></div>
-
 
                 <!-- Zusammenfassung und Prompt-Generator -->
                 <div id="summary">
                     <h2>Dein fertiges Persönlichkeitsprofil</h2>
-                    <button type="button" id="generate-prompt-button">System-Prompt generieren</button>
+                    <button type="button" id="generate-prompt-button" class="btn btn-success">System-Prompt generieren</button>
                 </div>
             </form>
         </div>
@@ -105,10 +65,10 @@
         <!-- Bereich zur Anzeige des generierten System Prompts und der JSON-Daten -->
         <div id="results" style="display:none;">
             <h2>Generierter System Prompt</h2>
-            <textarea id="system-prompt" rows="10"></textarea>
+            <textarea id="system-prompt" rows="10" class="form-control"></textarea>
 
             <h2>Parameter im JSONL-Format</h2>
-            <textarea id="system-prompt-json" rows="10"></textarea>
+            <textarea id="system-prompt-json" rows="10" class="form-control"></textarea>
         </div>
     </div>
     <!-- Footer -->

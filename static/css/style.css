@@ -580,3 +580,36 @@ h1, h3, h4, h5 {
         font-size: 1rem;
     }
 }
+
+/* Stile für die Settings-Seite */
+.settings-body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.dimension {
+    margin-bottom: 30px;
+}
+
+.facet {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.slider-label {
+    display: inline-block;
+    width: 400px;
+}
+
+.slider {
+    width: 300px;
+}
+
+#results {
+    margin-top: 30px;
+}
+
+textarea {
+    width: 100%;
+    font-family: monospace;
+}
