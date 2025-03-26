@@ -17,7 +17,7 @@ from pymongo import MongoClient
 # Local imports
 from aio_straico import straico_client
 # .prompt muss für gunicorn auf Fly.io sein
-from prompt import (
+from .prompt import (
     prompt_pastor, prompt_theologian, prompt_preacher,
     prompt_tags, prompt_abstraction
 )
@@ -719,6 +719,6 @@ setup_mongodb_indexes()
 
 
 # Wird nicht für Gunicorn-Server benötigt
-if __name__ == '__main__':
-    setup_mongodb_indexes()
-    app.run(host="0.0.0.0", port=5000)
+#if __name__ == '__main__':
+#    setup_mongodb_indexes()
+#    app.run(host="0.0.0.0", port=5000)
