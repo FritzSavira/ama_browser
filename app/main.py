@@ -21,7 +21,7 @@ from .prompt import (
     prompt_pastor, prompt_theologian, prompt_preacher,
     prompt_tags, prompt_abstraction
 )
-from system_prompt import prompt_system
+# from system_prompt import prompt_system
 
 
 # Logging configuration
@@ -178,7 +178,7 @@ class ChatService:
                 abstraction_str = str(abstraction)
                 reply = client.prompt_completion(
                     ANSWER_LLM,
-                    prompt_system + prompt_text + abstraction_str + question
+                    prompt_text + abstraction_str + question
                 )
                 return reply
         except Exception as e:
@@ -639,7 +639,7 @@ def ask():
             abstraction = AbstractionService.abstract_question(question, client, prompt_abstraction)
 
         # Generate reply using the appropriate prompt
-        reply = ChatService.generate_reply(abstraction, question, prompt_text, prompt_system)
+        reply = ChatService.generate_reply(abstraction, question, prompt_text)
         answer_markdown = (reply['completion']['choices'][0]['message']['content']
                            + ANSWER_FOOTER)
         answer_html = ChatService.convert_markdown_to_html(answer_markdown)
