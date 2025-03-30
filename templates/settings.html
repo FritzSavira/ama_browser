@@ -13,7 +13,7 @@
     <!-- Externe CSS-Datei -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <title>Dein LLM-Persönlichkeitsprofil</title>
+    <title>Persönlichkeitsprofil des Sprachmodells festlegen</title>
 
 </head>
 <body class="settings-body">
@@ -44,10 +44,10 @@
         </div>
     </nav>
     <div class="container my-5">
-        <h1>Dein LLM-Persönlichkeitsprofil</h1>
-        <p>Lege fest, wie das Large Language Model (LLM) in seinen Antworten auftreten soll. Wähle dafür Ausprägungen in den fünf grundlegenden Persönlichkeitsdimensionen. Passe für jede Dimension die Intensität an und erhalte am Ende ein zusammenfassendes System-Prompt-Template.</p>
+        <h1>Persönlichkeitsprofil des Sprachmodells festlegen</h1>
+        <p>Legen Sie hier fest, wie das Sprachmodell (LLM) in seinen Antworten auftreten soll. Wählen Sie dafür Ausprägungen mittels der Checkboxen an oder ab. Das so erstellt Profil kann über 'Individuell' in der Chat-Maske ausgewählt werden.</p>
 
-        <button id="start-button" class="btn btn-primary">Jetzt Big-Five-Profil anpassen</button>
+        <button id="start-button" class="btn btn-primary">Jetzt Persönlichkeitsprofil anpassen</button>
 
         <div id="main-content" style="display:none;">
             <!-- Formular für die Persönlichkeitsdimensionen -->
@@ -56,8 +56,8 @@
 
                 <!-- Zusammenfassung und Prompt-Generator -->
                 <div id="summary">
-                    <h2>Dein fertiges Persönlichkeitsprofil</h2>
-                    <button type="button" id="generate-prompt-button" class="btn btn-success">System-Prompt generieren</button>
+                    <h2>Das fertiges Persönlichkeitsprofil</h2>
+                    <button type="button" id="generate-prompt-button" class="btn btn-success">Persönlichkeitsprofil generieren</button>
                 </div>
             </form>
         </div>

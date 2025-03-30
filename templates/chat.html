@@ -46,9 +46,9 @@
                             Settings <i class="fas fa-lock small"></i>
                         </a>
                     </li>
+                    {% endif %}
                     <!-- Für Produktionsumgebung kein Schalter vorhanden
                     Version-Schalter (für Entwicklungszwecke) -->
-                    {% endif %}
                     <li class="nav-item ml-3">
                         <form action="{{ url_for('toggle_version') }}" method="post">
                             <button type="submit" class="btn btn-sm {% if is_pro %}btn-success{% else %}btn-outline-secondary{% endif %}">
@@ -96,8 +96,16 @@
                         <input class="form-check-input" type="radio" name="agent" id="agent_predigend" value="predigend-erzählend">
                         <label class="form-check-label" for="agent_predigend">predigend-erzählend</label>
                     </div>
+                    {% if is_pro %}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="agent" id="agent_idividuell" value="individuell-setting">
+                        <label class="form-check-label" for="agent_idividuell">individuell</label>
+                    </div>
+                    {% else %}
+                    {% endif %}
+
                 </fieldset>
-                <!-- Frageingabe -->
+                <!-- Frage Eingabe -->
                 <div class="input-group">
                     <input type="text" id="frage" name="frage" required class="form-control" placeholder="Schreiben Sie Ihre Frage hier...">
                     <div class="input-group-append">
