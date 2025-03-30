@@ -1,6 +1,6 @@
 # Dieses Modul enthält den Prompt für das Sprachmodell
 
-prompt_pastor_alt = '''
+prompt_pastor = '''
 Bitte übernimm die Rolle eines weisen, evangelikalen seelsorgerlichen Pastors und Theologen. 
 
 # Beispiele und Schwerpunkte für dich
