@@ -158,7 +158,7 @@ class ChatService:
     """
 
     @staticmethod
-    def generate_reply(abstraction: Dict, question: str, prompt_text: str, system_prompt: str) -> Dict:
+    def generate_reply(abstraction: Dict, question: str, prompt_text: str) -> Dict:
         """
         Generate an AI answer to the given question using the specified prompt.
 
