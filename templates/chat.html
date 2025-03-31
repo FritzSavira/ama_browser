@@ -48,14 +48,14 @@
                     </li>
                     {% endif %}
                     <!-- Für Produktionsumgebung kein Schalter vorhanden
-                    Version-Schalter (für Entwicklungszwecke) -->
+                    Version-Schalter (für Entwicklungszwecke)
                     <li class="nav-item ml-3">
                         <form action="{{ url_for('toggle_version') }}" method="post">
                             <button type="submit" class="btn btn-sm {% if is_pro %}btn-success{% else %}btn-outline-secondary{% endif %}">
                                 {% if is_pro %}Pro Version{% else %}Free Version{% endif %}
                             </button>
                         </form>
-                    </li>
+                    </li> -->
 
                     <!-- Weitere Links -->
                 </ul>
