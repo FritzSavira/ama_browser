@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Überprüfen, ob eine Frage eingegeben wurde
         if (frageInput.trim() === '') {
-            alert('Bitte gib eine Frage ein.');
+            alert('Bitte geben Sie eine Frage ein.');
             return;
         }
 
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Überprüfen, ob die Frage nicht leer ist
         if (frageInput.trim() === '') {
-            alert('Bitte gib eine Frage ein.');
+            alert('Bitte geben Sie eine Frage ein.');
             return;
         }
 
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 aktuelleID = data.id; // Zeile zum Speichern der ID
 
                 // Feedback-Aufforderung als separate Bot-Nachricht
-                const feedbackPrompt = displayMessage('Bitte bewerte die Antwort, vielen Dank!:', 'bot-message');
+                const feedbackPrompt = displayMessage('Bitte bewerten Sie die Antwort, vielen Dank!:', 'bot-message');
 
                 // Feedback options form in its own bubble
                 const feedbackOptionsContainer = displayMessage('', 'user-message');
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 body: JSON.stringify(freitextData)
                             });
                             if (freitextResponse.ok) {
-                                const feedbackThanks = displayMessage('Danke für dein Feedback!', 'bot-message');
+                                const feedbackThanks = displayMessage('Danke für Ihr Feedback!', 'bot-message');
                                 feedbackPrompt.remove();    // Remove the feedback prompt
                                 feedbackOptionsContainer.remove(); // Remove the feedback options prompt
                                 freitextContainer.remove(); // Remove the freitext form
@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
         freitextTextarea.rows = 4;
         freitextTextarea.classList.add('form-control');
         freitextTextarea.style.resize = 'vertical';
-        freitextTextarea.placeholder = 'Optional: Deine Anmerkungen oder Verbesserungsvorschläge';
+        freitextTextarea.placeholder = 'Optional: Ihre Anmerkungen oder Verbesserungsvorschläge';
 
         inputGroup.appendChild(freitextTextarea);
 
