@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 DATA_DIR = '/data'
 LOG_FILE = os.path.join(DATA_DIR, 'ama_log.json')
 ANSWER_FOOTER = ("\n\n *Diese Antwort wurde mit KI erstellt und kann fehlerhaft sein." 
-                 " Die Verantwortung, wie du diese Antwort nutzt, liegt bei dir.*")
+                 " Die Verantwortung, wie Sie diese Antwort nutzen, liegt bei Ihnen.*")
 
 # MongoDB configuration
 MONGODB_URI = os.environ.get('MONGODB_URI')
@@ -457,7 +457,7 @@ def faq():
     Render the faq page.
 
     Returns:
-        Rendered faq page template with questons and answers as content
+        Rendered faq page template with questions and answers as content
     """
     faqs = [
         {

@@ -1,0 +1,52 @@
+main.py:
+
+1.)
+Produktiv-System: "." Punkt vor prompt import (
+from .prompt import (
+    prompt_pastor, prompt_theologian, prompt_preacher,
+    prompt_tags, prompt_abstraction
+)
+
+Test-System: kein "." Punkt vor prompt import (
+from prompt import (
+    prompt_pastor, prompt_theologian, prompt_preacher,
+    prompt_tags, prompt_abstraction
+)
+
+2.)
+Produktiv-System: mit # deaktivieren
+# Wird nicht für Gunicorn-Server benötigt
+#if __name__ == '__main__':
+#    setup_mongodb_indexes()
+#    app.run(host="0.0.0.0", port=5000)
+
+Test-System: ohne # aktivieren
+Wird nicht für Gunicorn-Server benötigt
+if __name__ == '__main__':
+    setup_mongodb_indexes()
+    app.run(host="0.0.0.0", port=5000)
+
+
+chat.html:
+1.)
+Produktiv-System: Schalter zum Ein-, Ausschalten von Pro-Version deaktiviert
+<!-- Für Produktionsumgebung kein Schalter vorhanden
+Version-Schalter (für Entwicklungszwecke)
+<li class="nav-item ml-3">
+    <form action="{{ url_for('toggle_version') }}" method="post">
+        <button type="submit" class="btn btn-sm {% if is_pro %}btn-success{% else %}btn-outline-secondary{% endif %}">
+            {% if is_pro %}Pro Version{% else %}Free Version{% endif %}
+        </button>
+    </form>
+</li> -->
+
+Test-System: Schalter zum Ein-, Ausschalten von Pro-Version aktiviert
+<!-- Für Produktionsumgebung kein Schalter vorhanden
+Version-Schalter (für Entwicklungszwecke) -->
+<li class="nav-item ml-3">
+    <form action="{{ url_for('toggle_version') }}" method="post">
+        <button type="submit" class="btn btn-sm {% if is_pro %}btn-success{% else %}btn-outline-secondary{% endif %}">
+            {% if is_pro %}Pro Version{% else %}Free Version{% endif %}
+        </button>
+    </form>
+</li>
