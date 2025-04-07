@@ -21,7 +21,6 @@ from .prompt import (
     prompt_pastor, prompt_theologian, prompt_preacher,
     prompt_tags, prompt_abstraction
 )
-# from system_prompt import prompt_system
 
 
 # Logging configuration
@@ -66,6 +65,7 @@ executor = ThreadPoolExecutor(max_workers=3)
 # Hilfsfunktion: Ist der Benutzer ein Pro-Nutzer?
 def is_pro_user():
     return session.get('is_pro', False)
+
 
 def get_mongodb_client() -> MongoClient:
     """
@@ -118,6 +118,47 @@ def process_tags_and_logging(answer_markdown: str, question: str, reply: Dict,
         logger.info(f"Tags, abstraction and logging processed for question: {question[:50]}...")
     except Exception as e:
         logger.error(f"Error in processing: {str(e)}")
+
+
+def get_prompt_setting():
+    """
+    Dynamically reads the current value of prompt_setting from the file.
+    """
+    try:
+        with open('app/prompt_setting.py', 'r', encoding='utf-8') as f:
+            content = f.read()
+            return content
+    except Exception as e:
+        logger.error(f"Error reading prompt_setting.py: {str(e)}")
+        # Fallback zu einem Standardwert
+        return "Die prompt_setting.py Datei konnte nicht gelesen werden."
+
+
+def get_faq():
+    """
+    Reads the FAQ data from the JSON file.
+    Returns:
+    list: List of dictionaries with questions and answers
+    """
+    try:
+        # Path to JSON file relative to script directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        json_path = os.path.join(script_dir, 'faq.json')
+
+        # Opening and reading the JSON file
+        with open(json_path, 'r', encoding='utf-8') as file:
+            faq_data = json.load(file)
+        return faq_data
+
+    except FileNotFoundError:
+        print("Fehler: Die Datei faq.json wurde nicht gefunden.")
+        return []
+    except json.JSONDecodeError:
+        print("Fehler: Die JSON-Datei konnte nicht dekodiert werden.")
+        return []
+    except Exception as e:
+        print(f"Ein unerwarteter Fehler ist aufgetreten: {str(e)}")
+        return []
 
 
 class AbstractionService:
@@ -352,6 +393,8 @@ class LoggingService:
             prompt_version = f"prompt_theologian_{created}"
         elif agent == 'predigend-erzählend':
             prompt_version = f"prompt_preacher_{created}"
+        elif agent == 'individuell-setting':
+            prompt_version = f"prompt_setting_{created}"
         else:
             prompt_version = f"prompt_{created}"
 
@@ -388,15 +431,19 @@ app.secret_key = 'dein_geheimer_schluessel'  # In Produktion aus Umgebungsvariab
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
 # Middleware zur Initialisierung von session['is_pro']
+
+
 @app.before_request
 def initialize_session():
     if 'is_pro' not in session:
         session['is_pro'] = False  # Standardmäßig sind neue Benutzer Free-Nutzer
 
+
 # Alle Templates erhalten die Pro-Status-Information
 @app.context_processor
 def inject_pro_status():
     return {'is_pro': is_pro_user()}
+
 
 @app.route('/')
 def index():
@@ -418,6 +465,7 @@ def chat():
         Rendered chat page template
     """
     return render_template('chat.html')
+
 
 @app.route('/howto')
 def howto():
@@ -451,6 +499,7 @@ def legal():
     """
     return render_template('legal.html')
 
+
 @app.route('/faq')
 def faq():
     """
@@ -459,101 +508,8 @@ def faq():
     Returns:
         Rendered faq page template with questions and answers as content
     """
-    faqs = [
-        {
-            'question': 'Welche theologische Ausrichtung hat ShepWise?',
-            'answer': 'ShepWise basiert auf einer biblisch fundierten Theologie.'
-                      ' Die Antworten orientieren sich an der Autorität der Heiligen Schrift (sola scriptura)'
-                      ' und stehen in der Tradition reformatorischer Theologie.'
-                      ' Die denominative Tendenz der Antworten kann durch die Justierung der Persona'
-                      ' des Systemprompts eingestellt werden (Pro-Version).'
-                      ' In der voreingestellten Version antwortet ShepWise mit evangelikalen Tendenzen.'
-        },
-        {
-            'question': 'Wie stellt ShepWise sicher, dass die Antworten theologisch fundiert sind?',
-            'answer': 'Die App greift auf ein breites Spektrum theologischer Ressourcen zurück,'
-                      ' darunter systematische Theologie, Hermeneutik, Bibelauslegung, Kirchengeschichte,'
-                      ' Apologetik und klassische christliche Schriften.'
-                      ' Jede Antwort wird auf Grundlage dieser Quellen generiert.'
-        },
-        {
-            'question': 'Ersetzt ShepWise das eigene Bibelstudium?',
-            'answer': 'Nein. Wie in den Nutzungshinweisen betont, ersetzt ShepWise nicht das persönliche Gebet,'
-                      ' Bibelstudium und geistliche Wachstum. Die App dient als Formulierungshilfe und theologische'
-                      ' Unterstützung, nicht als Ersatz für die eigene theologische Reflexion.'
-        },
-        {
-            'question': 'Für welche pastoralen Situationen ist ShepWise besonders hilfreich?',
-            'answer': 'ShepWise unterstützt Sie besonders bei:'
-                      ' Formulierung seelsorgerlicher Antworten in komplexen Situationen *'
-                      ' Theologischer Reflexion aktueller gesellschaftlicher Fragen *'
-                      ' Vorbereitung von Predigten und Bibelarbeiten *'
-                      ' Schneller Orientierung bei unerwarteten seelsorgerlichen Anfragen *'
-                      ' Unterstützung für junge Pastoren oder ehrenamtliche Mitarbeiter'
-        },
-        {
-            'question': 'Wie formuliere ich meine Fragen, um optimale Antworten zu bekommen?',
-            'answer': 'Formulieren Sie Ihre Fragen so konkret wie möglich.'
-                      ' Nennen Sie den Kontext, in dem Sie die Antwort verwenden möchten,'
-                      ' und geben Sie relevante Details an, ohne persönliche Informationen Dritter preiszugeben.'
-        },
-        {
-            'question': 'Wie unterscheiden sich die drei Antwortformate?',
-            'answer': 'Pastoral-seelsorgerlich: Empathisch, begleitend, auf zwischenmenschliche Beziehungen'
-                      ' ausgerichtet * Theologisch-wissenschaftlich: Exegetisch fundiert, mit Bibelstellen,'
-                      ' kirchengeschichtlichen Bezügen und lehrmäßiger Tiefe * Predigend-erzählend:'
-                      ' Anschaulich, mit Metaphern, Beispielen und einer klaren Botschaft für die Verkündigung '
-        },
-        {
-            'question': 'Werden meine Fragen gespeichert?',
-            'answer': 'Nein, ShepWise speichert keine personenbezogenen Daten.'
-                      ' Die App arbeitet ohne Konto, ohne Cookies und ohne dauerhafte Speicherung'
-                      ' der von Ihnen formulierten Fragen.'
-        },
-        {
-            'question': 'Kann ich ShepWise für vertrauliche seelsorgerliche Anliegen nutzen?',
-            'answer': 'Ja, allerdings sollten Sie keine identifizierenden Details zu Ihren Gemeindemitgliedern'
-                      ' eingeben. Formulieren Sie Anfragen zu seelsorgerlichen Situationen immer anonymisiert.'
-        },
-        {
-            'question': 'Welche Arten von Fragen sollte ich nicht stellen?',
-            'answer': 'Vermeiden Sie: Fragen mit personenbezogenen Daten Dritter, Fragen zu medizinischen,'
-                      ' rechtlichen oder finanziellen Fachthemen, Anfragen für fertige Predigten,'
-                      ' die Sie unverändert übernehmen wollen'
-        },
-        {
-            'question': 'Kann ShepWise bei akuten Krisen oder psychischen Notfällen helfen?',
-            'answer': 'ShepWise ersetzt keine professionelle Krisenintervention oder psychologische Beratung.'
-                      ' Bei akuten Krisen sollten immer entsprechende Fachstellen hinzugezogen werden.'
-        },
-        {
-            'question': 'Wie aktuell sind die Antworten zu gesellschaftlichen Themen?',
-            'answer': 'ShepWise kann zu grundlegenden theologischen Aspekten aktueller Themen Position beziehen,'
-                      ' ist jedoch nicht für tagesaktuelle Ereignisse oder spezifische politische Situationen'
-                      ' optimiert.'
-        },
-        {
-            'question': 'Was kostet die Nutzung von ShepWise?',
-            'answer': 'Sie können ShepWise zunächst kostenfrei testen.'
-                      ' Für detaillierte Preisinformationen nach der Testphase kontaktieren Sie uns bitte direkt.'
-                      ' E-Mail: info@shepwise.com'
-        },
-        {
-            'question': 'Gibt es Einschränkungen während der kostenlosen Testphase?',
-            'answer': 'In der Testphase können Sie alle Funktionen ohne Einschränkung nutzen,'
-                      ' um die Eignung für Ihren Dienst zu prüfen.'
-        },
-        {
-            'question': 'Kann ich ShepWise auch auf mobilen Geräten nutzen?',
-            'answer': 'Ja, ShepWise ist für alle Geräte mit Internetzugang geeignet,'
-                      ' vom Desktop-Computer bis zum Smartphone.'
-        },
-        {
-            'question': 'Wie kann ich Feedback geben?',
-            'answer': 'Wir freuen uns über Ihr Feedback zur Verbesserung von ShepWise.'
-                      ' Nutzen Sie dafür unsere E-Mail: info@shepwise.com.'
-        },
-    ]
+    faqs = get_faq()
+
     return render_template('faq.html', faqs=faqs)
 
 
@@ -566,21 +522,21 @@ def settings():
     if request.method == 'POST':
         # Daten vom Frontend empfangen
         data = request.get_json()
-        system_prompt = data.get('system_prompt')
-        system_prompt_json = data.get('system_prompt_json')
+        prompt_setting = data.get('prompt_setting')
+        prompt_setting_json = data.get('prompt_setting_json')
 
         # Beispiel: Speichern der Daten in einer Datei
-        with open('app/system_prompt.py', 'w', encoding='utf-8') as f:
-            f.write(system_prompt)
+        with open('app/prompt_setting.py', 'w', encoding='utf-8') as f:
+            f.write(prompt_setting)
 
-        with open('app/system_prompt.jsonl', 'w', encoding='utf-8') as f:
-            json.dump(system_prompt_json, f, ensure_ascii=False)
+        with open('app/prompt_setting.jsonl', 'w', encoding='utf-8') as f:
+            json.dump(prompt_setting_json, f, ensure_ascii=False)
 
-        # Für jetzt geben wir nur eine Erfolgsmeldung zurück
-        return jsonify({
+        message = jsonify({
             'message': 'Daten erfolgreich gespeichert.',
-            'system_prompt': system_prompt
+            'prompt_setting': prompt_setting
         })
+        return message
     else:
         # Rendern der HTML-Vorlage
         return render_template('settings.html')
@@ -596,6 +552,7 @@ def upgrade():
     """
     return render_template('upgrade.html')
 
+
 @app.route('/toggle_version', methods=['POST'])
 def toggle_version():
     # Aktuellen Status bekommen oder False, wenn nicht vorhanden
@@ -603,7 +560,6 @@ def toggle_version():
     # Umschalten und speichern
     session['is_pro'] = not current_status
     return redirect(url_for('index'))
-
 
 
 @app.route('/ask', methods=['POST'])
@@ -631,6 +587,9 @@ def ask():
             prompt_text = prompt_theologian
         elif agent == 'predigend-erzählend':
             prompt_text = prompt_preacher
+        elif agent == 'individuell-setting':
+            # Dynamically load the current value
+            prompt_text = get_prompt_setting()
         else:
             return jsonify({'answer': 'Invalid agent selected.'}), 400
 

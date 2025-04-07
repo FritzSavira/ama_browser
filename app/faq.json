@@ -1,0 +1,62 @@
+[
+        {
+            "question": "Welche theologische Ausrichtung hat ShepWise?",
+            "answer": "ShepWise basiert auf einer biblisch fundierten Theologie. Die Antworten orientieren sich an der Autorität der Heiligen Schrift (sola scriptura) und stehen in der Tradition reformatorischer Theologie. Die denominative Tendenz der Antworten kann durch die Justierung der Persona des Systemprompts eingestellt werden (Pro-Version). In der voreingestellten Version antwortet ShepWise mit evangelikalen Tendenzen."
+        },
+        {
+            "question": "Wie stellt ShepWise sicher, dass die Antworten theologisch fundiert sind?",
+            "answer": "Die App greift auf ein breites Spektrum theologischer Ressourcen zurück, darunter systematische Theologie, Hermeneutik, Bibelauslegung, Kirchengeschichte, Apologetik und klassische christliche Schriften. Jede Antwort wird auf Grundlage dieser Quellen generiert."
+        },
+        {
+            "question": "Ersetzt ShepWise das eigene Bibelstudium?",
+            "answer": "Nein. Wie in den Nutzungshinweisen betont, ersetzt ShepWise nicht das persönliche Gebet, Bibelstudium und geistliche Wachstum. Die App dient als Formulierungshilfe und theologische Unterstützung, nicht als Ersatz für die eigene theologische Reflexion."
+        },
+        {
+            "question": "Für welche pastoralen Situationen ist ShepWise besonders hilfreich?",
+            "answer": "ShepWise unterstützt Sie besonders bei: Formulierung seelsorgerlicher Antworten in komplexen Situationen * Theologischer Reflexion aktueller gesellschaftlicher Fragen * Vorbereitung von Predigten und Bibelarbeiten * Schneller Orientierung bei unerwarteten seelsorgerlichen Anfragen * Unterstützung für junge Pastoren oder ehrenamtliche Mitarbeiter"
+        },
+        {
+            "question": "Wie formuliere ich meine Fragen, um optimale Antworten zu bekommen?",
+            "answer": "Formulieren Sie Ihre Fragen so konkret wie möglich. Nennen Sie den Kontext, in dem Sie die Antwort verwenden möchten, und geben Sie relevante Details an, ohne persönliche Informationen Dritter preiszugeben."
+        },
+        {
+            "question": "Wie unterscheiden sich die drei Antwortformate?",
+            "answer": "Pastoral-seelsorgerlich: Empathisch, begleitend, auf zwischenmenschliche Beziehungen ausgerichtet * Theologisch-wissenschaftlich: Exegetisch fundiert, mit Bibelstellen, kirchengeschichtlichen Bezügen und lehrmäßiger Tiefe * Predigend-erzählend: Anschaulich, mit Metaphern, Beispielen und einer klaren Botschaft für die Verkündigung."
+        },
+        {
+            "question": "Werden meine Fragen gespeichert?",
+            "answer": "Nein, ShepWise speichert keine personenbezogenen Daten. Die App arbeitet ohne Konto, ohne Cookies und ohne dauerhafte Speicherung der von Ihnen formulierten Fragen."
+        },
+        {
+            "question": "Kann ich ShepWise für vertrauliche seelsorgerliche Anliegen nutzen?",
+            "answer": "Ja, allerdings sollten Sie keine identifizierenden Details zu Ihren Gemeindemitgliedern eingeben. Formulieren Sie Anfragen zu seelsorgerlichen Situationen immer anonymisiert."
+        },
+        {
+            "question": "Welche Arten von Fragen sollte ich nicht stellen?",
+            "answer": "Vermeiden Sie: Fragen mit personenbezogenen Daten Dritter, Fragen zu medizinischen, rechtlichen oder finanziellen Fachthemen, Anfragen für fertige Predigten, die Sie unverändert übernehmen wollen"
+        },
+        {
+            "question": "Kann ShepWise bei akuten Krisen oder psychischen Notfällen helfen?",
+            "answer": "ShepWise ersetzt keine professionelle Krisenintervention oder psychologische Beratung. Bei akuten Krisen sollten immer entsprechende Fachstellen hinzugezogen werden."
+        },
+        {
+            "question": "Wie aktuell sind die Antworten zu gesellschaftlichen Themen?",
+            "answer": "ShepWise kann zu grundlegenden theologischen Aspekten aktueller Themen Position beziehen, ist jedoch nicht für tagesaktuelle Ereignisse oder spezifische politische Situationen optimiert."
+        },
+        {
+            "question": "Was kostet die Nutzung von ShepWise?",
+            "answer": "Sie können ShepWise zunächst kostenfrei testen. Für detaillierte Preisinformationen nach der Testphase kontaktieren Sie uns bitte direkt. E-Mail: info@shepwise.com"
+        },
+        {
+            "question": "Gibt es Einschränkungen während der kostenlosen Testphase?",
+            "answer": "In der Testphase können Sie alle Funktionen ohne Einschränkung nutzen, um die Eignung für Ihren Dienst zu prüfen."
+        },
+        {
+            "question": "Kann ich ShepWise auch auf mobilen Geräten nutzen?",
+            "answer": "Ja, ShepWise ist für alle Geräte mit Internetzugang geeignet, vom Desktop-Computer bis zum Smartphone."
+        },
+        {
+            "question": "Wie kann ich Feedback geben?",
+            "answer": "Wir freuen uns über Ihr Feedback zur Verbesserung von ShepWise. Nutzen Sie dafür unsere E-Mail: info@shepwise.com."
+        }
+    ]
