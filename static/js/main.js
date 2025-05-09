@@ -84,21 +84,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ frage: frageInput, agent: agentValue })
             });
 
-
-
-
             // Ladeintervall stoppen
             clearInterval(loadingInterval);
 
             if (response.ok) {
                 const data = await response.json();
 
-                // Zeige die Antwort an
-                loadingMessage.innerHTML = data.antwort;
+                // Speichern der Daten
                 aktuelleFrage = data.frage;
-                aktuelleAntwortMarkdown = data.antwort_markdown;
+                aktuelleAntwortMarkdown = data.antwort;
+                aktuelleID = data.id;
+
+                // Hier marked.js verwenden, um Markdown in HTML zu konvertieren
+                loadingMessage.innerHTML = marked.parse(data.antwort);
                 downloadButton.style.display = 'inline-block';
-                aktuelleID = data.id; // Zeile zum Speichern der ID
 
                 // Feedback-Aufforderung als separate Bot-Nachricht
                 const feedbackPrompt = displayMessage('Bitte bewerten Sie die Antwort, vielen Dank!:', 'bot-message');
@@ -175,10 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     }
                 });
-
-
-
-
             } else {
                 loadingMessage.textContent = 'Fehler bei der Verarbeitung der Anfrage.';
             }
@@ -319,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Inhalt für die .md-Datei formatieren
-        const mdContent = `# Frage\n\n${aktuelleFrage}\n\n# Antwort\n\n${aktuelleAntwortMarkdown}`;
+        const mdContent = `# Frage<br /><br />${aktuelleFrage}<br /><br /># Antwort<br /><br />${aktuelleAntwortMarkdown}`;
 
         // Blob-Objekt mit dem Markdown-Inhalt erstellen
         const blob = new Blob([mdContent], { type: 'text/markdown' });

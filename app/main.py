@@ -8,9 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Dict
 
 # Third-party imports
-import bleach
 import certifi
-import markdown
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from pymongo import MongoClient
 
@@ -22,7 +20,6 @@ from .prompt import (
     prompt_tags, prompt_abstraction
 )
 
-
 # Logging configuration
 logging.basicConfig(
     level=logging.INFO,
@@ -33,7 +30,7 @@ logger = logging.getLogger(__name__)
 # Constants and configuration
 DATA_DIR = '/data'
 LOG_FILE = os.path.join(DATA_DIR, 'ama_log.json')
-ANSWER_FOOTER = ("\n\n *Diese Antwort wurde mit KI erstellt und kann fehlerhaft sein." 
+ANSWER_FOOTER = ("<br /><br /> *Diese Antwort wurde mit KI erstellt und kann fehlerhaft sein."
                  " Die Verantwortung, wie Sie diese Antwort nutzen, liegt bei Ihnen.*")
 
 # MongoDB configuration
@@ -42,21 +39,10 @@ DB_NAME = 'ama_browser'
 COLLECTION_AMA_LOG = 'ama_log'
 COLLECTION_AMA_PROMPTS = 'ama_prompts'
 
-# HTML sanitizer configuration
-ALLOWED_TAGS = set(bleach.sanitizer.ALLOWED_TAGS).union({
-    'p', 'pre', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br'
-})
-ALLOWED_ATTRIBUTES = {
-    '*': ['class', 'id', 'style'],
-    'a': ['href', 'title'],
-    'img': ['src', 'alt', 'title'],
-}
-
 # LLM configuration
 ANSWER_LLM = 'openai/gpt-4o-2024-11-20'
 # ANSWER_LLM = 'anthropic/claude-3.7-sonnet:thinking'
 TAGS_LLM = 'anthropic/claude-3.5-sonnet'
-
 
 # Global thread pool for asynchronous operations
 executor = ThreadPoolExecutor(max_workers=3)
@@ -251,34 +237,6 @@ class ChatService:
             logger.error(f"Error generating tags: {str(e)}")
             raise
 
-    @staticmethod
-    def convert_markdown_to_html(markdown_text: str) -> str:
-        """
-        Convert Markdown text to safe HTML.
-
-        Args:
-            markdown_text: The Markdown text to convert
-
-        Returns:
-            str: The sanitized HTML
-
-        Raises:
-            Exception: If an error occurs during conversion
-        """
-        try:
-            html = markdown.markdown(
-                markdown_text,
-                extensions=['fenced_code', 'codehilite']
-            )
-            return bleach.clean(
-                html,
-                tags=ALLOWED_TAGS,
-                attributes=ALLOWED_ATTRIBUTES
-            )
-        except Exception as e:
-            logger.error(f"Error during markdown conversion: {str(e)}")
-            raise
-
 
 class LoggingService:
     """
@@ -430,8 +388,8 @@ app = Flask(__name__, static_folder='../static', template_folder='../templates')
 app.secret_key = 'dein_geheimer_schluessel'  # In Produktion aus Umgebungsvariablen laden
 straico_api_key = os.getenv('STRAICO_API_KEY')
 
-# Middleware zur Initialisierung von session['is_pro']
 
+# Middleware zur Initialisierung von session['is_pro']
 
 @app.before_request
 def initialize_session():
@@ -601,7 +559,6 @@ def ask():
         reply = ChatService.generate_reply(abstraction, question, prompt_text)
         answer_markdown = (reply['completion']['choices'][0]['message']['content']
                            + ANSWER_FOOTER)
-        answer_html = ChatService.convert_markdown_to_html(answer_markdown)
 
         # Generate unique ID for logging and feedback
         unique_id = str(uuid.uuid4())
@@ -619,8 +576,8 @@ def ask():
         )
 
         return jsonify({
-            'antwort': answer_html,  # Keep original key for backward compatibility
-            'antwort_markdown': answer_markdown,  # Keep original key for backward compatibility
+            'antwort': answer_markdown,  # Jetzt direkt Markdown zurückgeben
+            'antwort_markdown': answer_markdown,  # Für die Abwärtskompatibilität behalten
             'frage': question,  # Keep original key for backward compatibility
             'id': unique_id
         })
@@ -676,7 +633,6 @@ def setup_mongodb_indexes():
 
 # Call setup_mongodb_indexes()
 setup_mongodb_indexes()
-
 
 # Wird nicht für Gunicorn-Server benötigt
 #if __name__ == '__main__':
