@@ -20,6 +20,7 @@ from .prompt import (
     prompt_tags, prompt_abstraction
 )
 
+
 # Logging configuration
 logging.basicConfig(
     level=logging.INFO,
