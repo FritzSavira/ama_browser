@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Erfassen des ausgewählten Agenten
         const agentInput = document.querySelector('input[name="agent"]:checked');
 
+        // Erfassen des Stil-Schalters
+        const stilSwitch = document.getElementById('stilSwitch');
+        const stil = stilSwitch && stilSwitch.checked ? 'persönlich' : 'sachlich';
+
         // Überprüfen, ob eine Frage eingegeben wurde
         if (frageInput.trim() === '') {
             alert('Bitte geben Sie eine Frage ein.');
@@ -39,11 +43,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const agentValue = agentInput.value;
 
-        // Überprüfen, ob die Frage nicht leer ist
-        if (frageInput.trim() === '') {
-            alert('Bitte geben Sie eine Frage ein.');
-            return;
+        // Finaler Prompt-String (außer bei individuell)
+        let agentFinal = agentValue;
+        if (
+            agentValue === 'seelsorgerlich' ||
+            agentValue === 'theologisch' ||
+            agentValue === 'predigend'
+        ) {
+            agentFinal = `${agentValue}-${stil}`;
         }
+        // Für individuell-setting bleibt Wert wie im Value
 
         // Lösche den bisherigen Chat-Verlauf
         chatMessages.innerHTML = '';
@@ -81,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ frage: frageInput, agent: agentValue })
+                body: JSON.stringify({ frage: frageInput, agent: agentFinal })
             });
 
             // Ladeintervall stoppen

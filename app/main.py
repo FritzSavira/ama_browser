@@ -547,17 +547,17 @@ def ask():
             return jsonify({'answer': 'No agent selected.'}), 400
 
         # Map the agent to the appropriate prompt
-        if agent == 'pastoral-seelsorgerlich-sachlich':
+        if agent == 'seelsorgerlich-sachlich':
             prompt_text = prompt_pastor_factual
-        elif agent == 'pastoral-seelsorgerlich-persönlich':
+        elif agent == 'seelsorgerlich-persönlich':
             prompt_text = prompt_pastor_personal
-        elif agent == 'theologisch-wissenschaftlich-sachlich':
+        elif agent == 'theologisch-sachlich':
             prompt_text = prompt_theologian_factual
-        elif agent == 'theologisch-wissenschaftlich-persönlich':
+        elif agent == 'theologisch-persönlich':
             prompt_text = prompt_theologian_personal
-        elif agent == 'predigend-erzählend-sachlich':
+        elif agent == 'predigend-sachlich':
             prompt_text = prompt_preacher_factual
-        elif agent == 'predigend-erzählend-persönlich':
+        elif agent == 'predigend-persönlich':
             prompt_text = prompt_preacher_personal
         elif agent == 'individuell-setting':
             # Dynamically load the current value
