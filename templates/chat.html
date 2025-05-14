@@ -5,15 +5,26 @@
     <!-- Viewport Meta Tag für Responsivität -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frage-Antwort Chat</title>
-
-    <!-- Einbinden von Bootstrap CSS über CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <!-- Font-Import -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Serif+Pro:wght@400;600&display=swap" rel="stylesheet">
-    <!-- Icons Import -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Externe CSS-Datei -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+      /* Optional kleine CSS Ergänzung, damit Toggle besser aussieht */
+      .custom-switch .custom-control-label::before {
+        left: -2.25rem;
+        width: 2rem;
+        height: 1rem;
+        border-radius: 1rem;
+      }
+      .custom-switch .custom-control-label::after {
+        top: .08rem;
+        left: -2.10rem;
+        width: .85rem;
+        height: .85rem;
+        border-radius: .85rem;
+      }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -85,16 +96,28 @@
                 <fieldset class="form-group">
                     <legend>Wählen Sie das Format der Antwort:</legend>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="agent" id="agent_pastoral" value="pastoral-seelsorgerlich" required>
-                        <label class="form-check-label" for="agent_pastoral">pastoral-seelsorgerlich</label>
+                        <input class="form-check-input" type="radio" name="agent" id="agent_pastoral_sachlich" value="pastoral-seelsorgerlich-sachlich" required>
+                        <label class="form-check-label" for="agent_pastoral_sachlich">seelsorgerlich-sachlich</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="agent" id="agent_theologisch" value="theologisch-wissenschaftlich">
-                        <label class="form-check-label" for="agent_theologisch">theologisch-wissenschaftlich</label>
+                        <input class="form-check-input" type="radio" name="agent" id="agent_pastoral_persönlich" value="pastoral-seelsorgerlich-persönlich" required>
+                        <label class="form-check-label" for="agent_pastoral_persönlich">seelsorgerlich-persönlich</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="agent" id="agent_predigend" value="predigend-erzählend">
-                        <label class="form-check-label" for="agent_predigend">predigend-erzählend</label>
+                        <input class="form-check-input" type="radio" name="agent" id="agent_theologisch_sachlich" value="theologisch-wissenschaftlich-sachlich">
+                        <label class="form-check-label" for="agent_theologisch_sachlich">theologisch-sachlich</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="agent" id="agent_theologisch_persönlich" value="theologisch-wissenschaftlich-persönlich">
+                        <label class="form-check-label" for="agent_theologisch_persönlich">theologisch-persönlich</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="agent" id="agent_predigend_sachlich" value="predigend-erzählend-sachlich">
+                        <label class="form-check-label" for="agent_predigend_sachlich">predigend-sachlich</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="agent" id="agent_predigend_persönlich" value="predigend-erzählend-persönlich">
+                        <label class="form-check-label" for="agent_predigend_persönlich">predigend-persönlich</label>
                     </div>
                     {% if is_pro %}
                     <div class="form-check form-check-inline">

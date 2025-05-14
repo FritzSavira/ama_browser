@@ -15,8 +15,9 @@ from pymongo import MongoClient
 # Local imports
 from aio_straico import straico_client
 # .prompt muss für gunicorn auf Fly.io sein
-from .prompt import (
-    prompt_pastor, prompt_theologian, prompt_preacher,
+from prompt import (
+    prompt_pastor_personal, prompt_theologian_personal, prompt_preacher_personal,
+    prompt_pastor_factual, prompt_theologian_factual, prompt_preacher_factual,
     prompt_tags, prompt_abstraction
 )
 
@@ -346,12 +347,18 @@ class LoggingService:
             created = 'NA'
 
         # Map the agent to the appropriate prompt_version
-        if agent == 'pastoral-seelsorgerlich':
-            prompt_version = f"prompt_pastor_{created}"
-        elif agent == 'theologisch-wissenschaftlich':
-            prompt_version = f"prompt_theologian_{created}"
-        elif agent == 'predigend-erzählend':
-            prompt_version = f"prompt_preacher_{created}"
+        if agent == 'pastoral-seelsorgerlich-sachlich':
+            prompt_version = f"prompt_pastor_factual_{created}"
+        elif agent == 'pastoral-seelsorgerlich-persönlich':
+            prompt_version = f"prompt_pastor_personal_{created}"
+        elif agent == 'theologisch-wissenschaftlich-sachlich':
+            prompt_version = f"prompt_theologian_factual_{created}"
+        elif agent == 'theologisch-wissenschaftlich-persönlich':
+            prompt_version = f"prompt_theologian_personal_{created}"
+        elif agent == 'predigend-erzählend-sachlich':
+            prompt_version = f"prompt_preacher_factual_{created}"
+        elif agent == 'predigend-erzählend-persönlich':
+            prompt_version = f"prompt_preacher_personal_{created}"
         elif agent == 'individuell-setting':
             prompt_version = f"prompt_setting_{created}"
         else:
@@ -540,12 +547,18 @@ def ask():
             return jsonify({'answer': 'No agent selected.'}), 400
 
         # Map the agent to the appropriate prompt
-        if agent == 'pastoral-seelsorgerlich':
-            prompt_text = prompt_pastor
-        elif agent == 'theologisch-wissenschaftlich':
-            prompt_text = prompt_theologian
-        elif agent == 'predigend-erzählend':
-            prompt_text = prompt_preacher
+        if agent == 'pastoral-seelsorgerlich-sachlich':
+            prompt_text = prompt_pastor_factual
+        elif agent == 'pastoral-seelsorgerlich-persönlich':
+            prompt_text = prompt_pastor_personal
+        elif agent == 'theologisch-wissenschaftlich-sachlich':
+            prompt_text = prompt_theologian_factual
+        elif agent == 'theologisch-wissenschaftlich-persönlich':
+            prompt_text = prompt_theologian_personal
+        elif agent == 'predigend-erzählend-sachlich':
+            prompt_text = prompt_preacher_factual
+        elif agent == 'predigend-erzählend-persönlich':
+            prompt_text = prompt_preacher_personal
         elif agent == 'individuell-setting':
             # Dynamically load the current value
             prompt_text = get_prompt_setting()
@@ -636,6 +649,6 @@ def setup_mongodb_indexes():
 setup_mongodb_indexes()
 
 # Wird nicht für Gunicorn-Server benötigt
-#if __name__ == '__main__':
-#    setup_mongodb_indexes()
-#    app.run(host="0.0.0.0", port=5000)
+if __name__ == '__main__':
+    setup_mongodb_indexes()
+    app.run(host="0.0.0.0", port=5000)
