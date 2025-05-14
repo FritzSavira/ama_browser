@@ -112,14 +112,15 @@
                     </div>
                     {% endif %}
                 </fieldset>
-                <!-- NEU: Stil-Schalter -->
-                <div class="form-group">
-                    <label for="stilSwitch">Stil der Antwort:</label>
-                    <div class="custom-control custom-switch d-inline-block ml-2 align-middle">
-                        <input type="checkbox" class="custom-control-input" id="stilSwitch" name="stil">
-                        <label class="custom-control-label" for="stilSwitch" id="stilSwitchLabel">sachlich</label>
+                    <!-- Stil-Schalter -->
+                    <legend>Stil der Antwort:</legend>
+                    <div class="form-group">
+                        <label for="stilSwitch">persönlich/sachlich -->.......</label>
+                        <div class="custom-control custom-switch d-inline-block ml-2 align-middle">
+                            <input type="checkbox" class="custom-control-input" id="stilSwitch" name="stil" checked>
+                            <label class="custom-control-label" for="stilSwitch" id="stilSwitchLabel">persönlich</label>
+                        </div>
                     </div>
-                </div>
                 <!-- Frage Eingabe -->
                 <div class="input-group">
                     <input type="text" id="frage" name="frage" required class="form-control" placeholder="Schreiben Sie Ihre Frage hier...">
